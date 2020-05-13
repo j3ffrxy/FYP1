@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using FYP.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +7,7 @@ using System;
 using System.Data;
 using System.Security.Claims;
 
-namespace L08.Controllers
+namespace FYP.wwwroot.Controllers
 {
     public class loginController : Controller
     {
@@ -16,13 +17,13 @@ namespace L08.Controllers
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             if (Url.IsLocalUrl(returnUrl))
                 return Redirect(returnUrl);
-            return RedirectToAction("Index", "Travel");
+            return RedirectToAction("", "");
         }
 
         [AllowAnonymous]
         public IActionResult Login(string returnUrl = null)
         {
-            TempData["ReturnUrl"] = returnUrl;
+            TempData[""] = returnUrl;
             return View();
         }
 
@@ -58,7 +59,6 @@ namespace L08.Controllers
         {
             principal = null;
 
-            // TODO L08 Task 1 - Provide Login SELECT Statement
             string sql = @" SELECT * FROM TravelUser WHERE UserId = '{0}' AND UserPw = HASHBYTES('SHA1', '{1}') ";
 
             string select = String.Format(sql, uid, pw);
