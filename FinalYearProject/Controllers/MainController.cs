@@ -2,14 +2,14 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using L08.Models;
+using FinalYearProject.Models;
 using System;
 using System.Data;
 using System.Security.Claims;
 
-namespace L08.Controllers
+namespace FinalYearProject.Controllers
 {
-   public class AccountController : Controller
+   public class MainController : Controller
    {
       [Authorize]
       public IActionResult Logoff(string returnUrl = null)
@@ -59,24 +59,7 @@ namespace L08.Controllers
       {
          principal = null;
 
-            // TODO L08 Task 1 - Provide Login SELECT Statement
-            /*      string sql = @"  -- Your SELECT SQL Statement Here --  ";
-
-                  string select = String.Format(sql, uid, pw);
-                DataTable ds = DBUtl.GetTable(select);
-            /*    if (ds.Rows.Count == 1)
-                 {
-                    principal =
-                       new ClaimsPrincipal(
-                          new ClaimsIdentity(
-                             new Claim[] {
-                                new Claim(ClaimTypes.NameIdentifier, uid),
-                                new Claim(ClaimTypes.Name, ds.Rows[0]["FullName"].ToString())
-                             },
-                             CookieAuthenticationDefaults.AuthenticationScheme));
-                    return true;
-                 }
-              */
+          
             return false;
       }
 

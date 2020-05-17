@@ -1,7 +1,7 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 
-namespace L08.Models
+namespace FinalYearProject.Models
 {
    public class UserLogin
    {
