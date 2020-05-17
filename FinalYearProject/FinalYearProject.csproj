@@ -5,15 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controller\**" />
-    <Content Remove="Controller\**" />
-    <EmbeddedResource Remove="Controller\**" />
-    <None Remove="Controller\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="System.Data.SqlClient" Version="4.7.0" />
   </ItemGroup>
-
 
 </Project>
