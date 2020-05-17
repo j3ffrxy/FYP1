@@ -7,18 +7,11 @@ using System;
 using System.Data;
 using System.Security.Claims;
 
-namespace FYP.wwwroot.Controllers
+namespace FYP.Controllers
 {
     public class loginController : Controller
     {
-        [Authorize]
-        public IActionResult Logoff(string returnUrl = null)
-        {
-            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            if (Url.IsLocalUrl(returnUrl))
-                return Redirect(returnUrl);
-            return RedirectToAction("", "");
-        }
+       
 
         [AllowAnonymous]
         public IActionResult Login(string returnUrl = null)
@@ -62,19 +55,8 @@ namespace FYP.wwwroot.Controllers
             string sql = @" SELECT * FROM TravelUser WHERE UserId = '{0}' AND UserPw = HASHBYTES('SHA1', '{1}') ";
 
             string select = String.Format(sql, uid, pw);
-            DataTable ds = DBUtl.GetTable(select);
-            if (ds.Rows.Count == 1)
-            {
-                principal =
-                   new ClaimsPrincipal(
-                      new ClaimsIdentity(
-                         new Claim[] {
-                        new Claim(ClaimTypes.NameIdentifier, uid),
-                        new Claim(ClaimTypes.Name, ds.Rows[0]["FullName"].ToString())
-                         },
-                         CookieAuthenticationDefaults.AuthenticationScheme));
-                return true;
-            }
+            int ds;
+           
             return false;
         }
 
