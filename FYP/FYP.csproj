@@ -5,7 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="Models\Users.cs" />
+    <Content Include="Models\UserLogin.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
+    <PackageReference Include="xunit.extensibility.core" Version="2.4.1" />
+    <PackageReference Include="xunit.extensibility.execution" Version="2.4.1" />
   </ItemGroup>
 
 </Project>
