@@ -1,0 +1,31 @@
+﻿@model FYP.Models.UserLogin;
+
+
+
+
+asp-controller, asp-action, post, not done.
+
+<form>
+    <h2 class="form-signin-heading">please sign in </h2>
+     
+    <div class="form-group row">
+        <label asp-for="User_id" class="control-label">User ID: </label>
+        <input asp-for="User_id" class="form-control" />
+        <span asp-validation-for="User_id" class="text-danger"></span>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Password" class="control-label">Password :</label>
+        <input asp-for="Password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group row">
+        <input type ="submit" class="btn btn-primary" value="Login"/>
+
+    </div>
+
+
+
+</form>
