@@ -4,6 +4,8 @@ using System.Data;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using FYP.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,12 +19,39 @@ namespace FYP.Controllers
             return View();
         }
 
-        public IActionResult login()
+        public IActionResult Login(UserLogin user)
         {
+            if (!AuthenticateUser(user.User_id, user.Password, out ClaimsPrincipal principal))
+            {
+                ViewData["Message"] = "Incorrect User ID or Password";
+                ViewData["MsgType"] = "warning";
+                return View(//idk);
+            }
+            else
+            {
+
+                HttpContext.SignInAsync(
+                   CookieAuthenticationDefaults.AuthenticationScheme,
+                   principal,
+                   new AuthenticationProperties
+                   {
+                       IsPersistent = user.RememberMe 
+               });
+
+          
+
+                if (TempData["returnUrl"] != null)
+                {
+                    string returnUrl = TempData["returnUrl"].ToString();
+                    if (Url.IsLocalUrl(returnUrl))
+                        return Redirect(returnUrl);
+                }
+
+                return RedirectToAction(//idk);
+            }
 
 
-
-            return View();
+          
         }
 
         private bool AuthenticateUser(string uid, string pw,

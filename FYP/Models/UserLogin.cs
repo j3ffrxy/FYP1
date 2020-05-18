@@ -13,5 +13,6 @@ namespace FYP.Models
 
         [Required(ErrorMessage = "Please enter Password")]
         public string Password { get; set; }
+        public bool RememberMe { get; set; }
     }
 }
