@@ -11,7 +11,7 @@ namespace FYP.Controllers
         public IActionResult Index()
         {
             DataTable dt = DBUtl.GetTable("SELECT full_name AS [Full Name] , group_name AS Rank , dob AS [Date of Birth] FROM Users U INNER JOIN User_group UG ON U.Group_id = UG.Group_id ");
-            return View("Index", dt.Rows);
+            return View();
         }
         public IActionResult Create()
         {
