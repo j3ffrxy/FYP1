@@ -120,5 +120,9 @@ namespace FYP.Controllers
             }
             return RedirectToAction("Index");
         }
+        public IActionResult About()
+        {
+           return RedirectToAction("About");
+        }
     }
 }
