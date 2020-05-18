@@ -16,26 +16,58 @@
     </script>
 
 }
+<nav class="navbar navbar-expand-sm navbar-light bg-dark" >
+
+    <button class="navbar-toggler" type="button"
+            data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="User" asp-action="Create">Register</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Account" asp-action="About">About</a>
+            </li>
+        </ul>
+
+        <ul class="nav navbar-nav ml-auto">
+            <li>
+                <a class="nav-link" asp-controller="UserLogin" asp-action="Index">
+                    <i class="fa fa-sign-in"></i>
+                    Login
+                </a>
+            </li>
+            <li>
+                &nbsp;&nbsp;&nbsp;
+            </li>
+        </ul>
+    </div>
+</nav>
+
 <form asp-controller="User"
       asp-action="Create"
       method="post">
 
     <div class="form-group row">
         <div class="offset-sm-2 col-sm-6 ">
-            <h2>Create Performance Record</h2>
+            <h2>Create User Account</h2>
         </div>
     </div>
 
     <div class="form-group row">
         <label class="control-label col-sm-2" asp-for="Group_id">Rank :</label>
         <div class="col-sm-5">
-            <select id = "Group_id" name= "Group_id" class=" = form-control">
-                <option value= "">-- Select One --</option>
-                <option value= "1"> Recruit </option>
-                <option value= "2"> Corporal </option>
-                <option value= "3"> Platoon Commander </option>
-                <option value= "4"> Officer Commander </option>
-                <option value= "5"> Commandant Officer </option>
+            <select id="Group_id" name="Group_id" class=" = form-control">
+                <option value="">-- Select One --</option>
+                <option value="1"> Recruit </option>
+                <option value="2"> Corporal </option>
+                <option value="3"> Platoon Commander </option>
+                <option value="4"> Officer Commander </option>
+                <option value="5"> Commandant Officer </option>
                 <option value=" 6"> Admin</option>
             </select>
         </div>
