@@ -25,7 +25,7 @@ namespace FYP.Controllers
             {
                 ViewData["Message"] = "Incorrect User ID or Password";
                 ViewData["MsgType"] = "warning";
-                return View(//idk);
+                return View();
             }
             else
             {
@@ -47,7 +47,7 @@ namespace FYP.Controllers
                         return Redirect(returnUrl);
                 }
 
-                return RedirectToAction(//idk);
+                return RedirectToAction("Login");
             }
 
 
