@@ -80,7 +80,7 @@ namespace FYP.Controllers
                 string update =
                    @"UPDATE Users
                     SET Group_id ='{1}', full_name='{2}', 
-                        dob ='{3:dd-MM-yyyy}' , nric = '{4}' , password = HASHBYTES('SHA1', '{5}' , '{6}')
+                        dob ='{3:dd-MM-yyyy}' , nric = '{4}' , password = HASHBYTES('SHA1', '{5}') , role = '{6}'
                   WHERE User_id = '{0}'";
                 int res = DBUtl.ExecSQL(update, user.User_id, user.Group_id, user.full_name, user.dob, user.nric, user.password, user.role);
                 if (res == 1)
@@ -121,10 +121,6 @@ namespace FYP.Controllers
                 }
             }
             return RedirectToAction("Index");
-        }
-        public IActionResult About()
-        {
-           return RedirectToAction("About");
         }
     }
 }

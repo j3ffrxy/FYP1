@@ -16,7 +16,7 @@ namespace FYP.Controller
         private const string LOGIN_SQL =
          @"SELECT * FROM Users 
             WHERE nric = '{0}' 
-              AND password =  '{1}'";
+              AND password =  HASHBYTES('SHA1', '{1}')";
 
         private const string ROLE_COL = "role";
         private const string NAME_COL = "full_name";
