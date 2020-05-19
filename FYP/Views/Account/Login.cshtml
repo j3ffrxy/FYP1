@@ -1,24 +1,24 @@
 ﻿@model FYP.Models.UserLogin
 
-<form asp-controller="Account"
+<form asp-controller="UserLogin"
       asp-action="Login"
       method="post">
-    <h2>Please Sign In</h2>
-    <div class="col-sm-4">
-        <div class="form-group row">
-            <label asp-for="User_id" class="control-label">User ID :</label>
-            <input type="text" asp-for="User_id" class="form-control" />
-            <span asp-validation-for="User_id" class="text-danger"></span>
-        </div>
-
+    <h2 class="form-signin-heading">Please Sign In</h2>
+    <div class="col-sm-5">
 
         <div class="form-group row">
-            <label asp-for="Password" class="control-label">Password :</label>
-            <input type="password" asp-for="Password" class="form-control" />
-            <span asp-validation-for="Password" class="text-danger"></span>
+            <label asp-for="nric" class="control-label">User ID :</label>
+            <input asp-for="nric" class="form-control" />
+            <span asp-validation-for="nric" class="text-danger"></span>
         </div>
 
         <div class="form-group row">
+            <label asp-for="password" class="control-label">Password :</label>
+            <input asp-for="password" class="form-control" />
+            <span asp-validation-for="password" class="text-danger"></span>
+        </div>
+
+        <div class="form-group-row">
             <div class="form-check">
                 <input asp-for="RememberMe" class="form-check-input" />
                 <label asp-for="RememberMe" class="form-check-label">
@@ -26,6 +26,8 @@
                 </label>
             </div>
         </div>
+
+
         @if (ViewData["Message"] != null)
         {
             <div class="form-group row">
@@ -35,6 +37,8 @@
             </div>
         }
 
+
+
         <div class="form-group row">
             <input type="submit" class="btn btn-primary" value="Login" />
         </div>
@@ -42,3 +46,4 @@
     </div>
 
 </form>
+

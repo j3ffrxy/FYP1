@@ -4,21 +4,23 @@ using FYP.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
+
 namespace FYP.Controllers
 {
-    public class UserController : Controller
+    public class UserController : Microsoft.AspNetCore.Mvc.Controller
     {
         public IActionResult Index()
         {
-            DataTable dt = DBUtl.GetTable("SELECT full_name AS [Full Name] , group_name AS Rank , dob AS [Date of Birth] FROM Users U INNER JOIN User_group UG ON U.Group_id = UG.Group_id ");
-            return View();
+
+            DataTable dt = DBUtl.GetTable("SELECT User_id ,  full_name AS [Full Name] , group_name AS Rank , dob AS [Date of Birth] FROM Users U INNER JOIN User_group UG ON U.Group_id = UG.Group_id ");
+            return View("Index", dt.Rows);
         }
         public IActionResult Create()
         {
-
             return View();
         }
         [HttpPost]
+
         public IActionResult Create(Users user)
         {
             if (!ModelState.IsValid)
@@ -30,10 +32,10 @@ namespace FYP.Controllers
             else
             {
                 string insert =
-                    @"INSERT INTO Users(Group_id , full_name , dob)
-                      Values ('{0}' , '{1}' , '{2:dd-MM-yyyy}')";
+                    @"INSERT INTO Users(Group_id , full_name , dob , nric , password , role)
+                      Values ('{0}' , '{1}' , '{2:dd-MM-yyyy}' , '{3}' , HASHBYTES('SHA1', '{4}') , '{5}')";
 
-                int res = DBUtl.ExecSQL(insert, user.Group_id, user.full_name, user.dob);
+                int res = DBUtl.ExecSQL(insert, user.Group_id, user.full_name, user.dob, user.nric, user.password, user.role);
 
                 if (res == 1)
                 {
@@ -48,9 +50,9 @@ namespace FYP.Controllers
                 return RedirectToAction("Index");
             }
         }
-        public IActionResult Edit(int id)
+        public IActionResult Edits(int id)
         {
-            string select = "SELECT * FROM Users WHERE full_name = '{0}'";
+            string select = "SELECT * FROM Users WHERE User_id = '{0}'";
             List<Users> list = DBUtl.GetList<Users>(select, id);
             if (list.Count == 1)
             {
@@ -60,12 +62,12 @@ namespace FYP.Controllers
             {
                 TempData["Message"] = "User not found";
                 TempData["MsgType"] = "warning";
-                return RedirectToAction("Edit");
+                return RedirectToAction("Edits");
             }
         }
 
         [HttpPost]
-        public IActionResult Edit(Users user)
+        public IActionResult Edits(Users user)
         {
             if (!ModelState.IsValid)
             {
@@ -78,9 +80,9 @@ namespace FYP.Controllers
                 string update =
                    @"UPDATE Users
                     SET Group_id ='{1}', full_name='{2}', 
-                        dob='{3:dd-MM-yyyy}'
-                  WHERE full_name='{0}'";
-                int res = DBUtl.ExecSQL(update, user.User_id, user.Group_id, user.full_name, user.dob);
+                        dob ='{3:dd-MM-yyyy}' , nric = '{4}' , password = HASHBYTES('SHA1', '{5}' , '{6}')
+                  WHERE User_id = '{0}'";
+                int res = DBUtl.ExecSQL(update, user.User_id, user.Group_id, user.full_name, user.dob, user.nric, user.password, user.role);
                 if (res == 1)
                 {
                     TempData["Message"] = "User Updated";
