@@ -32,10 +32,10 @@ namespace FYP.Controllers
             else
             {
                 string insert =
-                    @"INSERT INTO Users(Group_id , full_name , dob , nric , password , role)
-                      Values ('{0}' , '{1}' , '{2:dd-MM-yyyy}' , '{3}' , HASHBYTES('SHA1', '{4}') , '{5}')";
+                    @"INSERT INTO Users(Group_id , full_name , dob , nric , password)
+                      Values ('{0}' , '{1}' , '{2:dd-MM-yyyy}' , '{3}' , HASHBYTES('SHA1', '{4}'))";
 
-                int res = DBUtl.ExecSQL(insert, user.Group_id, user.full_name, user.dob, user.nric, user.password, user.role);
+                int res = DBUtl.ExecSQL(insert, user.Group_id, user.full_name, user.dob, user.nric, user.password);
 
                 if (res == 1)
                 {
@@ -44,7 +44,7 @@ namespace FYP.Controllers
                 }
                 else
                 {
-                    TempData["Message"] = DBUtl.DB_Message;
+                    TempData["Message"] = "User already exists";
                     TempData["MsgType"] = "danger";
                 }
                 return RedirectToAction("Index");
@@ -80,9 +80,9 @@ namespace FYP.Controllers
                 string update =
                    @"UPDATE Users
                     SET Group_id ='{1}', full_name='{2}', 
-                        dob ='{3:dd-MM-yyyy}' , nric = '{4}' , password = HASHBYTES('SHA1', '{5}') , role = '{6}'
-                  WHERE User_id = '{0}'";
-                int res = DBUtl.ExecSQL(update, user.User_id, user.Group_id, user.full_name, user.dob, user.nric, user.password, user.role);
+                        dob ='{3:dd-MM-yyyy}' , nric = '{4}' , password = HASHBYTES('SHA1', '{5}') 
+                        WHERE User_id = '{0}'";
+                int res = DBUtl.ExecSQL(update, user.User_id, user.Group_id, user.full_name, user.dob, user.nric, user.password);
                 if (res == 1)
                 {
                     TempData["Message"] = "User Updated";
@@ -121,6 +121,19 @@ namespace FYP.Controllers
                 }
             }
             return RedirectToAction("Index");
+        }
+        public IActionResult VerifyDate(DateTime dob)
+        {
+            DateTime firstdate = DateTime.Today;
+            DateTime seconddate = dob;
+
+            String diff = (firstdate - seconddate).TotalDays.ToString();
+            int legible = Int32.Parse(diff);
+            if (legible < 5840)
+            {
+                return Json($"User is still not eligible for NS");
+            }
+            return Json(true);
         }
     }
 }
