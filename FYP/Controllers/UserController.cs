@@ -4,6 +4,12 @@ using FYP.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using Microsoft.AspNetCore.Http;
+using System.Linq;
+using System.Data.OleDb;
+using System.IO;
+using System.Text;
+
 
 namespace FYP.Controllers
 {
@@ -134,6 +140,104 @@ namespace FYP.Controllers
                 return Json($"User is still not eligible for NS");
             }
             return Json(true);
+        }
+        public IActionResult MassAdd()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult MassAdd(IFormFile postedFile)
+        {
+            if (postedFile != null)
+            {
+                try
+                {
+                    string fileExtension = Path.GetExtension(postedFile.FileName);
+
+                    //Validate uploaded file and return error.
+                    if (fileExtension != ".csv")
+                    {
+                        ViewBag.Message = "Please select the csv file with .csv extension";
+                        return View();
+                    }
+
+
+                    var user = new List<Users>();
+                    using (var sreader = new StreamReader(postedFile.OpenReadStream()))
+                    {
+                        //First line is header. If header is not passed in csv then we can neglect the below line.
+
+                        //Loop through the records
+                        while (!sreader.EndOfStream)
+                        {
+                            string[] rows = sreader.ReadLine().Split(',');
+
+                            user.Add(new Users
+                            {
+                                Group_id = int.Parse(rows[0].ToString()),
+                                full_name = rows[1].ToString(),
+                                dob = DateTime.Parse(rows[2].ToString()),
+                                nric = rows[3].ToString(),
+                                password = rows[4].ToString(),
+
+                            });
+                        }
+
+                    }
+                    int count = 0;
+                    bool exists = false;
+                    foreach (Users u in user)
+                    {
+                        List<Users> existuser = DBUtl.GetList<Users>("SELECT * FROM USERS");
+                        foreach (var a in existuser)
+                        {
+                            if (u.nric.Equals(a.nric))
+                            {
+                                exists = true;
+                            }
+                        }
+                        if (exists == false)
+                        {
+                            string insert =
+                                      @"INSERT INTO Users(Group_id , full_name , dob , nric , password)
+                                     Values ('{0}' , '{1}' , '{2:dd-MM-yyyy}' , '{3}' , HASHBYTES('SHA1', '{4}'))";
+
+                            int res = DBUtl.ExecSQL(insert, u.Group_id, u.full_name, u.dob, u.nric, u.password);
+                            if (res == 1)
+                            {
+                                count++;
+                            }
+                        }
+                        else
+                        {
+                            TempData["Message"] = "User already exists";
+                            TempData["MsgType"] = "danger";
+                        }
+
+                    }
+                    if (count == user.Count)
+                    {
+                        TempData["Message"] = "All users have been created";
+                        TempData["MsgType"] = "success";
+                    }
+                    else
+                    {
+                        TempData["Message"] = "Not all users have been created";
+                        TempData["MsgType"] = "danger";
+                    }
+
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Message = ex.Message;
+                }
+            }
+            else
+            {
+                ViewBag.Message = "Please select the file first to upload.";
+            }
+            return View();
         }
     }
 }
