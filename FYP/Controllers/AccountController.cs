@@ -18,7 +18,7 @@ namespace FYP.Controller
             WHERE nric = '{0}' 
               AND password =  HASHBYTES('SHA1', '{1}')";
 
-        private const string ROLE_COL = "role";
+        private const string ROLE_COL = "Group_id";
         private const string NAME_COL = "full_name";
 
         private const string REDIRECT_CNTR = "User";
@@ -63,6 +63,15 @@ namespace FYP.Controller
                 return RedirectToAction(REDIRECT_ACTN, REDIRECT_CNTR);
             }
         }
+
+        public IActionResult Logoff(string returnUrl = null)
+        {
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            if (Url.IsLocalUrl(returnUrl))
+                return Redirect(returnUrl);
+            return View(LOGIN_VIEW);
+        }
+
         private bool AuthenticateUser(string uid, string pw, out ClaimsPrincipal principal)
         {
             principal = null;

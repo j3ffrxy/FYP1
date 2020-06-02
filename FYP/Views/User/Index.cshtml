@@ -35,7 +35,7 @@
                 <th>Full Name</th>
                 <th>Rank</th>
                 <th>Date Of Birth</th>
-                @if (User.IsInRole("Admin"))
+                @if (User.IsInRole("6"))
                 {
                     <th>Action</th>
                 }
@@ -50,7 +50,7 @@
                     <td>@row["Full name"]</td>
                     <td>@row["Rank"]</td>
                     <td>@String.Format("{0:dd-MM-yyyy}", row["Date of Birth"])</td>
-                    @if (User.IsInRole("Admin"))
+                    @if (User.IsInRole("6"))
                     {
                         <td>
                             <a asp-controller="User"
@@ -76,7 +76,7 @@
                 <th>Full Name</th>
                 <th>Rank</th>
                 <th>Date Of Birth</th>
-                @if (User.IsInRole("Admin"))
+                @if (User.IsInRole("6"))
                 {
                     <th>Action</th>
                 }
