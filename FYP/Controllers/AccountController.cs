@@ -69,7 +69,7 @@ namespace FYP.Controller
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             if (Url.IsLocalUrl(returnUrl))
                 return Redirect(returnUrl);
-            return View(LOGIN_VIEW);
+            return RedirectToAction("Login", "Account");
         }
 
         private bool AuthenticateUser(string uid, string pw, out ClaimsPrincipal principal)

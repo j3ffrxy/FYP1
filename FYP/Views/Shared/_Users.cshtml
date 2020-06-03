@@ -21,7 +21,15 @@
         {
             <Partial name="SAFAdmin" />
         }
-        else
+        else if (User.IsInRole("3"))
+        {
+            <Partial name="SAFUser" />
+        }
+        else if (User.IsInRole("4"))
+        {
+            <Partial name="SAFUser" />
+        }
+        else if (User.IsInRole("5"))
         {
             <Partial name="SAFUser" />
         }
