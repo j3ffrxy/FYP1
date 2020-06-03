@@ -12,13 +12,20 @@ namespace FYP.Controllers
 {
     public class ActivityController : Microsoft.AspNetCore.Mvc.Controller
     {
+        public IActionResult Index()
+        {
+
+            DataTable dt = DBUtl.GetTable("SELECT platoon AS [Platoon], type AS [Activity Type], activity_description AS [Description], activity_date AS [Date], status AS [Status] FROM Activity");
+            return View("Index", dt.Rows);
+        }
+
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Create(Appointment a)
+        public IActionResult Create(Activity a)
         {
             if (!ModelState.IsValid)
             {
@@ -29,19 +36,19 @@ namespace FYP.Controllers
             else
             {
                 string insert =
-                    @"INSERT INTO Users(Equipment_id, date, quantity, appt_desc, nric)
-                      Values ('{0}' , '{1:dd-MM-yyyy}' , {2} , '{3}' , '{4}')";
+                    @"INSERT INTO Activity(Activity_id, platoon, type, activity_description, activity_date, status)
+                      Values ('{0}' , '{1}' , '{2}' , '{3}' , '{4}', '{5:dd-MM-yyyy}', '{6}')";
 
-                int res = DBUtl.ExecSQL(insert, a.Equipment_id, a.date, a.quantity, a.appt_desc, a.nric);
+                int res = DBUtl.ExecSQL(insert, a.Activity_id, a.platoon, a.type, a.activity_description, a.activity_date, a.status);
 
                 if (res == 1)
                 {
-                    TempData["Message"] = "Appointment Created";
+                    TempData["Message"] = "Activity Created";
                     TempData["MsgType"] = "success";
                 }
                 else
                 {
-                    TempData["Message"] = "Appointment Creation Failed";
+                    TempData["Message"] = "Activity Creation Failed";
                     TempData["MsgType"] = "danger";
                 }
                 return RedirectToAction("Index");
@@ -90,7 +97,7 @@ namespace FYP.Controllers
                     TempData["Message"] = DBUtl.DB_Message;
                     TempData["MsgType"] = "danger";
                 }
-                return RedirectToAction("View");
+                return RedirectToAction("Index");
             }
         }
 
@@ -118,7 +125,7 @@ namespace FYP.Controllers
                     TempData["MsgType"] = "danger";
                 }
             }
-            return RedirectToAction("View");
+            return RedirectToAction("Index");
         }
     }
 }

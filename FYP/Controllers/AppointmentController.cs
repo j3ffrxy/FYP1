@@ -98,7 +98,7 @@ namespace FYP.Controllers
                     TempData["Message"] = DBUtl.DB_Message;
                     TempData["MsgType"] = "danger";
                 }
-                return RedirectToAction("View");
+                return RedirectToAction("Index");
             }
         }
 
@@ -126,7 +126,7 @@ namespace FYP.Controllers
                     TempData["MsgType"] = "danger";
                 }
             }
-            return RedirectToAction("View");
+            return RedirectToAction("Index");
         }
     }
 }
