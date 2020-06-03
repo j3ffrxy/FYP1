@@ -4,7 +4,7 @@
 
     <script>
         $(document).ready(function () {
-            $('#jsAppt').DataTable({
+            $('#jsAct').DataTable({
                 ordering: true,
                 paging: true,
                 searching: true,
@@ -18,7 +18,7 @@
 }
 
 @model System.Data.DataRowCollection
-<h2> Appointments </h2>
+<h2> Activities </h2>
 
 @if (TempData["Message"] != null)
 {
@@ -32,40 +32,43 @@
     <table id="jsAppt" class="table">
         <thead>
             <tr>
-                <th>Equipment</th>
+                <th>Platoon</th>
+                <th>Type</th>
+                <th>Description</th>
                 <th>Date</th>
-                <th>Quantity</th>
                 <th>Status</th>
                 @if (User.IsInRole("3") || User.IsInRole("4") || User.IsInRole("5"))
                 {
                     <th>Action</th>
                 }
 
-                </tr>
+            </tr>
         </thead>
 
         <tbody>
             @foreach (System.Data.DataRow row in Model)
             {
             <tr>
-                <td>@row["Equipment"]</td>
-                <td>@String.Format("{0:dd-MM-yyyy}", row["date"])</td>
-                <td>@row["Quantity"]</td>
+                <td>@row["platoon"]</td>
+                <td>@row["type"]</td>
+                <td>@row["activity_description"]</td>
+                <td>@String.Format("{0:dd-MM-yyyy}", row["activity_date"])</td>
+                <td>@row["status"]</td>
 
                 <td>
-                    <a asp-controller="Appointment"
-                        asp-action="Edits"
-                        asp-route-id="@row["Appt_id"]">
+                    <a asp-controller="Activity"
+                       asp-action="Edit"
+                       asp-route-id="@row["Appt_id"]">
                         Edit
                     </a>
-                    <a asp-controller="Appointment"
-                        asp-action="Delete"
-                        asp-route-id="@row["Appt_id"]"
-                        onclick="return confirm('Delete Appointment')">
+                    <a asp-controller="Activity"
+                       asp-action="Delete"
+                       asp-route-id="@row["Appt_id"]"
+                       onclick="return confirm('Delete Activity')">
                         Delete
-                     </a>
-                 </td>
-                
+                    </a>
+                </td>
+
 
             </tr>
             }
@@ -73,11 +76,15 @@
 
         <tfoot>
             <tr>
-                <th>Equipment</th>
+                <th>Platoon</th>
+                <th>Type</th>
+                <th>Description</th>
                 <th>Date</th>
-                <th>Quantity</th>
                 <th>Status</th>
-                <th>Action</th>
+                @if (User.IsInRole("3") || User.IsInRole("4") || User.IsInRole("5"))
+                {
+                    <th>Action</th>
+                }
 
             </tr>
         </tfoot>
