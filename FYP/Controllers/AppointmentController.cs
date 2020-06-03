@@ -55,7 +55,7 @@ namespace FYP.Controllers
             }
         }
 
-        public IActionResult Edit(int id)
+        public IActionResult Edits(int id)
         {
             string select = "SELECT * FROM Appointment WHERE Appt_id = '{0}'";
             List<Appointment> list = DBUtl.GetList<Appointment>(select, id);
@@ -68,6 +68,37 @@ namespace FYP.Controllers
                 TempData["Message"] = "Appointment does not exist.";
                 TempData["MsgType"] = "warning";
                 return RedirectToAction("Edit");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Edits(Appointment a)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewData["Message"] = "Invalid Input";
+                ViewData["MsgType"] = "warning";
+                return View("Edit");
+            }
+            else
+            {
+                string update =
+                   @"UPDATE Appointment
+                    SET Equipment_id='{1}', 
+                        date ='{2:dd-MM-yyyy}' , quantity = {3}, appt_desc = '{4}' , nric ='{5}' 
+                        WHERE Appt_id_id = '{0}'";
+                int res = DBUtl.ExecSQL(update, a.Appt_id, a.Equipment_id, a.date, a.quantity, a.appt_desc, a.nric);
+                if (res == 1)
+                {
+                    TempData["Message"] = "Appointment Updated";
+                    TempData["MsgType"] = "success";
+                }
+                else
+                {
+                    TempData["Message"] = DBUtl.DB_Message;
+                    TempData["MsgType"] = "danger";
+                }
+                return RedirectToAction("View");
             }
         }
 
