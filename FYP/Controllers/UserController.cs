@@ -21,6 +21,11 @@ namespace FYP.Controllers
             DataTable dt = DBUtl.GetTable("SELECT User_id ,  full_name AS [Full Name] , group_name AS Rank , dob AS [Date of Birth] FROM Users U INNER JOIN User_group UG ON U.Group_id = UG.Group_id ");
             return View("Index", dt.Rows);
         }
+
+        public IActionResult About()
+        {
+            return View("About");
+        }
         public IActionResult Create()
         {
             return View();

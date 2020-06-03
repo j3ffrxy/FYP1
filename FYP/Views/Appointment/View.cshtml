@@ -1,0 +1,88 @@
+﻿@section MoreScripts {
+    <link href="~/lib/datatables/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#jsAppt').DataTable({
+                ordering: true,
+                paging: true,
+                searching: true,
+                info: true,
+                lengthChange: true,
+                pageLength: 20
+            });
+        });
+    </script>
+
+}
+
+@model System.Data.DataRowCollection
+<h2> Appointments </h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-@TempData["MsgType"]">
+        @TempData["Message"]
+    </div>
+}
+
+<div>
+
+    <table id="jsAppt" class="table">
+        <thead>
+            <tr>
+                <th>Equipment</th>
+                <th>Date</th>
+                <th>Quantity</th>
+                <th>Status</th>
+                @if (User.IsInRole("3") || User.IsInRole("4") || User.IsInRole("5"))
+                {
+                    <th>Action</th>
+                }
+
+                </tr>
+        </thead>
+
+        <tbody>
+            @foreach (System.Data.DataRow row in Model)
+            {
+            <tr>
+                <td>@row["Equipment"]</td>
+                <td>@String.Format("{0:dd-MM-yyyy}", row["date"])</td>
+                <td>@row["Quantity"]</td>
+
+                <td>
+                    <a asp-controller="Appointment"
+                        asp-action="Edit"
+                        asp-route-id="@row["Appt_id"]">
+                        Edit
+                    </a>
+                    <a asp-controller="Appointment"
+                        asp-action="Delete"
+                        asp-route-id="@row["Appt_id"]"
+                        onclick="return confirm('Delete Appointment')">
+                        Delete
+                     </a>
+                 </td>
+                
+
+            </tr>
+            }
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <th>Equipment</th>
+                <th>Date</th>
+                <th>Quantity</th>
+                <th>Status</th>
+                <th>Action</th>
+
+            </tr>
+        </tfoot>
+
+
+    </table>
+</div>
+
