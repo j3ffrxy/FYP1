@@ -36,23 +36,23 @@
         {
 
             <tr>
-                <td>@row.Equipment_id</td>
-                <td>@row.Equipment_name</td>
-                <td>@row.Storage_location</td>
-                <td>@row.Quantity</td>
+                <td>@row["Equipment_id"]</td>
+                <td>@row["Equipment_name"]</td>
+                <td>@row["Storage_location"]</td>
+                <td>@row["Quantity"]</td>
 
                 @if (!User.IsInRole("3"))
                 {
                     <td>
                         <a asp-controller="Equipment"
                            asp-action="EditEquipment"
-                           asp-route-id="@row.Equipment_id">
+                           asp-route-id="@row["Equipment_id"]">
                             Edit
                         </a>
                         @if (User.IsInRole("1"))
                         {
                             <text> |</text>
-                            <a asp-controller="Equipment" asp-action="DeleteEquipment" asp-route-id="@row.Equipment_id" onclick="return confirm('Are you sure you want to delete: @eq.EQUIPMENT_ID?')">Delete</a>
+                            <a asp-controller="Equipment" asp-action="DeleteEquipment" asp-route-id="@row["Equipment_id"]" onclick="return confirm('Are you sure you want to delete: @row["Equipment_id"]?')">Delete</a>
 
                         }
 
