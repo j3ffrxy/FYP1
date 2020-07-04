@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using FYP.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FYP.Controllers
@@ -16,11 +18,9 @@ namespace FYP.Controllers
 
         public IActionResult Index()
         {
-            string reload = "DELETE FROM bluet";
-            DBUtl.ExecSQL(reload);
-            List<equipment> equipList = DBUtl.GetList<equipment>(
-                  @"SELECT * FROM Equipment");
-            return View(equipList);
+            DataTable dt = DBUtl.GetTable("SELECT * FROM Equipment");
+            return View("Index", dt.Rows);
+       
         }
 
        
@@ -34,7 +34,7 @@ namespace FYP.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddEquipment(equipment newEquipment)
+        public IActionResult AddEquipment(Equipment newEquipment)
         {
 
             if (!ModelState.IsValid)
@@ -75,18 +75,17 @@ namespace FYP.Controllers
 
 
         [HttpGet]
-        public IActionResult EditEquipment(string id)
+        public IActionResult EditEquipment(int id)
         {
 
             // Get the record from the database using the id
-            string equipmentSql = @"SELECT * FROM Equipment WHERE  Equipment_id='{0}'";
-            List<equipment> lstEquipment = DBUtl.GetList<equipment>(equipmentSql, id);
-
-            // If the record is found, pass the model to the View
-            if (lstEquipment.Count == 1)
+            string select = "SELECT * FROM Equipment WHERE  Equipment_id='{0}'";
+            List<Equipment> list = DBUtl.GetList<Equipment>(select, id);
+            if (list.Count == 1)
             {
-                return View(lstEquipment[0]);
+                return View(list[0]);
             }
+            else
             {
                 TempData["Message"] = "Equipment not found.";
                 TempData["MsgType"] = "warning";
@@ -96,7 +95,7 @@ namespace FYP.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditEquipment(equipment newEquipment)
+        public IActionResult EditEquipment(Equipment newEquipment)
         {
 
             if (!ModelState.IsValid)
@@ -107,15 +106,13 @@ namespace FYP.Controllers
             }
 
         
-            // Write the SQL statement
-            string update = "UPDATE Equipment SET Storage_location='{1}',Quantity ={3},Equipment_name='{4}' WHERE Equipment_id='{5}'";
+            string update = @"UPDATE Equipment SET  Equipment_name='{1}', Quantity = '{2}',Storage_location='{3}' WHERE Equipment_id='{0}'";
 
-            // Check the result and branch
-            // If successful set a TempData success Message and MsgType
-            // If unsuccessful, set a TempData message that equals the DBUtl error message
+        
 
-            if (DBUtl.ExecSQL(update, newEquipment.Equipment_id, newEquipment.Storage_location,
-                    newEquipment.Quantity, newEquipment.Equipment_name) == 1)
+            int can = DBUtl.ExecSQL(update, newEquipment.Equipment_id, newEquipment.Storage_location,
+                      newEquipment.Quantity, newEquipment.Equipment_name);
+            if (can == 1)
             {
                 TempData["Message"] = "Successfully updated Equipment";
                 TempData["MsgType"] = "success";
@@ -126,7 +123,6 @@ namespace FYP.Controllers
                 TempData["MsgType"] = "danger";
             }
 
-            // Call the action ListMovies to show the result of the update
             return RedirectToAction("Index");
         }
         public IActionResult DeleteEquipment(string id)
@@ -156,11 +152,101 @@ namespace FYP.Controllers
             }
             return RedirectToAction("Index");
         }
+        public ActionResult MassAdd(IFormFile postedFile)
+        {
+            if (postedFile != null)
+            {
+                try
+                {
+                    string fileExtension = Path.GetExtension(postedFile.FileName);
 
-          
+                    //Validate uploaded file and return error.
+                    if (fileExtension != ".csv")
+                    {
+                        ViewBag.Message = "Please select the csv file with .csv extension";
+                        return View();
+                    }
 
-         
+
+                    var equipment = new List<Equipment>();
+                    using (var sreader = new StreamReader(postedFile.OpenReadStream()))
+                    {
+                        //First line is header. If header is not passed in csv then we can neglect the below line.
+
+                        //Loop through the records
+                        while (!sreader.EndOfStream)
+                        {
+                            string[] rows = sreader.ReadLine().Split(',');
+
+                            equipment.Add(new Equipment
+                            {
+                                Equipment_name = rows[1].ToString(),
+                                Serial_id = rows[2].ToString(),
+                                Storage_location = rows[3].ToString(),
+                                Quantity = int.Parse(rows[4].ToString()),
+                            });
+                        }
+
+                    }
+                    int count = 0;
+                    bool exists = false;
+                    foreach (Equipment u in equipment)
+                    {
+                        List<Equipment> existuser = DBUtl.GetList<Equipment>("SELECT * FROM Equipment");
+                        foreach (var a in existuser)
+                        {
+                            if (u.Equipment_id.Equals(a.Equipment_id))
+                            {
+                                exists = true;
+                            }
+                        }
+                        if (exists == false)
+                        {
+                            string insert =
+                                      @"INSERT INTO Equipments(Equipment_name , Serial_id , Storage_location , Quantity )
+                                     Values ('{0}' , '{1}' , '{2}' , '{3}'))";
+
+                            int res = DBUtl.ExecSQL(insert, u.Equipment_name, u.Serial_id, u.Storage_location, u.Quantity);
+                            if (res == 1)
+                            {
+                                count++;
+                            }
+                        }
+                        else
+                        {
+                            TempData["Message"] = "Equipment already exists";
+                            TempData["MsgType"] = "danger";
+                        }
+
+                    }
+                    if (count == equipment.Count)
+                    {
+                        TempData["Message"] = "All equipments have been created";
+                        TempData["MsgType"] = "success";
+                    }
+                    else
+                    {
+                        TempData["Message"] = "Not all equipments have been created";
+                        TempData["MsgType"] = "danger";
+                    }
+
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Message = ex.Message;
+                }
             }
+            else
+            {
+                ViewBag.Message = "Please select the file to upload.";
+            }
+            return View();
+        }
+
+
+
+    }
 
          
         }
