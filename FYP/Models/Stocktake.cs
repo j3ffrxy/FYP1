@@ -17,5 +17,6 @@ namespace FYP.Models
 
         public String comments { get; set; }
 
+        public bool archrive { get; set; }
     }
 }

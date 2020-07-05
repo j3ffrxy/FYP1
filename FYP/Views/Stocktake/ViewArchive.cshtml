@@ -18,7 +18,7 @@
 }
 
 @model System.Data.DataRowCollection
-<h2> Stocktake </h2>
+<h2> Archive </h2>
 
 @if (TempData["Message"] != null)
 {
@@ -57,13 +57,7 @@
                                asp-action="ViewComments"
                                asp-route-id="@row["Stocktake_id"]">
                                 Comments
-                            </a>
-                            <a asp-controller="Stocktake"
-                               asp-action="Delete"
-                               asp-route-id="@row["Stocktake_id"]"
-                               onclick="return confirm('Delete Stocktake')">
-                                Delete
-                            </a>
+                            </a>                            
                         </td>
                     }
 
