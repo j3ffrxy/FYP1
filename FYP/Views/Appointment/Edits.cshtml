@@ -20,6 +20,7 @@
       asp-action="Edits"
       method="post">
 
+
     <div class="form-group row">
         <div class="offset-sm-2 col-sm-6 ">
             <h2>Edit Appointment</h2>
@@ -85,13 +86,13 @@
 
     @if (ViewData["Message"] != null)
     {
-    <div class="form-group row">
-        <div class="offset-sm-2 col-sm-6">
-            <div class="alert alert-@ViewData["MsgType"]">
-                @ViewData["Message"]
+        <div class="form-group row">
+            <div class="offset-sm-2 col-sm-6">
+                <div class="alert alert-@ViewData["MsgType"]">
+                    @ViewData["Message"]
+                </div>
             </div>
         </div>
-    </div>
     }
 
 

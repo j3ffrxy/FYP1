@@ -15,7 +15,7 @@ namespace FYP.Controllers
         public IActionResult Index()
         {
 
-            DataTable dt = DBUtl.GetTable("SELECT platoon AS [Platoon], type AS [Activity Type], activity_description AS [Description], activity_date AS [Date], status AS [Status] FROM Activity");
+            DataTable dt = DBUtl.GetTable("SELECT Activity_id, platoon AS [Platoon], type AS [Activity Type], activity_description AS [Description], activity_date AS [Date], status AS [Status] FROM Activity");
             return View("Index", dt.Rows);
         }
 
@@ -36,10 +36,10 @@ namespace FYP.Controllers
             else
             {
                 string insert =
-                    @"INSERT INTO Activity(Activity_id, platoon, type, activity_description, activity_date, status)
-                      Values ('{0}' , '{1}' , '{2}' , '{3}' , '{4}', '{5:dd-MM-yyyy}', '{6}')";
+                    @"INSERT INTO Activity(platoon, type, activity_description, activity_date, status)
+                      Values ('{0}' , '{1}' , '{2}', '{3:yyyy-MM-dd}' , '{4}')";
 
-                int res = DBUtl.ExecSQL(insert, a.Activity_id, a.platoon, a.type, a.activity_description, a.activity_date, a.status);
+                int res = DBUtl.ExecSQL(insert, a.platoon, a.type, a.activity_description, a.activity_date, a.status);
 
                 if (res == 1)
                 {
@@ -48,7 +48,7 @@ namespace FYP.Controllers
                 }
                 else
                 {
-                    TempData["Message"] = "Activity Creation Failed";
+                    TempData["Message"] = DBUtl.DB_Message;
                     TempData["MsgType"] = "danger";
                 }
                 return RedirectToAction("Index");
@@ -66,7 +66,7 @@ namespace FYP.Controllers
             {
                 TempData["Message"] = "Activity does not exist.";
                 TempData["MsgType"] = "warning";
-                return RedirectToAction("Edit");
+                return RedirectToAction("Edits");
             }
         }
 
@@ -82,9 +82,9 @@ namespace FYP.Controllers
             else
             {
                 string update =
-                   @"UPDATE Users
+                   @"UPDATE Activity
                     SET platoon ='{1}', type='{2}', 
-                        activity_description ='{3}' , activity_date ='{4:dd-MM-yyyy}' , status = '{5}'
+                        activity_description ='{3}' , activity_date ='{4:yyyy-MM-dd}' , status = '{5}'
                         WHERE Activity_id = '{0}'";
                 int res = DBUtl.ExecSQL(update, a.Activity_id, a.platoon, a.type, a.activity_description, a.activity_date, a.status);
                 if (res == 1)

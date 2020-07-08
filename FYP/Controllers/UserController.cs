@@ -18,13 +18,13 @@ namespace FYP.Controllers
         public IActionResult Index()
         {
 
-            DataTable dt = DBUtl.GetTable("SELECT User_id ,  full_name AS [Full Name] , group_name AS Rank , dob AS [Date of Birth] FROM Users U INNER JOIN User_group UG ON U.Group_id = UG.Group_id ");
-            return View("Index", dt.Rows);
+            return View("About");
         }
 
         public IActionResult About()
         {
-            return View("About");
+            DataTable dt = DBUtl.GetTable("SELECT User_id ,  full_name AS [Full Name] , group_name AS Rank , dob AS [Date of Birth] FROM Users U INNER JOIN User_group UG ON U.Group_id = UG.Group_id ");
+            return View("Index", dt.Rows);
         }
         public IActionResult Create()
         {
@@ -58,7 +58,7 @@ namespace FYP.Controllers
                     TempData["Message"] = "User already exists";
                     TempData["MsgType"] = "danger";
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("About");
             }
         }
         public IActionResult Edits(int id)
@@ -104,7 +104,7 @@ namespace FYP.Controllers
                     TempData["Message"] = DBUtl.DB_Message;
                     TempData["MsgType"] = "danger";
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("About");
             }
         }
         public IActionResult Delete(int id)

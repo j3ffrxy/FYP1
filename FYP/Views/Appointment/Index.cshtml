@@ -41,33 +41,33 @@
                     <th>Action</th>
                 }
 
-                </tr>
+            </tr>
         </thead>
 
         <tbody>
             @foreach (System.Data.DataRow row in Model)
             {
-            <tr>
-                <td>@row["Equipment"]</td>
-                <td>@String.Format("{0:dd-MM-yyyy}", row["date"])</td>
-                <td>@row["Quantity"]</td>
+                <tr>
+                    <td>@row["Equipment"]</td>
+                    <td>@String.Format("{0:dd-MM-yyyy}", row["date"])</td>
+                    <td>@row["Quantity"]</td>
 
-                <td>
-                    <a asp-controller="Appointment"
-                        asp-action="Edits"
-                        asp-route-id="@row["Appt_id"]">
-                        Edit
-                    </a>
-                    <a asp-controller="Appointment"
-                        asp-action="Delete"
-                        asp-route-id="@row["Appt_id"]"
-                        onclick="return confirm('Delete Appointment')">
-                        Delete
-                     </a>
-                 </td>
-                
+                    <td>
+                        <a asp-controller="Appointment"
+                           asp-action="Edits"
+                           asp-route-id="@row["Appt_id"]">
+                            Edit
+                        </a>
+                        <a asp-controller="Appointment"
+                           asp-action="Delete"
+                           asp-route-id="@row["Appt_id"]"
+                           onclick="return confirm('Delete Appointment')">
+                            Delete
+                        </a>
+                    </td>
 
-            </tr>
+
+                </tr>
             }
         </tbody>
 
