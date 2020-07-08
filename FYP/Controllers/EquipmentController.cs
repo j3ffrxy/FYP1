@@ -20,15 +20,15 @@ namespace FYP.Controllers
         {
             DataTable dt = DBUtl.GetTable("SELECT * FROM Equipment");
             return View("Index", dt.Rows);
-       
+
         }
 
-       
+
 
         [HttpGet]
         public IActionResult AddEquipment()
         {
-       
+
             return View();
 
         }
@@ -40,24 +40,23 @@ namespace FYP.Controllers
             if (!ModelState.IsValid)
             {
 
-              
+
                 ViewData["Message"] = "Invalid Input";
                 ViewData["MsgType"] = "warning";
                 return View("AddEquipment");
             }
             else
             {
-                string equipmentID = newEquipment.Serial_id;
 
                 string insert =
-                   @"INSERT INTO Equipment(Equipment_id,Serial_id,Storage_location,Quantity,Equipment_name)
-                                 VALUES('{0}','{1}','{2}','{3}','{4}'";
+                   @"INSERT INTO Equipment(Equipment_name,Serial_id,Storage_location,Quantity)
+                                 VALUES('{0}','{1}','{2}','{3}'";
 
 
-                int result = DBUtl.ExecSQL(insert, equipmentID,
+                int result = DBUtl.ExecSQL(insert, newEquipment.Equipment_name,
                     newEquipment.Serial_id,
                     newEquipment.Storage_location,
-                    newEquipment.Quantity, newEquipment.Equipment_name);
+                    newEquipment.Quantity);
 
                 if (result == 1)
                 {
@@ -105,10 +104,10 @@ namespace FYP.Controllers
                 return View();
             }
 
-        
+
             string update = @"UPDATE Equipment SET  Equipment_name='{1}', Quantity = '{2}',Storage_location='{3}' WHERE Equipment_id='{0}'";
 
-        
+
 
             int can = DBUtl.ExecSQL(update, newEquipment.Equipment_id, newEquipment.Storage_location,
                       newEquipment.Quantity, newEquipment.Equipment_name);
@@ -152,6 +151,11 @@ namespace FYP.Controllers
             }
             return RedirectToAction("Index");
         }
+        public IActionResult MassAdd()
+        {
+            return View();
+        }
+        [HttpPost]
         public ActionResult MassAdd(IFormFile postedFile)
         {
             if (postedFile != null)
@@ -218,6 +222,7 @@ namespace FYP.Controllers
                             TempData["MsgType"] = "danger";
                         }
 
+
                     }
                     if (count == equipment.Count)
                     {
@@ -239,19 +244,9 @@ namespace FYP.Controllers
             }
             else
             {
-                ViewBag.Message = "Please select the file to upload.";
+                ViewBag.Message = "Please select the file first to upload.";
             }
             return View();
         }
-
-
-
     }
-
-         
-        }
-
-      
-  
-
-    
+}
