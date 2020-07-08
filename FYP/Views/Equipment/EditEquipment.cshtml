@@ -7,29 +7,12 @@
     <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
     <script language="javascript">
-        function SetOne() {
-            var qty = $("#Quantity").val();
-
-            if ($("#Serial_id").val().trim().length > 0) {
-                5
-                $("#Quantity").val(1);
-                $('#Quantity').attr('readonly', true);
-
-            } else {
-                $('#Quantity').attr('readonly', false);
-                $("#Quantity").val(qty);
-
-            }
-        }
-
         $(document).ready(function () {
-            if ($("#Serial_id").val().trim().length > 0) {
-                $('#Quantity').attr('readonly', true);
-            }
-            else {
-                $('#Quantity').attr('readonly', false);
-            }
-            $("#Serial_id").change(SetOne);
+            $('#JSdate')
+                .datetimepicker({
+                    format: 'DD-MM-YYYY',
+                    sideBySide: true
+                });
         });
     </script>
 }
@@ -60,8 +43,8 @@
         <div class="col-sm-4">
             <select asp-for="Storage_location" class="form-control">
                 <option value="">--- Select ---</option>
-                <option value="Warehouse A">Store A</option>
-                <option value="Warehouse B">Store B</option>
+                <option value="Store A">Store A</option>
+                <option value="Store B">Store B</option>
             </select>
         </div>
 

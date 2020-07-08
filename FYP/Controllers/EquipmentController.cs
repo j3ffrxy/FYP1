@@ -50,7 +50,7 @@ namespace FYP.Controllers
 
                 string insert =
                    @"INSERT INTO Equipment(Equipment_name,Serial_id,Storage_location,Quantity)
-                                 VALUES('{0}','{1}','{2}','{3}'";
+                                 VALUES('{0}','{1}','{2}','{3}')";
 
 
                 int result = DBUtl.ExecSQL(insert, newEquipment.Equipment_name,
@@ -184,10 +184,10 @@ namespace FYP.Controllers
 
                             equipment.Add(new Equipment
                             {
+                                Serial_id = int.Parse(rows[0].ToString()),
                                 Equipment_name = rows[1].ToString(),
-                                Serial_id = rows[2].ToString(),
-                                Storage_location = rows[3].ToString(),
-                                Quantity = int.Parse(rows[4].ToString()),
+                                Storage_location = rows[2].ToString(),
+                                Quantity = int.Parse(rows[3].ToString()),
                             });
                         }
 
@@ -196,10 +196,10 @@ namespace FYP.Controllers
                     bool exists = false;
                     foreach (Equipment u in equipment)
                     {
-                        List<Equipment> existuser = DBUtl.GetList<Equipment>("SELECT * FROM Equipment");
-                        foreach (var a in existuser)
+                        List<Equipment> list = DBUtl.GetList<Equipment>("SELECT * FROM Equipment");
+                        foreach (var a in list)
                         {
-                            if (u.Equipment_id.Equals(a.Equipment_id))
+                            if (u.Equipment_id==(a.Equipment_id))
                             {
                                 exists = true;
                             }
@@ -207,8 +207,8 @@ namespace FYP.Controllers
                         if (exists == false)
                         {
                             string insert =
-                                      @"INSERT INTO Equipments(Equipment_name , Serial_id , Storage_location , Quantity )
-                                     Values ('{0}' , '{1}' , '{2}' , '{3}'))";
+                                      @"INSERT INTO Equipment(Equipment_name , Serial_id , Storage_location , Quantity )
+                                     Values ('{0}' , '{1}' , '{2}' , '{3}')";
 
                             int res = DBUtl.ExecSQL(insert, u.Equipment_name, u.Serial_id, u.Storage_location, u.Quantity);
                             if (res == 1)

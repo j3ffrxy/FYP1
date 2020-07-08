@@ -15,7 +15,7 @@ namespace FYP.Models
   
        
       
-        public string Serial_id { get; set; }
+        public int Serial_id { get; set; }
 
         [Required(ErrorMessage = "Enter storage location")]
         public string Storage_location { get; set; }
