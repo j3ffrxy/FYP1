@@ -47,21 +47,42 @@ namespace FYP.Controllers
             else
             {
                 string insert =
-                    @"INSERT INTO Users(Group_id , full_name , dob , nric , password)
-                      Values ('{0}' , '{1}' , '{2:dd-MM-yyyy}' , '{3}' , HASHBYTES('SHA1', '{4}'))";
+                    @"INSERT INTO Users(Group_id , Brigade_id, Company_id , Platoon_id ,  full_name , dob , nric , password, rank)
+                      Values ('{0}' , '{1}', '{2}', '{3}' , '{4}' , '{5:yyyy-MM-dd}' , '{6}' , HASHBYTES('SHA1', '{7}') , '{8}')";
 
-                int res = DBUtl.ExecSQL(insert, user.Group_id, user.full_name, user.dob, user.nric, user.password);
+                List<Users> existuser = DBUtl.GetList<Users>("SELECT * FROM USERS");
+                bool exists = false;
 
-                if (res == 1)
+                
+
+                foreach(var a in existuser)
                 {
-                    TempData["Message"] = "User Created";
-                    TempData["MsgType"] = "success";
+                    if (a.nric.Equals(user.nric))
+                    {
+                        exists = true;
+                    }
+                }
+                if(exists == false)
+                {
+                    int res = DBUtl.ExecSQL(insert, user.Group_id, user.Brigade_id, user.Company_id, user.Platoon_id, user.full_name, user.dob, user.nric, user.password, user.rank);
+                    if (res == 1)
+                    {
+                        TempData["Message"] = "User Created";
+                        TempData["MsgType"] = "success";
+                    }
+                    else
+                    {
+                        TempData["Message"] = DBUtl.DB_Message;
+                        TempData["MsgType"] = "danger";
+                    }
                 }
                 else
                 {
                     TempData["Message"] = "User already exists";
                     TempData["MsgType"] = "danger";
                 }
+
+               
                 return RedirectToAction("About");
             }
         }
@@ -93,11 +114,11 @@ namespace FYP.Controllers
             else
             {
                 string update =
-                   @"UPDATE Users
-                    SET Group_id ='{1}', full_name='{2}', 
-                        dob ='{3:dd-MM-yyyy}' , nric = '{4}' , password = HASHBYTES('SHA1', '{5}') 
+                  @"UPDATE Users
+                     SET Group_id ='{1}', Brigade_id = '{2}' , Company_id = '{3}' , Platoon_id = '{4}' ,  full_name='{5}', 
+                        dob ='{6:dd-MM-yyyy}' , nric = '{7}' , password = HASHBYTES('SHA1', '{8}') , rank = '{9}' 
                         WHERE User_id = '{0}'";
-                int res = DBUtl.ExecSQL(update, user.User_id, user.Group_id, user.full_name, user.dob, user.nric, user.password);
+                int res = DBUtl.ExecSQL(update, user.User_id, user.Group_id, user.Brigade_id, user.Company_id, user.Platoon_id, user.full_name, user.dob, user.nric, user.password, user.rank);
                 if (res == 1)
                 {
                     TempData["Message"] = "User Updated";
@@ -108,7 +129,7 @@ namespace FYP.Controllers
                     TempData["Message"] = DBUtl.DB_Message;
                     TempData["MsgType"] = "danger";
                 }
-                return RedirectToAction("About");
+                return RedirectToAction("Index");
             }
         }
         public IActionResult Delete(int id)
@@ -183,11 +204,14 @@ namespace FYP.Controllers
 
                             user.Add(new Users
                             {
-                                Group_id = int.Parse(rows[0].ToString()),
-                                full_name = rows[1].ToString(),
-                                dob = DateTime.Parse(rows[2].ToString()),
-                                nric = rows[3].ToString(),
-                                password = rows[4].ToString(),
+                                Brigade_id = int.Parse(rows[1].ToString()),
+                                Company_id = int.Parse(rows[2].ToString()),
+                                Platoon_id = int.Parse(rows[3].ToString()),
+                                full_name = rows[4].ToString(),
+                                dob = DateTime.Parse(rows[5].ToString()),
+                                nric = rows[6].ToString(),
+                                password = rows[7].ToString(),
+                                rank = rows[8].ToString()
 
                             });
                         }
@@ -208,10 +232,10 @@ namespace FYP.Controllers
                         if (exists == false)
                         {
                             string insert =
-                                      @"INSERT INTO Users(Group_id , full_name , dob , nric , password)
-                                     Values ('{0}' , '{1}' , '{2:dd-MM-yyyy}' , '{3}' , HASHBYTES('SHA1', '{4}'))";
+                                      @"INSERT INTO Users(Group_id , Brigade_id, Company_id , Platoon_id ,  full_name , dob , nric , password, rank)
+                      Values ('{0}' , '{1}', '{2}', '{3}' , '{4}' , '{5:yyyy-MM-dd}' , '{6}' , HASHBYTES('SHA1', '{7}') , '{8}')";
 
-                            int res = DBUtl.ExecSQL(insert, u.Group_id, u.full_name, u.dob, u.nric, u.password);
+                            int res = DBUtl.ExecSQL(insert, u.Group_id, u.Brigade_id, u.Company_id, u.Platoon_id, u.full_name, u.dob, u.nric, u.password, u.rank);
                             if (res == 1)
                             {
                                 count++;
