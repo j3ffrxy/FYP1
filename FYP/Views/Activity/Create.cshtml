@@ -28,12 +28,50 @@
     </div>
 
     <div class="form-group row">
-        <label class="control-label col-sm-2" asp-for="platoon">Platoon: </label>
+        <label class="control-label col-sm-2" asp-for="Platoon_id">Platoon: </label>
         <div class="col-sm-5">
-            <input type="text" asp-for="platoon" class="form-control" />
+            <select id="Platoon_id" name="Platoon_id" class="form-control">
+                <option value="">-- Select One --</option>
+                <option value="1"> A </option>
+                <option value="2"> B </option>
+                <option value="3"> C </option>
+                <option value="4"> N </option>
+            </select>
         </div>
         <div class="col-sm-4">
-            <span asp-validation-for="platoon" class="text-danger"></span>
+            <span asp-validation-for="Platoon_id" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="control-label col-sm-2" asp-for="Company_id">Company: </label>
+        <div class="col-sm-5">
+            <select id="Company_id" name="Company_id" class="form-control">
+                <option value="">-- Select One --</option>
+                <option value="1"> A </option>
+                <option value="2"> B </option>
+                <option value="3"> C </option>
+                <option value="4"> N </option>
+            </select>
+        </div>
+        <div class="col-sm-4">
+            <span asp-validation-for="Company_id" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="control-label col-sm-2" asp-for="Brigade_id">Brigade: </label>
+        <div class="col-sm-5">
+            <select id="Brigade_id" name="Brigade_id" class="form-control">
+                <option value="">-- Select One --</option>
+                <option value="1"> A </option>
+                <option value="2"> B </option>
+                <option value="3"> C </option>
+                <option value="4"> N </option>
+            </select>
+        </div>
+        <div class="col-sm-4">
+            <span asp-validation-for="Brigade_id" class="text-danger"></span>
         </div>
     </div>
 
@@ -69,16 +107,6 @@
         </div>
         <div class="col-sm-4">
             <span asp-validation-for="activity_date" class="text-danger"></span>
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <label class="control-label col-sm-2" asp-for="status">Status: </label>
-        <div class="col-sm-5">
-            <input type="text" asp-for="status" class="form-control" />
-        </div>
-        <div class="col-sm-4">
-            <span asp-validation-for="status" class="text-danger"></span>
         </div>
     </div>
 

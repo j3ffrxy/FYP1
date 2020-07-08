@@ -16,7 +16,11 @@ namespace FYP.Controllers
         public IActionResult Index()
         {
 
-            DataTable dt = DBUtl.GetTable("SELECT A.User_id ,  U.full_name AS [Full Name], A.date AS [Date], SD.description AS [Equipment], A.quantity AS [Quantity], A.appt_desc AS [Description] FROM Appointment A INNER JOIN Users U ON U.User_id = A.User_id AND INNER JOIN Equipment E ON A.Equipment_id = E.Equipment_id AND INNER JOIN Serial_detail SD ON SD.Serial_id = E.Serial_id");
+            DataTable dt = DBUtl.GetTable(@"SELECT Appt_id, A.date AS [Date], E.Equipment_name AS [Equipment], 
+                                            A.quantity AS [Quantity], A.appt_desc AS [Description], A.nric AS [SAF11B], A.status AS [Status], A.Activity_id AS [Activity], A.remarks AS [Remarks]
+                                            FROM Appointment A 
+                                            INNER JOIN Equipment E ON A.Equipment_id = E.Equipment_id 
+                                            INNER JOIN Activity AC ON A.Activity_id = AC.Activity_id");
             return View("Index", dt.Rows);
         }
         public IActionResult Create()
@@ -36,10 +40,10 @@ namespace FYP.Controllers
             else
             {
                 string insert =
-                    @"INSERT INTO Users(Equipment_id, date, quantity, appt_desc, nric)
-                      Values ('{0}' , '{1:dd-MM-yyyy}' , {2} , '{3}' , '{4}')";
+                    @"INSERT INTO Appointment(Equipment_id, Activity_id, nric, date, quantity, appt_desc, status)
+                      Values ('{0}' , '{1}' , '{2}' , '{3:yyyy-MM-dd}' , '{4}', '{5}', '{6}')";
 
-                int res = DBUtl.ExecSQL(insert, a.Equipment_id, a.date, a.quantity, a.appt_desc, a.nric);
+                int res = DBUtl.ExecSQL(insert, a.Equipment_id, a.Activity_id, a.nric, a.date, a.quantity, a.appt_desc, a.status);
 
                 if (res == 1)
                 {
@@ -48,7 +52,7 @@ namespace FYP.Controllers
                 }
                 else
                 {
-                    TempData["Message"] = "Appointment Creation Failed";
+                    TempData["Message"] = DBUtl.DB_Message;
                     TempData["MsgType"] = "danger";
                 }
                 return RedirectToAction("Index");
@@ -67,7 +71,7 @@ namespace FYP.Controllers
             {
                 TempData["Message"] = "Appointment does not exist.";
                 TempData["MsgType"] = "warning";
-                return RedirectToAction("Edit");
+                return RedirectToAction("Edits");
             }
         }
 
@@ -78,16 +82,17 @@ namespace FYP.Controllers
             {
                 ViewData["Message"] = "Invalid Input";
                 ViewData["MsgType"] = "warning";
-                return View("Edit");
+                return View("Edits");
             }
             else
             {
                 string update =
                    @"UPDATE Appointment
                     SET Equipment_id='{1}', 
-                        date ='{2:dd-MM-yyyy}' , quantity = {3}, appt_desc = '{4}' , nric ='{5}' 
-                        WHERE Appt_id_id = '{0}'";
-                int res = DBUtl.ExecSQL(update, a.Appt_id, a.Equipment_id, a.date, a.quantity, a.appt_desc, a.nric);
+                        date ='{2:yyyy-MM-dd}' , quantity = {3}, appt_desc = '{4}' , nric ='{5}', status = '{6}', Activity_id = '{7}', remarks = '{8}'
+                        WHERE Appt_id = '{0}'";
+                int res = DBUtl.ExecSQL(update, a.Appt_id, a.Equipment_id, a.date, a.quantity, a.appt_desc, a.nric, a.status, a.Activity_id, a.remarks);
+                
                 if (res == 1)
                 {
                     TempData["Message"] = "Appointment Updated";

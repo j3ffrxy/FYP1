@@ -32,12 +32,35 @@
         <div class="col-sm-5">
             <select id="Equipment_id" name="Equipment_id" class="form-control">
                 <option value="">-- Select One --</option>
-                <option value="1"> SAR-21 </option>
-                <option value="2"> M-16 </option>
+                <option value="8"> Rifle </option>
+                <option value="10"> SAR-21 </option>
             </select>
         </div>
         <div class="col-sm-4">
             <span asp-validation-for="Equipment_id" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="control-label col-sm-2" asp-for="Activity_id">Activity: </label>
+        <div class="col-sm-5">
+            <select id="Activity_id" name="Activity_id" class="form-control">
+                <option value="">-- Select One --</option>
+                <option value="10"> Activity 1 </option>
+            </select>
+        </div>
+        <div class="col-sm-4">
+            <span asp-validation-for="Activity_id" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="control-label col-sm-2" asp-for="nric">SAF11B: </label>
+        <div class="col-sm-5">
+            <input type="text" asp-for="nric" class="form-control" />
+        </div>
+        <div class="col-sm-4">
+            <span asp-validation-for="nric" class="text-danger"></span>
         </div>
     </div>
 
@@ -76,10 +99,15 @@
         </div>
     </div>
 
-
-
-
-
+    <div class="form-group row">
+        <label class="control-label col-sm-2" asp-for="status">Status: </label>
+        <div class="col-sm-5">
+            <input type="text" asp-for="status" class="form-control" />
+        </div>
+        <div class="col-sm-4">
+            <span asp-validation-for="status" class="text-danger"></span>
+        </div>
+    </div>
 
     <div class="form-group row">
         <div class="offset-sm-2 col-sm-6">

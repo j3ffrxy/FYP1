@@ -12,7 +12,13 @@ namespace FYP.Models
         public int Activity_id { get; set; }
 
         [Required(ErrorMessage = "Specify a valid platoon")]
-        public string platoon { get; set; }
+        public int Platoon_id { get; set; }
+
+        [Required(ErrorMessage = "Specify a valid company")]
+        public int Company_id { get; set; }
+
+        [Required(ErrorMessage = "Specify a valid brigade")]
+        public int Brigade_id { get; set; }
 
         [Required(ErrorMessage = "Enter a valid activity type")]
         public char type { get; set; }
@@ -23,8 +29,5 @@ namespace FYP.Models
         [Required(ErrorMessage = "Enter a date")]
         [DataType(DataType.DateTime)]
         public DateTime activity_date { get; set; }
-
-        [Required(ErrorMessage = "Enter a valid status")]
-        public char status { get; set; }
     }
 }

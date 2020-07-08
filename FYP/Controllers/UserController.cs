@@ -23,7 +23,11 @@ namespace FYP.Controllers
 
         public IActionResult About()
         {
-            DataTable dt = DBUtl.GetTable("SELECT User_id ,  full_name AS [Full Name] , group_name AS Rank , dob AS [Date of Birth] FROM Users U INNER JOIN User_group UG ON U.Group_id = UG.Group_id ");
+            DataTable dt = DBUtl.GetTable(@"SELECT User_id ,  full_name AS [Full Name] , rank AS [Rank] , dob AS [Date of Birth] , B.name AS [Brigade] , C.name AS [Company] , P.name AS [Platoon] FROM Users U 
+                                            INNER JOIN User_group UG ON U.Group_id = UG.Group_id 
+                                            INNER JOIN Brigade B ON B.Brigade_id = U.Brigade_id 
+                                            INNER JOIN Company C ON C.Company_id = U.Company_id
+                                            INNER JOIN Platoon P ON P.Platoon_id = U.Platoon_id ");
             return View("Index", dt.Rows);
         }
         public IActionResult Create()
