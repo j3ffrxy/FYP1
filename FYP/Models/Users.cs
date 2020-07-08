@@ -13,6 +13,17 @@ namespace FYP.Models
 
         public int Group_id { get; set; }
 
+        [Required(ErrorMessage = "PLease select a brigade")]
+        public int Brigade_id { get; set; }
+
+        [Required(ErrorMessage = "Please select a company ")]
+
+        public int Company_id { get; set; }
+
+        public int Platoon_id { get; set; }
+
+        public int Equipment_id { get; set; }
+
         [Required(ErrorMessage = "Enter your NRIC")]
         [RegularExpression("[STFG]\\d{7}[A-Z]", ErrorMessage = "Invalid NRIC format")]
         public string nric { get; set; }
@@ -27,6 +38,11 @@ namespace FYP.Models
         [DataType(DataType.DateTime)]
         [Remote(action: "VerifyDate", controller: "User")]
         public DateTime dob { get; set; }
+
+        [Required(ErrorMessage = "Select a rank")]
+        public String rank { get; set; }
+
+        
 
     }
 }

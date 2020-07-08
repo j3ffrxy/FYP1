@@ -10,11 +10,13 @@
     <link href="~/lib/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
     <link href="~/lib/font-awesome/css/brands.min.css" rel="stylesheet" />
     <link href="~/lib/font-awesome/css/solid.min.css" rel="stylesheet" />
-
+    <img src="~/images/mindefLogo.png" width="480" height="320" />
     @RenderSection("MoreScripts", false)
+
 
 </head>
 <body>
+    
     @if (User.Identity.IsAuthenticated)
     {
         if (User.IsInRole("6"))
@@ -36,6 +38,10 @@
         else if (User.IsInRole("5"))
         {
             <Partial name="SAFUser" />
+        }
+        else if (User.IsInRole("7"))
+        {
+            <Partial name="SAFStoreman" />
         }
     }
     else

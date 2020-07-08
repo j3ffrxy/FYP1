@@ -1,0 +1,28 @@
+﻿@model FYP.Models.Stocktake;
+
+
+
+<form asp-controller="Stocktake"
+      asp-action="ViewComments">
+
+    <div class="form-group row">
+        <div class="offset-sm-2 col-sm-6 ">
+            <h2>Comments </h2>
+        </div>
+    </div>
+
+    <input asp-for="Stocktake_id" hidden />
+
+    <div class="form-group row">
+        <label class="control-label col-sm-2" asp-for="comments">Description :</label>
+        <div class="col-sm-7">
+            <textarea readonly asp-for="comments" class="form-control"></textarea>
+        </div>
+
+    </div>
+
+
+
+    
+
+</form>

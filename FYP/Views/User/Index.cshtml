@@ -36,6 +36,9 @@
                 <th>Full Name</th>
                 <th>Rank</th>
                 <th>Date Of Birth</th>
+                <th>Brigade</th>
+                <th>Company</th>
+                <th>Platoon</th>
                 @if (User.IsInRole("6"))
                 {
                     <th>Action</th>
@@ -47,28 +50,31 @@
         <tbody>
             @foreach (System.Data.DataRow row in Model)
             {
-                <tr>
-                    <td>@row["Full name"]</td>
-                    <td>@row["Rank"]</td>
-                    <td>@String.Format("{0:dd-MM-yyyy}", row["Date of Birth"])</td>
-                    @if (User.IsInRole("6"))
-                    {
-                        <td>
-                            <a asp-controller="User"
-                               asp-action="Edits"
-                               asp-route-id="@row["User_id"]">
-                                Edit
-                            </a>
-                            <a asp-controller="User"
-                               asp-action="Delete"
-                               asp-route-id="@row["User_id"]"
-                               onclick="return confirm('Delete User <@row["Full Name"]>')">
-                                Delete
-                            </a>
-                        </td>
-                    }
+            <tr>
+                <td>@row["Full name"]</td>
+                <td>@row["Rank"]</td>
+                <td>@String.Format("{0:dd-MM-yyyy}", row["Date of Birth"])</td>
+                <td>@row["Brigade"]</td>
+                <td>@row["Company"]</td>
+                <td>@row["Platoon"]</td>
+                @if (User.IsInRole("6"))
+                {
+                    <td>
+                        <a asp-controller="User"
+                           asp-action="Edits"
+                           asp-route-id="@row["User_id"]">
+                            Edit
+                        </a>
+                        <a asp-controller="User"
+                           asp-action="Delete"
+                           asp-route-id="@row["User_id"]"
+                           onclick="return confirm('Delete User <@row["Full Name"]>')">
+                            Delete
+                        </a>
+                    </td>
+                }
 
-                </tr>
+            </tr>
             }
         </tbody>
 
@@ -77,6 +83,9 @@
                 <th>Full Name</th>
                 <th>Rank</th>
                 <th>Date Of Birth</th>
+                <th>Brigade</th>
+                <th>Company</th>
+                <th>Platoon</th>
                 @if (User.IsInRole("6"))
                 {
                     <th>Action</th>

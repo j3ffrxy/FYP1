@@ -19,7 +19,7 @@ namespace FYP.Controller
               AND password =  HASHBYTES('SHA1', '{1}')";
 
         private const string ROLE_COL = "Group_id";
-        private const string NAME_COL = "full_name";
+        private const string NAME_COL = "nric";
 
         private const string REDIRECT_CNTR = "User";
         private const string REDIRECT_ACTN = "Index";
@@ -69,7 +69,7 @@ namespace FYP.Controller
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             if (Url.IsLocalUrl(returnUrl))
                 return Redirect(returnUrl);
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction(LOGIN_VIEW);
         }
 
         private bool AuthenticateUser(string uid, string pw, out ClaimsPrincipal principal)

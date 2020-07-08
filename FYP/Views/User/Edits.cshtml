@@ -30,22 +30,50 @@
     <input asp-for="User_id" hidden />
 
     <div class="form-group row">
-        <label class="control-label col-sm-2" asp-for="Group_id">Rank :</label>
+        <label class="control-label col-sm-2" asp-for="Brigade_id">Brigade :</label>
         <div class="col-sm-5">
-            <select id="Group_id" name="Group_id" class=" = form-control">
+            <select id="Brigade_id" name="Brigade_id" class="form-control">
                 <option value="">-- Select One --</option>
-                <option value="1"> Recruit </option>
-                <option value="2"> Corporal </option>
-                <option value="3"> Platoon Commander </option>
-                <option value="4"> Officer Commander </option>
-                <option value="5"> Commandant Officer </option>
-                <option value=" 6"> Admin</option>
+                <option value="1"> A </option>
+                <option value="2"> B </option>
+                <option value="3"> C </option>
             </select>
         </div>
         <div class="col-sm-4">
-            <span asp-validation-for="Group_id" class="text-danger"></span>
+            <span asp-validation-for="Brigade_id" class="text-danger"></span>
         </div>
     </div>
+
+    <div class="form-group row">
+        <label class="control-label col-sm-2" asp-for="Company_id">Company :</label>
+        <div class="col-sm-5">
+            <select id="Company_id" name="Company_id" class="form-control">
+                <option value="">-- Select One --</option>
+                <option value="1"> A </option>
+                <option value="2"> B </option>
+                <option value="3"> C </option>
+            </select>
+        </div>
+        <div class="col-sm-4">
+            <span asp-validation-for="Company_id" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="control-label col-sm-2" asp-for="Platoon_id">Platoon :</label>
+        <div class="col-sm-5">
+            <select id="Platoon_id" name="Platoon_id" class="form-control">
+                <option value="">-- Select One --</option>
+                <option value="1"> A </option>
+                <option value="2"> B </option>
+                <option value="3"> C </option>
+            </select>
+        </div>
+        <div class="col-sm-4">
+            <span asp-validation-for="Platoon_id" class="text-danger"></span>
+        </div>
+    </div>
+
 
     <div class="form-group row">
         <label class="control-label col-sm-2" asp-for="nric">NRIC  :</label>
@@ -90,6 +118,44 @@
         </div>
         <div class="col-sm-4">
             <span asp-validation-for="dob" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="control-label col-sm-2" asp-for="rank">Rank :</label>
+        <div class="col-sm-5">
+            <select id="rank" name="rank" class="form-control">
+                <option value="">-- Select One --</option>
+                <option value="Recruit"> Recruit </option>
+                <option value="Private"> Private </option>
+                <option value="Corporal"> Corporal </option>
+                <option value="Third Sergeant"> Third Sergeant</option>
+                <option value="First Sergeant"> First Sergeant </option>
+                <option value="Staff Sergeant"> Staff Sergeant</option>
+                <option value="Master Warrant Officer"> Master Warrant Officer</option>
+                <option value="Brigadier-General"> Brigadier-General</option>
+            </select>
+        </div>
+        <div class="col-sm-4">
+            <span asp-validation-for="rank" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="control-label col-sm-2" asp-for="Group_id">Role :</label>
+        <div class="col-sm-5">
+            <select id="Group_id" name="Group_id" class="form-control">
+                <option value="">-- Select One --</option>
+                <option value="3"> Platoon Commander </option>
+                <option value="4"> Officer Commander </option>
+                <option value="5"> Commandant Officer </option>
+                <option value="6"> Admin</option>
+                <option value="7"> Store Supervisor </option>
+                <option value="8"> Serviceman</option>
+            </select>
+        </div>
+        <div class="col-sm-4">
+            <span asp-validation-for="Group_id" class="text-danger"></span>
         </div>
     </div>
 
