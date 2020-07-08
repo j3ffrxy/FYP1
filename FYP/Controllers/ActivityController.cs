@@ -15,7 +15,11 @@ namespace FYP.Controllers
         public IActionResult Index()
         {
 
-            DataTable dt = DBUtl.GetTable("SELECT platoon AS [Platoon], type AS [Activity Type], activity_description AS [Description], activity_date AS [Date], status AS [Status] FROM Activity");
+            DataTable dt = DBUtl.GetTable(@"SELECT Activity_id, P.name AS [Platoon], C.name AS [Company], B.name AS [Brigade], type AS [Activity Type], activity_description AS [Description], activity_date AS [Date]
+                                            FROM Activity A
+                                            INNER JOIN Brigade B ON B.Brigade_id = A.Brigade_id 
+                                            INNER JOIN Company C ON C.Company_id = A.Company_id
+                                            INNER JOIN Platoon P ON P.Platoon_id = A.Platoon_id ");
             return View("Index", dt.Rows);
         }
 
@@ -36,10 +40,10 @@ namespace FYP.Controllers
             else
             {
                 string insert =
-                    @"INSERT INTO Activity(Activity_id, platoon, type, activity_description, activity_date, status)
-                      Values ('{0}' , '{1}' , '{2}' , '{3}' , '{4}', '{5:dd-MM-yyyy}', '{6}')";
+                    @"INSERT INTO Activity(Platoon_id, Company_id, Brigade_id, type, activity_description, activity_date)
+                      Values ('{0}' , '{1}' , '{2}', '{3}', '{4}', '{5:yyyy-MM-dd}')";
 
-                int res = DBUtl.ExecSQL(insert, a.Activity_id, a.platoon, a.type, a.activity_description, a.activity_date, a.status);
+                int res = DBUtl.ExecSQL(insert, a.Platoon_id, a.Company_id, a.Brigade_id, a.type, a.activity_description, a.activity_date);
 
                 if (res == 1)
                 {
@@ -48,7 +52,7 @@ namespace FYP.Controllers
                 }
                 else
                 {
-                    TempData["Message"] = "Activity Creation Failed";
+                    TempData["Message"] = DBUtl.DB_Message;
                     TempData["MsgType"] = "danger";
                 }
                 return RedirectToAction("Index");
@@ -66,7 +70,7 @@ namespace FYP.Controllers
             {
                 TempData["Message"] = "Activity does not exist.";
                 TempData["MsgType"] = "warning";
-                return RedirectToAction("Edit");
+                return RedirectToAction("Edits");
             }
         }
 
@@ -77,16 +81,16 @@ namespace FYP.Controllers
             {
                 ViewData["Message"] = "Invalid Input";
                 ViewData["MsgType"] = "warning";
-                return View("Edit");
+                return View("Edits");
             }
             else
             {
                 string update =
-                   @"UPDATE Users
-                    SET platoon ='{1}', type='{2}', 
-                        activity_description ='{3}' , activity_date ='{4:dd-MM-yyyy}' , status = '{5}'
+                   @"UPDATE Activity
+                    SET Platoon_id ='{1}', Company_id ='{2}', Brigade_id ='{3}', type='{4}', 
+                        activity_description ='{5}' , activity_date ='{6:yyyy-MM-dd}'
                         WHERE Activity_id = '{0}'";
-                int res = DBUtl.ExecSQL(update, a.Activity_id, a.platoon, a.type, a.activity_description, a.activity_date, a.status);
+                int res = DBUtl.ExecSQL(update, a.Activity_id, a.Platoon_id, a.Company_id, a.Brigade_id, a.type, a.activity_description, a.activity_date);
                 if (res == 1)
                 {
                     TempData["Message"] = "Activity Updated";

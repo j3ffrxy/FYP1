@@ -1,0 +1,85 @@
+﻿@section MoreScripts {
+    <link href="~/lib/datatables/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#jsStocktake').DataTable({
+                ordering: true,
+                paging: true,
+                searching: true,
+                info: true,
+                lengthChange: true,
+                pageLength: 20
+            });
+        });
+    </script>
+
+}
+
+@model System.Data.DataRowCollection
+<h2> Stocktake </h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-@TempData["MsgType"]">
+        @TempData["Message"]
+    </div>
+}
+
+<div>
+
+    <table id="jsStocktake" class="table">
+        <thead>
+            <tr>
+                <th>Quantity</th>
+                <th>Date Created</th>
+                <th>Created By</th>
+                @if (User.IsInRole("7") || User.IsInRole("6"))
+                {
+                    <th>Action</th>
+                }
+
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (System.Data.DataRow row in Model)
+            {
+                <tr>
+                    <td>@row["Quantity"]</td>
+                    <td>@String.Format("{0:dd-MM-yyyy}", row["Date Created"])</td>
+                    <td>@row["Created By"]</td>
+                    @if (User.IsInRole("7") || User.IsInRole("6"))
+                    {
+                        <td>
+                            <a asp-controller="Stocktake"
+                               asp-action="ViewComments"
+                               asp-route-id="@row["Stocktake_id"]">
+                                Comments
+                            </a>
+                            
+                        </td>
+                    }
+
+                </tr>
+            }
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <th>Quantity</th>
+                <th>Date Created</th>
+                <th>Created By</th>
+                @if (User.IsInRole("7") || User.IsInRole("6"))
+                {
+                    <th>Action</th>
+                }
+
+            </tr>
+        </tfoot>
+
+
+    </table>
+</div>
+

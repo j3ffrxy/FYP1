@@ -33,15 +33,19 @@
         <thead>
             <tr>
                 <th>Equipment</th>
+                <th>Activity</th>
+                <th>SAF11B</th>
                 <th>Date</th>
                 <th>Quantity</th>
+                <th>Description</th>
                 <th>Status</th>
-                @if (User.IsInRole("3") || User.IsInRole("4") || User.IsInRole("5"))
+                <th>Remarks</th>
+                @if (User.IsInRole("6"))
                 {
                     <th>Action</th>
                 }
 
-                </tr>
+            </tr>
         </thead>
 
         <tbody>
@@ -49,23 +53,27 @@
             {
             <tr>
                 <td>@row["Equipment"]</td>
-                <td>@String.Format("{0:dd-MM-yyyy}", row["date"])</td>
+                <td>@row["Activity"]</td>
+                <td>@row["SAF11B"]</td>
+                <td>@String.Format("{0:dd-MM-yyyy}", row["Date"])</td>
                 <td>@row["Quantity"]</td>
-
+                <td>@row["Description"]</td>
+                <td>@row["Status"]</td>
+                <td>@row["Remarks"]</td>
                 <td>
                     <a asp-controller="Appointment"
-                        asp-action="Edits"
-                        asp-route-id="@row["Appt_id"]">
+                       asp-action="Edits"
+                       asp-route-id="@row["Appt_id"]">
                         Edit
                     </a>
                     <a asp-controller="Appointment"
-                        asp-action="Delete"
-                        asp-route-id="@row["Appt_id"]"
-                        onclick="return confirm('Delete Appointment')">
+                       asp-action="Delete"
+                       asp-route-id="@row["Appt_id"]"
+                       onclick="return confirm('Delete Appointment')">
                         Delete
-                     </a>
-                 </td>
-                
+                    </a>
+                </td>
+
 
             </tr>
             }
@@ -74,10 +82,17 @@
         <tfoot>
             <tr>
                 <th>Equipment</th>
+                <th>Activity</th>
+                <th>SAF11B</th>
                 <th>Date</th>
                 <th>Quantity</th>
+                <th>Description</th>
                 <th>Status</th>
-                <th>Action</th>
+                <th>Remarks</th>
+                @if (User.IsInRole("6"))
+                {
+                    <th>Action</th>
+                }
 
             </tr>
         </tfoot>

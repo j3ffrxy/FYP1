@@ -33,11 +33,12 @@
         <thead>
             <tr>
                 <th>Platoon</th>
+                <th>Company</th>
+                <th>Brigade</th>
                 <th>Type</th>
                 <th>Description</th>
                 <th>Date</th>
-                <th>Status</th>
-                @if (User.IsInRole("3") || User.IsInRole("4") || User.IsInRole("5"))
+                @if (User.IsInRole("6"))
                 {
                     <th>Action</th>
                 }
@@ -50,20 +51,21 @@
             {
             <tr>
                 <td>@row["platoon"]</td>
-                <td>@row["type"]</td>
-                <td>@row["activity_description"]</td>
-                <td>@String.Format("{0:dd-MM-yyyy}", row["activity_date"])</td>
-                <td>@row["status"]</td>
+                <td>@row["company"]</td>
+                <td>@row["brigade"]</td>
+                <td>@row["activity type"]</td>
+                <td>@row["description"]</td>
+                <td>@String.Format("{0:dd-MM-yyyy}", row["date"])</td>
 
                 <td>
                     <a asp-controller="Activity"
-                       asp-action="Edit"
-                       asp-route-id="@row["Appt_id"]">
+                       asp-action="Edits"
+                       asp-route-id="@row["Activity_id"]">
                         Edit
                     </a>
                     <a asp-controller="Activity"
                        asp-action="Delete"
-                       asp-route-id="@row["Appt_id"]"
+                       asp-route-id="@row["Activity_id"]"
                        onclick="return confirm('Delete Activity')">
                         Delete
                     </a>
@@ -77,11 +79,12 @@
         <tfoot>
             <tr>
                 <th>Platoon</th>
+                <th>Company</th>
+                <th>Brigade</th>
                 <th>Type</th>
                 <th>Description</th>
                 <th>Date</th>
-                <th>Status</th>
-                @if (User.IsInRole("3") || User.IsInRole("4") || User.IsInRole("5"))
+                @if (User.IsInRole("6"))
                 {
                     <th>Action</th>
                 }

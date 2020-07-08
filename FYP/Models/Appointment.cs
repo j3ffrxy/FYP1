@@ -13,6 +13,8 @@ namespace FYP.Models
 
         public int Equipment_id { get; set; }
 
+        public int Activity_id { get; set; }
+
         [Required(ErrorMessage = "Enter a valid date")]
         [DataType(DataType.DateTime)]
         public DateTime date { get; set; }
@@ -26,5 +28,10 @@ namespace FYP.Models
         [Required(ErrorMessage = "Enter an NRIC")]
         [RegularExpression("[STFG]\\d{7}[A-Z]", ErrorMessage = "Invalid NRIC format")]
         public string nric { get; set; }
+
+        [Required(ErrorMessage = "Enter a status")]
+        public string status { get; set; }
+
+        public string remarks { get; set; }
     }
 }
