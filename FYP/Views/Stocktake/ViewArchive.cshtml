@@ -35,7 +35,7 @@
                 <th>Quantity</th>
                 <th>Date Created</th>
                 <th>Created By</th>
-                @if (User.IsInRole("7"))
+                @if (User.IsInRole("7") || User.IsInRole("6"))
                 {
                     <th>Action</th>
                 }
@@ -50,7 +50,7 @@
                     <td>@row["Quantity"]</td>
                     <td>@String.Format("{0:dd-MM-yyyy}", row["Date Created"])</td>
                     <td>@row["Created By"]</td>
-                    @if (User.IsInRole("7"))
+                    @if (User.IsInRole("7") || User.IsInRole("6"))
                     {
                         <td>
                             <a asp-controller="Stocktake"
@@ -70,7 +70,7 @@
                 <th>Quantity</th>
                 <th>Date Created</th>
                 <th>Created By</th>
-                @if (User.IsInRole("7"))
+                @if (User.IsInRole("7") || User.IsInRole("6"))
                 {
                     <th>Action</th>
                 }

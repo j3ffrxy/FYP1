@@ -84,9 +84,9 @@ namespace FYP.Controller
                             {
                                 Equipment_id = int.Parse(rows[0].ToString()),
                                 Serial_id = int.Parse(rows[1].ToString()),
-                                storage_location = rows[2].ToString(),
-                                storage_detail = rows[3].ToString(),
-                                quantity = int.Parse(rows[4].ToString()),
+                                Equipment_name = rows[2].ToString(),
+                                Storage_location = rows[3].ToString(),
+                                Quantity = int.Parse(rows[4].ToString()),
 
                             });
                         }
@@ -106,14 +106,14 @@ namespace FYP.Controller
                     }
                     foreach (var a in equipment)
                     {
-                        total += a.quantity;
+                        total += a.Quantity;
                         bool correct = false;
                         var currequip = DBUtl.GetList<Equipment>("SELECT * FROM Equipment");
 
 
                         foreach (var b in currequip)
                         {
-                            if (a.quantity == b.quantity)
+                            if (a.Quantity == b.Quantity)
                             {
                                 correct = true;
 
@@ -133,27 +133,18 @@ namespace FYP.Controller
 
 
 
-                    if (message == " ")
+                    if (message == "")
                     {
                         message += "No discrepancies found during stocktaking";
                         DBUtl.ExecSQL(insert, user_id, total, DateTime.Now, message , archive);
-                        TempData["Message"] = "No discrepancies found during stocktaking";
-                        TempData["MsgType"] = "success";
 
                     }
                     else
                     {
                         DBUtl.ExecSQL(insert, user_id, total, DateTime.Now, message, archive);
-                        TempData["Message"] = "Discrepancies were found during stocktaking , check comments for more details";
-                        TempData["MsgType"] = "warning";
 
                     }
-                    var list = DBUtl.GetList<Stocktake>("Select * From Stocktaking");
-                    var count = 0;
-                    foreach(var a in list)
-                    {
-                        count++;
-                    }
+                   
                     return RedirectToAction("ViewComments");
                 }
                 catch (Exception ex)
@@ -168,52 +159,53 @@ namespace FYP.Controller
             }
             return View();
         }
-        public IActionResult Delete(int id)
+
+            
+        public IActionResult ViewComments(int id)
         {
-            string select = @"SELECT * FROM Stocktaking WHERE  Stocktake_id ={0}";
-            DataTable ds = DBUtl.GetTable(select, id);
-            if (ds.Rows.Count != 1)
+            bool newstocktake = true;
+            if(id > 0)
             {
-                TempData["Message"] = "Stocktake does not exist";
-                TempData["MsgType"] = "warning";
+                newstocktake = false;
             }
-            else
+            if(newstocktake == true)
             {
-                string delete = "DELETE FROM Stocktaking WHERE Stocktake_id={0}";
-                int res = DBUtl.ExecSQL(delete, id);
-                if (res == 1)
+                var list = DBUtl.GetList<Stocktake>("Select * From Stocktaking");
+                var count = 0;
+                foreach (var a in list)
                 {
-                    TempData["Message"] = "Stocktake Deleted";
-                    TempData["MsgType"] = "success";
+                    count++;
+                }
+                string select = "SELECT * FROM Stocktaking WHERE Stocktake_id = '{0}'";
+                List<Stocktake> list1 = DBUtl.GetList<Stocktake>(select, count);
+                if (list1.Count == 1)
+                {
+                    return View(list1[0]);
                 }
                 else
                 {
-                    TempData["Message"] = DBUtl.DB_Message;
-                    TempData["MsgType"] = "danger";
+                    TempData["Message"] = "Stocktaking not found";
+                    TempData["MsgType"] = "warning";
+                    return RedirectToAction("ViewStocktake");
                 }
-            }
-            return RedirectToAction("ViewStocktake");
-        }
-        public IActionResult ViewComments()
-        {
-            var list = DBUtl.GetList<Stocktake>("Select * From Stocktaking");
-            var count = 0;
-            foreach(var a in list)
-            {
-                count++;
-            }
-            string select = "SELECT * FROM Stocktaking WHERE Stocktake_id = '{0}'";
-            List<Stocktake> list1 = DBUtl.GetList<Stocktake>(select, count);
-            if (list1.Count == 1)
-            {
-                return View(list1[0]);
             }
             else
             {
-                TempData["Message"] = "Stocktaking not found";
-                TempData["MsgType"] = "warning";
-                return RedirectToAction("ViewStocktake");
+                string select = "SELECT * FROM Stocktaking WHERE Stocktake_id = '{0}'";
+                List<Stocktake> list1 = DBUtl.GetList<Stocktake>(select, id);
+                if (list1.Count == 1)
+                {
+                    return View(list1[0]);
+                }
+                else
+                {
+                    TempData["Message"] = "Stocktaking not found";
+                    TempData["MsgType"] = "warning";
+                    return RedirectToAction("ViewStocktake");
+                }
             }
+            
         }
+      
     }
 }

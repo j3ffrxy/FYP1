@@ -11,10 +11,10 @@ namespace FYP.Models
 
         public int Serial_id { get; set; }
 
-        public String storage_location { get; set; }
+        public String Storage_location { get; set; }
 
-        public String storage_detail { get; set; }
+        public String Equipment_name { get; set; }
 
-        public int quantity { get; set; }
+        public int Quantity { get; set; }
     }
 }
