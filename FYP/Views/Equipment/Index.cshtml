@@ -25,7 +25,7 @@
 <table id="jsMovieTable" class="table">
     <thead>
         <tr>
-            <th scope="col">Equipment ID</th>
+            <th scope="col">Serial Number</th>
             <th scope="col">Equipment Name</th>
             <th scope="col">Storage Location</th>
             <th scope="col">Quantity</th>
@@ -36,7 +36,7 @@
         {
 
             <tr>
-                <td>@row["Equipment_id"]</td>
+                <td>@row["Serial_no"]</td>
                 <td>@row["Equipment_name"]</td>
                 <td>@row["Storage_location"]</td>
                 <td>@row["Quantity"]</td>
@@ -46,19 +46,19 @@
             <td>
                 <a asp-controller="Equipment"
                    asp-action="EditEquipment"
-                   asp-route-id="@row["Equipment_id"]">
+                   asp-route-id="@row["Serial_no"]">
                     Edit
                 </a>
                 <a asp-controller="Equipment"
                    asp-action="DeleteEquipment"
-                   asp-route-id="@row["Equipment_id"]"
+                   asp-route-id="@row["Serial_no"]"
                    onclick="return confirm('Delete Equipment')">
                     Delete
                 </a>
                 @if (User.IsInRole("1"))
                 {
                     <text> |</text>
-                    <a asp-controller="Equipment" asp-action="DeleteEquipment" asp-route-id="@row["Equipment_id"]" onclick="return confirm('Are you sure you want to delete: @row["Equipment_id"]?')">Delete</a>
+                    <a asp-controller="Equipment" asp-action="DeleteEquipment" asp-route-id="@row["Serial_no"]" onclick="return confirm('Are you sure you want to delete: @row["Serial_no"]?')">Delete</a>
 
                 }
 

@@ -9,13 +9,13 @@ namespace FYP.Models
 {
     public class Equipment
     {
-        public string Equipment_id { get; set; }
+        public string Serial_no { get; set; }
 
         public string Equipment_name { get; set; }
   
        
       
-        public int Serial_id { get; set; }
+        public int type_id { get; set; }
 
         [Required(ErrorMessage = "Enter storage location")]
         public string Storage_location { get; set; }

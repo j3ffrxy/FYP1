@@ -20,14 +20,29 @@
 <form asp-controller="Equipment"
       asp-action="EditEquipment"
       method="post">
-    <input hidden asp-for="Equipment_id" />
     <div class="form-group row">
         <div class="offset-sm-0 col-sm-6 ">
             <h2>Edit Equipment</h2>
         </div>
     </div>
-    <input asp-for="Equipment_id" hidden />
-    <input asp-for="Serial_id" hidden />
+    <div class="form-group row">
+        <label class="control-label col-sm-2" asp-for="Serial_no">Serial Number :</label>
+        <div class="col-sm-5">
+            <input asp-for="Serial_no" class="form-control" />
+        </div>
+        <div class="col-sm-4">
+            <span asp-validation-for="Serial_no" class="text-danger"></span>
+        </div>
+    </div>    <div class="form-group row">
+        <label class="control-label col-sm-2" asp-for="type_id">Equipment type id :</label>
+        <div class="col-sm-5">
+            <input asp-for="type_id" class="form-control" />
+        </div>
+        <div class="col-sm-4">
+            <span asp-validation-for="type_id" class="text-danger"></span>
+        </div>
+    </div>
+
     <div class="form-group row">
         <label class="control-label col-sm-2" asp-for="Equipment_name">Equipment Name :</label>
         <div class="col-sm-5">

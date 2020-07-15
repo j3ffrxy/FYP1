@@ -49,12 +49,12 @@ namespace FYP.Controllers
             {
 
                 string insert =
-                   @"INSERT INTO Equipment(Equipment_name,Serial_id,Storage_location,Quantity)
-                                 VALUES('{0}','{1}','{2}','{3}')";
+                   @"INSERT INTO Equipment(Serial_no,Equipment_name,type_id,Storage_location,Quantity)
+                                 VALUES('{0}','{1}','{2}','{3}','{4}')";
 
 
-                int result = DBUtl.ExecSQL(insert, newEquipment.Equipment_name,
-                    newEquipment.Serial_id,
+                int result = DBUtl.ExecSQL(insert, newEquipment.Serial_no, newEquipment.Equipment_name,
+                    newEquipment.type_id,
                     newEquipment.Storage_location,
                     newEquipment.Quantity);
 
@@ -78,7 +78,7 @@ namespace FYP.Controllers
         {
 
             // Get the record from the database using the id
-            string select = "SELECT * FROM Equipment WHERE  Equipment_id='{0}'";
+            string select = "SELECT * FROM Equipment WHERE  Serial_no='{0}'";
             List<Equipment> list = DBUtl.GetList<Equipment>(select, id);
             if (list.Count == 1)
             {
@@ -94,7 +94,7 @@ namespace FYP.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditEquipment(Equipment newEquipment)
+        public IActionResult EditEquipment(Equipment EditEquip)
         {
 
             if (!ModelState.IsValid)
@@ -105,13 +105,13 @@ namespace FYP.Controllers
             }
 
 
-            string update = @"UPDATE Equipment SET  Equipment_name='{1}', Quantity = '{2}',Storage_location='{3}' WHERE Equipment_id='{0}'";
+            string update = @"UPDATE Equipment SET type_id='{1}', Equipment_name='{2}', Quantity = '{3}',Storage_location='{4}' WHERE Serial_no ='{0}'";
 
 
 
-            int can = DBUtl.ExecSQL(update, newEquipment.Equipment_id, newEquipment.Storage_location,
-                      newEquipment.Quantity, newEquipment.Equipment_name);
-            if (can == 1)
+            int res = DBUtl.ExecSQL(update, EditEquip.Serial_no, EditEquip.type_id, EditEquip.Equipment_name, EditEquip.Quantity,
+                      EditEquip.Storage_location);
+            if (res == 1)
             {
                 TempData["Message"] = "Successfully updated Equipment";
                 TempData["MsgType"] = "success";
@@ -127,7 +127,7 @@ namespace FYP.Controllers
         public IActionResult DeleteEquipment(string id)
         {
             string select = @"SELECT * FROM Equipment 
-                              WHERE Equipment_id='{0}'";
+                              WHERE Serial_no='{0}'";
             DataTable ds = DBUtl.GetTable(select, id);
             if (ds.Rows.Count != 1)
             {
@@ -136,7 +136,7 @@ namespace FYP.Controllers
             }
             else
             {
-                string delete = "DELETE FROM Equipment WHERE Equipment_id='{0}'";
+                string delete = "DELETE FROM Equipment WHERE Serial_no='{0}'";
                 int res = DBUtl.ExecSQL(delete, id);
                 if (res == 1)
                 {
@@ -184,7 +184,7 @@ namespace FYP.Controllers
 
                             equipment.Add(new Equipment
                             {
-                                Serial_id = int.Parse(rows[0].ToString()),
+                                type_id = int.Parse(rows[0].ToString()),
                                 Equipment_name = rows[1].ToString(),
                                 Storage_location = rows[2].ToString(),
                                 Quantity = int.Parse(rows[3].ToString()),
@@ -199,7 +199,7 @@ namespace FYP.Controllers
                         List<Equipment> list = DBUtl.GetList<Equipment>("SELECT * FROM Equipment");
                         foreach (var a in list)
                         {
-                            if (u.Equipment_id==(a.Equipment_id))
+                            if (u.Serial_no==(a.Serial_no))
                             {
                                 exists = true;
                             }
@@ -207,10 +207,10 @@ namespace FYP.Controllers
                         if (exists == false)
                         {
                             string insert =
-                                      @"INSERT INTO Equipment(Equipment_name , Serial_id , Storage_location , Quantity )
+                                      @"INSERT INTO Equipment(Equipment_name , type_id , Storage_location , Quantity )
                                      Values ('{0}' , '{1}' , '{2}' , '{3}')";
 
-                            int res = DBUtl.ExecSQL(insert, u.Equipment_name, u.Serial_id, u.Storage_location, u.Quantity);
+                            int res = DBUtl.ExecSQL(insert, u.Equipment_name, u.type_id, u.Storage_location, u.Quantity);
                             if (res == 1)
                             {
                                 count++;

@@ -8,24 +8,23 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="User" asp-action="Create">Create User</a>
+            <li class="dropdown">
+                <a class="dropdown-toggle" role="button" aria-expanded="false" href="#" data-toggle="dropdown">Users<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li>@Html.ActionLink("Add Users", "Create", "User", null, new { id = "item 1" })</li>
+                    <li>@Html.ActionLink("Mass add users", "MassAdd", "User", null, new { id = "item 2" })</li>
+                </ul>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="User" asp-action="Index">View User</a>
+
+            <li class="dropdown">
+                <a class="dropdown-toggle" role="button" aria-expanded="false" href="#" data-toggle="dropdown">Equipments<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li>@Html.ActionLink("View Equipments", "Index", "Equipment", null, new { id = "item 1" })</li>
+                    <li>@Html.ActionLink("Add Equipments", "AddEquipment", "Equipment", null, new { id = "item 2" })</li>
+                    <li>@Html.ActionLink("Mass add equipments", "MassAdd", "Equipment", null, new { id = "item 3" })</li>
+                </ul>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="User" asp-action="MassAdd">Add multiple users</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Equipment" asp-action="Index">View Equipments</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Equipment" asp-action="AddEquipment">Add Equipment</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Equipment" asp-action="MassAdd">Add multiple Equipments</a>
-            </li>
+
 
         </ul>
 
