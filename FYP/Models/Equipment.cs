@@ -19,7 +19,6 @@ namespace FYP.Models
 
         [Required(ErrorMessage = "Enter a valid  weapon type")]
 
-        public int Type_id { get; set; }
 
         [Required(ErrorMessage = "Enter storage location")]
         public string Storage_location { get; set; }
