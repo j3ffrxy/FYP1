@@ -9,12 +9,16 @@ namespace FYP.Models
 {
     public class Equipment
     {
+        [Required(ErrorMessage = "Specify a valid Serial no")]
+
         public string Serial_no { get; set; }
+        [Required(ErrorMessage = "Enter Equipment name")]
 
         public string Equipment_name { get; set; }
-  
-       
-      
+
+
+        [Required(ErrorMessage = "Enter a valid  weapon type")]
+
         public int type_id { get; set; }
 
         [Required(ErrorMessage = "Enter storage location")]
