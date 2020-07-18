@@ -8,36 +8,43 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="User" asp-action="Create">Create User</a>
+            <li class="dropdown">
+                <a class="dropdown-toggle" role="button" aria-expanded="false" href="#" data-toggle="dropdown">Users<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li>@Html.ActionLink("Add Users", "Create", "User", null, new { id = "item 1" })</li>
+                    <li>@Html.ActionLink("Mass add users", "MassAdd", "User", null, new { id = "item 2" })</li>
+                </ul>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="User" asp-action="About">View User</a>
+
+            <li class="dropdown">
+                <a class="dropdown-toggle" role="button" aria-expanded="false" href="#" data-toggle="dropdown">Equipments<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li>@Html.ActionLink("View Equipments", "Index", "Equipment", null, new { id = "item 1" })</li>
+                    <li>@Html.ActionLink("Add Equipments", "AddEquipment", "Equipment", null, new { id = "item 2" })</li>
+                    <li>@Html.ActionLink("Mass add equipments", "MassAdd", "Equipment", null, new { id = "item 3" })</li>
+                </ul>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="User" asp-action="MassAdd">Add multiple users</a>
+
+            <li class="dropdown">
+                <a class="dropdown-toggle" role="button" aria-expanded="false" href="#" data-toggle="dropdown">Stocktake<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li>@Html.ActionLink("View Stocktake", "ViewStocktake", "Stocktake", null, new { id = "item 1" })</li>
+                    <li>@Html.ActionLink("Add Stockstake", "AddStocktake", "Stocktake", null, new { id = "item 2" })</li>
+                    <li>@Html.ActionLink("View Archive", "ViewArchive", "Stocktake", null, new { id = "item 3" })</li>
+
+                </ul>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Stocktake" asp-action="AddStocktake">New Stocktake</a>
+            <li class="dropdown">
+                <a class="dropdown-toggle" role="button" aria-expanded="false" href="#" data-toggle="dropdown">Appointment<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li>@Html.ActionLink("View Appointment", "Index", "Appointment", null, new { id = "item 1" })</li>
+                    <li>@Html.ActionLink("Create Appointment", "Create", "Appointment", null, new { id = "item 2" })</li>
+                    <li>@Html.ActionLink("Edit Appointment", "Edits", "Appointment", null, new { id = "item 3" })</li>
+      
+
+                </ul>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Stocktake" asp-action="ViewStocktake">View Recent Stocktake</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Stocktake" asp-action="ViewArchive">View Archive</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Activity" asp-action="Create">Create Session</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Activity" asp-action="Index">View Sessions</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Appointment" asp-action="Create">Book Appointment</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Appointment" asp-action="Index">View Appointments</a>
-            </li>
+
         </ul>
 
         <ul class="nav navbar-nav ml-auto">

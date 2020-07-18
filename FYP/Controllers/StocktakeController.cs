@@ -82,8 +82,8 @@ namespace FYP.Controller
 
                             equipment.Add(new Equipment
                             {
-                                Equipment_id = int.Parse(rows[0].ToString()),
-                                Serial_id = int.Parse(rows[1].ToString()),
+                                Serial_no = rows[0].ToString(),
+                                Type_desc = rows[1].ToString(),
                                 Equipment_name = rows[2].ToString(),
                                 Storage_location = rows[3].ToString(),
                                 Quantity = int.Parse(rows[4].ToString()),
@@ -122,7 +122,7 @@ namespace FYP.Controller
                         }
                         if (correct != true)
                         {
-                            message += String.Format("Equipment {0} quantity do not match" + Environment.NewLine, a.Equipment_id);
+                            message += String.Format("Equipment {0} quantity do not match" + Environment.NewLine, a.Serial_no);
                         }
 
 

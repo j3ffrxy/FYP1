@@ -7,26 +7,20 @@ using System.Threading.Tasks;
 
 namespace FYP.Models
 {
-    public class Equipment
+    public class Equipment_accessories
     {
-        [Required(ErrorMessage = "Specify a valid Serial no")]
 
-        public string Serial_no { get; set; }
-        [Required(ErrorMessage = "Enter Equipment name")]
+        public int Equipment_accessories_id { get; set; }
 
-        public string Equipment_name { get; set; }
-
-
-
-
+        public string Accessories_details { get; set; }
         [Required(ErrorMessage = "Enter storage location")]
+
         public string Storage_location { get; set; }
-    
 
         [Required(ErrorMessage = "Enter quantity")]
         public int Quantity { get; set; }
 
-        public string Type_desc { get; set; }
+
       
 
      
