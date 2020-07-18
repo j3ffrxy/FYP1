@@ -40,7 +40,7 @@ namespace FYP.Controller
                 DateTime seconddate = a.date_created;
                 String diff = (firstdate - seconddate).TotalDays.ToString();
                 double archivable = Double.Parse(diff);
-                if(archivable > 365)
+                if(archivable > 30)
                 {
                     var update = "Update Stocktaking Set archive = '{0}' Where Stocktake_id = '{1}'";
                     DBUtl.ExecSQL(update, true, a.Stocktake_id);
@@ -83,7 +83,7 @@ namespace FYP.Controller
                             equipment.Add(new Equipment
                             {
                                 Serial_no = rows[0].ToString(),
-                                type_id = int.Parse(rows[1].ToString()),
+                               
                                 Equipment_name = rows[2].ToString(),
                                 Storage_location = rows[3].ToString(),
                                 Quantity = int.Parse(rows[4].ToString()),
@@ -97,13 +97,9 @@ namespace FYP.Controller
                     String message = "";
                     int total = 0;
                     var user = DBUtl.GetList<Users>("SELECT * FROM Users WHERE nric = '" + User.Identity.Name + " ' ");
-                    var user_id = 0;
                     var archive = false;
 
-                    foreach (var c in user)
-                    {
-                        user_id = c.User_id;
-                    }
+                    
                     foreach (var a in equipment)
                     {
                         total += a.Quantity;
@@ -136,12 +132,12 @@ namespace FYP.Controller
                     if (message == "")
                     {
                         message += "No discrepancies found during stocktaking";
-                        DBUtl.ExecSQL(insert, user_id, total, DateTime.Now, message , archive);
+                        DBUtl.ExecSQL(insert, user[0].User_id, total, DateTime.Now, message , archive);
 
                     }
                     else
                     {
-                        DBUtl.ExecSQL(insert, user_id, total, DateTime.Now, message, archive);
+                        DBUtl.ExecSQL(insert, user[0].User_id, total, DateTime.Now, message, archive);
 
                     }
                    

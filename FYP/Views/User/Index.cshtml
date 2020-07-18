@@ -36,10 +36,9 @@
                 <th>Full Name</th>
                 <th>Rank</th>
                 <th>Date Of Birth</th>
-                <th>Brigade</th>
+                <th>Unit</th>
                 <th>Company</th>
-                <th>Platoon</th>
-                @if (User.IsInRole("6"))
+                @if (User.IsInRole("Admin"))
                 {
                     <th>Action</th>
                 }
@@ -54,10 +53,9 @@
                 <td>@row["Full name"]</td>
                 <td>@row["Rank"]</td>
                 <td>@String.Format("{0:dd-MM-yyyy}", row["Date of Birth"])</td>
-                <td>@row["Brigade"]</td>
+                <td>@row["Unit"]</td>
                 <td>@row["Company"]</td>
-                <td>@row["Platoon"]</td>
-                @if (User.IsInRole("6"))
+                @if (User.IsInRole("Admin"))
                 {
                     <td>
                         <a asp-controller="User"
@@ -83,10 +81,9 @@
                 <th>Full Name</th>
                 <th>Rank</th>
                 <th>Date Of Birth</th>
-                <th>Brigade</th>
+                <th>Unit</th>
                 <th>Company</th>
-                <th>Platoon</th>
-                @if (User.IsInRole("6"))
+                @if (User.IsInRole("Admin"))
                 {
                     <th>Action</th>
                 }

@@ -23,11 +23,7 @@ namespace FYP.Controllers
 
         public IActionResult About()
         {
-            DataTable dt = DBUtl.GetTable(@"SELECT User_id ,  full_name AS [Full Name] , rank AS [Rank] , dob AS [Date of Birth] , B.name AS [Brigade] , C.name AS [Company] , P.name AS [Platoon] FROM Users U 
-                                            INNER JOIN User_group UG ON U.Group_id = UG.Group_id 
-                                            INNER JOIN Brigade B ON B.Brigade_id = U.Brigade_id 
-                                            INNER JOIN Company C ON C.Company_id = U.Company_id
-                                            INNER JOIN Platoon P ON P.Platoon_id = U.Platoon_id ");
+            DataTable dt = DBUtl.GetTable(@"SELECT User_id ,  full_name AS [Full Name] , rank AS [Rank] , dob AS [Date of Birth] , unit AS [Unit] , company AS [Company] FROM Users");
             return View("Index", dt.Rows);
         }
         public IActionResult Create()
@@ -47,8 +43,8 @@ namespace FYP.Controllers
             else
             {
                 string insert =
-                    @"INSERT INTO Users(Group_id , Brigade_id, Company_id , Platoon_id ,  full_name , dob , nric , password, rank)
-                      Values ('{0}' , '{1}', '{2}', '{3}' , '{4}' , '{5:yyyy-MM-dd}' , '{6}' , HASHBYTES('SHA1', '{7}') , '{8}')";
+                    @"INSERT INTO Users(nric , password , full_name , dob , rank , unit , company , role )
+                      Values ('{0}' , HASHBYTES('SHA1', '{1}'), '{2}', '{3:yyyy-MM-dd}' , '{4}' , '{5}' , '{6}' , '{7}' , )";
 
                 List<Users> existuser = DBUtl.GetList<Users>("SELECT * FROM USERS");
                 bool exists = false;
@@ -64,7 +60,7 @@ namespace FYP.Controllers
                 }
                 if(exists == false)
                 {
-                    int res = DBUtl.ExecSQL(insert, user.Group_id, user.Brigade_id, user.Company_id, user.Platoon_id, user.full_name, user.dob, user.nric, user.password, user.rank);
+                    int res = DBUtl.ExecSQL(insert, user.nric , user.password , user.full_name , user.dob , user.rank , user.unit , user.company , user.role);
                     if (res == 1)
                     {
                         TempData["Message"] = "User Created";
@@ -115,10 +111,10 @@ namespace FYP.Controllers
             {
                 string update =
                   @"UPDATE Users
-                     SET Group_id ='{1}', Brigade_id = '{2}' , Company_id = '{3}' , Platoon_id = '{4}' ,  full_name='{5}', 
+                     SET nric ='{1}', password = HASHBYTES('SHA1', '{2}') , full_name = '{3}' , dob = '{4:yyyy-MM-dd}' ,  rank = '{5}', 
                         dob ='{6:dd-MM-yyyy}' , nric = '{7}' , password = HASHBYTES('SHA1', '{8}') , rank = '{9}' 
                         WHERE User_id = '{0}'";
-                int res = DBUtl.ExecSQL(update, user.User_id, user.Group_id, user.Brigade_id, user.Company_id, user.Platoon_id, user.full_name, user.dob, user.nric, user.password, user.rank);
+                int res = DBUtl.ExecSQL(update, user.User_id, user.nric, user.password, user.full_name, user.dob, user.rank, user.unit, user.company, user.role);
                 if (res == 1)
                 {
                     TempData["Message"] = "User Updated";
@@ -184,6 +180,9 @@ namespace FYP.Controllers
                 {
                     string fileExtension = Path.GetExtension(postedFile.FileName);
 
+                   
+                   
+
                     //Validate uploaded file and return error.
                     if (fileExtension != ".csv")
                     {
@@ -196,6 +195,7 @@ namespace FYP.Controllers
                     using (var sreader = new StreamReader(postedFile.OpenReadStream()))
                     {
                         //First line is header. If header is not passed in csv then we can neglect the below line.
+                        string[] headers = sreader.ReadLine().Split(',');
 
                         //Loop through the records
                         while (!sreader.EndOfStream)
@@ -204,14 +204,14 @@ namespace FYP.Controllers
 
                             user.Add(new Users
                             {
-                                Brigade_id = int.Parse(rows[1].ToString()),
-                                Company_id = int.Parse(rows[2].ToString()),
-                                Platoon_id = int.Parse(rows[3].ToString()),
-                                full_name = rows[4].ToString(),
-                                dob = DateTime.Parse(rows[5].ToString()),
-                                nric = rows[6].ToString(),
-                                password = rows[7].ToString(),
-                                rank = rows[8].ToString()
+                                nric = rows[0].ToString(),
+                                password = rows[1].ToString(),
+                                full_name = rows[2].ToString(),
+                                dob = DateTime.Parse(rows[3].ToString()),
+                                rank = rows[4].ToString(),
+                                unit = rows[5].ToString(),
+                                company = rows[6].ToString(),
+                                role = rows[7].ToString()
 
                             });
                         }
@@ -232,10 +232,10 @@ namespace FYP.Controllers
                         if (exists == false)
                         {
                             string insert =
-                                      @"INSERT INTO Users(Group_id , Brigade_id, Company_id , Platoon_id ,  full_name , dob , nric , password, rank)
-                      Values ('{0}' , '{1}', '{2}', '{3}' , '{4}' , '{5:yyyy-MM-dd}' , '{6}' , HASHBYTES('SHA1', '{7}') , '{8}')";
+                                     @"INSERT INTO Users(nric , password , full_name , dob , rank , unit , company , role )
+                      Values ('{0}' , HASHBYTES('SHA1', '{1}'), '{2}', '{3:yyyy-MM-dd}' , '{4}' , '{5}' , '{6}' , '{7}' , )";
 
-                            int res = DBUtl.ExecSQL(insert, u.Group_id, u.Brigade_id, u.Company_id, u.Platoon_id, u.full_name, u.dob, u.nric, u.password, u.rank);
+                            int res = DBUtl.ExecSQL(insert, u.nric, u.password, u.full_name, u.dob, u.rank, u.unit, u.company, u.role);
                             if (res == 1)
                             {
                                 count++;
