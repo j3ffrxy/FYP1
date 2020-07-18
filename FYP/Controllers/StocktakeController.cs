@@ -83,7 +83,7 @@ namespace FYP.Controller
                             equipment.Add(new Equipment
                             {
                                 Serial_no = rows[0].ToString(),
-                                type_id = int.Parse(rows[1].ToString()),
+                                Type_desc = rows[1].ToString(),
                                 Equipment_name = rows[2].ToString(),
                                 Storage_location = rows[3].ToString(),
                                 Quantity = int.Parse(rows[4].ToString()),
