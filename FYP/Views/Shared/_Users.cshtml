@@ -19,30 +19,11 @@
     
     @if (User.Identity.IsAuthenticated)
     {
-        if (User.IsInRole("6"))
+        if (User.IsInRole("Admin"))
         {
             <Partial name="SAFAdmin" />
         }
-        else if (User.IsInRole("2"))
-        {
-            <Partial name="SAFUser" />
-        }
-        else if (User.IsInRole("3"))
-        {
-            <Partial name="SAFUser" />
-        }
-        else if (User.IsInRole("4"))
-        {
-            <Partial name="SAFUser" />
-        }
-        else if (User.IsInRole("5"))
-        {
-            <Partial name="SAFUser" />
-        }
-        else if (User.IsInRole("7"))
-        {
-            <Partial name="SAFStoreman" />
-        }
+        
     }
     else
     {

@@ -18,7 +18,7 @@ namespace FYP.Controller
             WHERE nric = '{0}' 
               AND password =  HASHBYTES('SHA1', '{1}')";
 
-        private const string ROLE_COL = "Group_id";
+        private const string ROLE_COL = "role";
         private const string NAME_COL = "nric";
 
         private const string REDIRECT_CNTR = "User";
