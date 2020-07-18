@@ -1,4 +1,4 @@
-﻿@model FYP.Models.Activity;
+﻿@model FYP.Models.Exercise;
 
 @section MoreScripts {
     <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
@@ -16,21 +16,21 @@
     </script>
 
 }
-<form asp-controller="Activity"
+<form asp-controller="Exercise"
       asp-action="Create"
       method="post">
 
 
     <div class="form-group row">
         <div class="offset-sm-2 col-sm-6 ">
-            <h2>Create Training Session</h2>
+            <h2>Create Exercise</h2>
         </div>
     </div>
 
     <div class="form-group row">
-        <label class="control-label col-sm-2" asp-for="Platoon_id">Platoon: </label>
+        <label class="control-label col-sm-2" asp-for="company">Company: </label>
         <div class="col-sm-5">
-            <select id="Platoon_id" name="Platoon_id" class="form-control">
+            <select id="company" name="company" class="form-control">
                 <option value="">-- Select One --</option>
                 <option value="1"> A </option>
                 <option value="2"> B </option>
@@ -39,14 +39,14 @@
             </select>
         </div>
         <div class="col-sm-4">
-            <span asp-validation-for="Platoon_id" class="text-danger"></span>
+            <span asp-validation-for="company" class="text-danger"></span>
         </div>
     </div>
 
     <div class="form-group row">
-        <label class="control-label col-sm-2" asp-for="Company_id">Company: </label>
+        <label class="control-label col-sm-2" asp-for="unit">Unit: </label>
         <div class="col-sm-5">
-            <select id="Company_id" name="Company_id" class="form-control">
+            <select id="unit" name="unit" class="form-control">
                 <option value="">-- Select One --</option>
                 <option value="1"> A </option>
                 <option value="2"> B </option>
@@ -55,58 +55,63 @@
             </select>
         </div>
         <div class="col-sm-4">
-            <span asp-validation-for="Company_id" class="text-danger"></span>
+            <span asp-validation-for="unit" class="text-danger"></span>
         </div>
     </div>
 
     <div class="form-group row">
-        <label class="control-label col-sm-2" asp-for="Brigade_id">Brigade: </label>
+        <label class="control-label col-sm-2" asp-for="Package_id">Package: </label>
         <div class="col-sm-5">
-            <select id="Brigade_id" name="Brigade_id" class="form-control">
-                <option value="">-- Select One --</option>
-                <option value="1"> A </option>
-                <option value="2"> B </option>
-                <option value="3"> C </option>
-                <option value="4"> N </option>
-            </select>
+            <div class="form-check form-check-inline">
+                <input type="checkbox" class="form-check-input"
+                       asp-for="Package_id" value="Yes" />
+                <label class="form-check-label">
+                    SAR-21 with magazine
+                </label>
+            </div>
         </div>
         <div class="col-sm-4">
-            <span asp-validation-for="Brigade_id" class="text-danger"></span>
+            <span asp-validation-for="Package_id" class="text-danger"></span>
         </div>
     </div>
 
     <div class="form-group row">
-        <label class="control-label col-sm-2" asp-for="type">Activity Type: </label>
+        <label class="control-label col-sm-2" asp-for="description">Description: </label>
         <div class="col-sm-5">
-            <input type="text" asp-for="type" class="form-control" />
+            <input type="text" asp-for="description" class="form-control" />
         </div>
         <div class="col-sm-4">
-            <span asp-validation-for="type" class="text-danger"></span>
+            <span asp-validation-for="description" class="text-danger"></span>
         </div>
     </div>
 
     <div class="form-group row">
-        <label class="control-label col-sm-2" asp-for="activity_description">Description: </label>
-        <div class="col-sm-5">
-            <input type="text" asp-for="activity_description" class="form-control" />
-        </div>
-        <div class="col-sm-4">
-            <span asp-validation-for="activity_description" class="text-danger"></span>
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <label class="control-label col-sm-2" asp-for="activity_date">Date: </label>
+        <label class="control-label col-sm-2" asp-for="start_date">Start Date: </label>
         <div class="col-sm-5">
             <div class="input-group date" id="JSdate" data-target-input="nearest">
-                <input type="text" asp-for="activity_date" class="form-control" />
+                <input type="text" asp-for="start_date" class="form-control" />
                 <div class="input-group-append" data-target="#JSdate" data-toggle="datetimepicker">
                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                 </div>
             </div>
         </div>
         <div class="col-sm-4">
-            <span asp-validation-for="activity_date" class="text-danger"></span>
+            <span asp-validation-for="start_date" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="control-label col-sm-2" asp-for="end_date">End Date: </label>
+        <div class="col-sm-5">
+            <div class="input-group date" id="JSdate" data-target-input="nearest">
+                <input type="text" asp-for="end_date" class="form-control" />
+                <div class="input-group-append" data-target="#JSdate" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <span asp-validation-for="end_date" class="text-danger"></span>
         </div>
     </div>
 

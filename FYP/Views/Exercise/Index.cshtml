@@ -4,7 +4,7 @@
 
     <script>
         $(document).ready(function () {
-            $('#jsActivity').DataTable({
+            $('#jsExercise').DataTable({
                 ordering: true,
                 paging: true,
                 searching: true,
@@ -18,7 +18,7 @@
 }
 
 @model System.Data.DataRowCollection
-<h2> Activities </h2>
+<h2> Exercises </h2>
 
 @if (TempData["Message"] != null)
 {
@@ -29,15 +29,17 @@
 
 <div>
 
-    <table id="jsActivity" class="table">
+    <table id="jsExercise" class="table">
         <thead>
             <tr>
-                <th>Platoon</th>
+                <th>Exercise No.</th>
+                <th>SAF11B</th>
                 <th>Company</th>
-                <th>Brigade</th>
-                <th>Type</th>
+                <th>Unit</th>
+                <th>Package</th>
                 <th>Description</th>
-                <th>Date</th>
+                <th>Start Date</th>
+                <th>End Date</th>
                 @if (User.IsInRole("6"))
                 {
                     <th>Action</th>
@@ -50,24 +52,31 @@
             @foreach (System.Data.DataRow row in Model)
             {
             <tr>
-                <td>@row["platoon"]</td>
-                <td>@row["company"]</td>
-                <td>@row["brigade"]</td>
-                <td>@row["activity type"]</td>
-                <td>@row["description"]</td>
-                <td>@String.Format("{0:dd-MM-yyyy}", row["date"])</td>
-
+                <td>@row["Exercise_id"]</td>
+                <td>@row["nric"]</td>
+                <td>@row["Company"]</td>
+                <td>@row["Unit"])</td>
+                <td>@row["Package"]</td>
+                <td>@row["Description"]</td>
+                <td>@String.Format("{0:dd-MM-yyyy}", row["Start Date"])</td>
+                <td>@String.Format("{0:dd-MM-yyyy}", row["End Date"])</td>
                 <td>
-                    <a asp-controller="Activity"
+                    <a asp-controller="Exercise"
                        asp-action="Edits"
-                       asp-route-id="@row["Activity_id"]">
+                       asp-route-id="@row["Exercise_id"]">
                         Edit
                     </a>
-                    <a asp-controller="Activity"
+                    <a asp-controller="Exercise"
                        asp-action="Delete"
-                       asp-route-id="@row["Activity_id"]"
-                       onclick="return confirm('Delete Activity')">
+                       asp-route-id="@row["Exercise_id"]"
+                       onclick="return confirm('Delete Exercise')">
                         Delete
+                    </a>
+                    <a asp-controller="Exercise"
+                       asp-action="Archive"
+                       asp-route-id="@row["Exercise_id"]"
+                       onclick="return confirm('Archive Exercise')">
+                        Archive
                     </a>
                 </td>
 
@@ -78,12 +87,14 @@
 
         <tfoot>
             <tr>
-                <th>Platoon</th>
+                <th>Exercise No.</th>
+                <th>SAF11B</th>
                 <th>Company</th>
-                <th>Brigade</th>
-                <th>Type</th>
+                <th>Unit</th>
+                <th>Package</th>
                 <th>Description</th>
-                <th>Date</th>
+                <th>Start Date</th>
+                <th>End Date</th>
                 @if (User.IsInRole("6"))
                 {
                     <th>Action</th>
