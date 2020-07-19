@@ -11,17 +11,6 @@ namespace FYP.Models
     {
         public int User_id { get; set; }
 
-        public int Group_id { get; set; }
-
-        [Required(ErrorMessage = "PLease select a brigade")]
-        public int Brigade_id { get; set; }
-
-        [Required(ErrorMessage = "Please select a company ")]
-
-        public int Company_id { get; set; }
-
-        public int Platoon_id { get; set; }
-
         public int Equipment_id { get; set; }
 
         [Required(ErrorMessage = "Enter your NRIC")]
@@ -42,7 +31,17 @@ namespace FYP.Models
         [Required(ErrorMessage = "Select a rank")]
         public String rank { get; set; }
 
-        
+        [Required(ErrorMessage = "Select a unit")]
+        public String unit { get; set; }
+
+        public String company { get; set; }
+
+        [Required(ErrorMessage = "Select a role")]
+        public String role { get; set; }
+
+
+
+
 
     }
 }

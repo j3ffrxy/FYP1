@@ -40,7 +40,7 @@ namespace FYP.Controller
                 DateTime seconddate = a.date_created;
                 String diff = (firstdate - seconddate).TotalDays.ToString();
                 double archivable = Double.Parse(diff);
-                if(archivable > 365)
+                if(archivable > 30)
                 {
                     var update = "Update Stocktaking Set archive = '{0}' Where Stocktake_id = '{1}'";
                     DBUtl.ExecSQL(update, true, a.Stocktake_id);
@@ -71,9 +71,11 @@ namespace FYP.Controller
 
 
                     var equipment = new List<Equipment>();
+                    var accessory = new List<Equipment_accessories>();
                     using (var sreader = new StreamReader(postedFile.OpenReadStream()))
                     {
                         //First line is header. If header is not passed in csv then we can neglect the below line.
+                        string[] headers = sreader.ReadLine().Split(',');
 
                         //Loop through the records
                         while (!sreader.EndOfStream)
@@ -83,30 +85,36 @@ namespace FYP.Controller
                             equipment.Add(new Equipment
                             {
                                 Serial_no = rows[0].ToString(),
-                                Type_desc = rows[1].ToString(),
-                                Equipment_name = rows[2].ToString(),
-                                Storage_location = rows[3].ToString(),
-                                Quantity = int.Parse(rows[4].ToString()),
+                                Equipment_name = rows[1].ToString(),
+                                Storage_location = rows[2].ToString(),
+                                Quantity = int.Parse(rows[3].ToString()),
+                                Type_desc = rows[4].ToString()
 
-                            });
+                            }); ;
+
+                            accessory.Add(new Equipment_accessories
+                            {
+                                Equipment_accessories_id = Int32.Parse(rows[5].ToString()),
+                                Accessories_details = rows[6].ToString(),
+                                Storage_location = rows[7].ToString(),
+                                Quantity = Int32.Parse(rows[8].ToString())
+                                
+                            }); ; 
                         }
 
                     }
 
 
                     String message = "";
-                    int total = 0;
+                    int equip_total = 0;
+                    int access_total = 0;
                     var user = DBUtl.GetList<Users>("SELECT * FROM Users WHERE nric = '" + User.Identity.Name + " ' ");
-                    var user_id = 0;
                     var archive = false;
 
-                    foreach (var c in user)
-                    {
-                        user_id = c.User_id;
-                    }
+                    
                     foreach (var a in equipment)
                     {
-                        total += a.Quantity;
+                        equip_total += a.Quantity;
                         bool correct = false;
                         var currequip = DBUtl.GetList<Equipment>("SELECT * FROM Equipment");
 
@@ -128,20 +136,38 @@ namespace FYP.Controller
 
                     }
 
-                    String insert = @"INSERT INTO Stocktaking(User_id , quantity , date_created , comments , archive)
-                                     Values ('{0}' , '{1}' , '{2:yyyy-MM-dd}' , '{3}' , '{4}')";
+                    foreach(var c in accessory)
+                    {
+                        access_total += c.Quantity;
+                        bool correct = false;
+                        var curracess = DBUtl.GetList<Equipment_accessories>("Select * From Equipment_accessories");
+                        foreach (var d in curracess)
+                        {
+                            if (c.Quantity == d.Quantity)
+                            {
+                                correct = true;
+                            }
+                        }
+                        if (correct != true)
+                        {
+                            message += String.Format("Accessory {0} quantity do not match" + Environment.NewLine, c.Equipment_accessories_id);
+                        }
+                    }
+
+                    String insert = @"INSERT INTO Stocktaking(User_id , total_equipment_quantity , total_accessories_quantity, date_created , comments , archive)
+                                     Values ('{0}' , '{1}' , '{2:yyyy-MM-dd}' , '{3:yyyy-MM-dd}' , '{4}' , '{5}')";
 
 
 
                     if (message == "")
                     {
                         message += "No discrepancies found during stocktaking";
-                        DBUtl.ExecSQL(insert, user_id, total, DateTime.Now, message , archive);
+                        DBUtl.ExecSQL(insert, user[0].User_id, equip_total,  access_total , DateTime.Now, message , archive);
 
                     }
                     else
                     {
-                        DBUtl.ExecSQL(insert, user_id, total, DateTime.Now, message, archive);
+                        DBUtl.ExecSQL(insert, user[0].User_id, equip_total,  access_total, DateTime.Now, message, archive);
 
                     }
                    

@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FYP.Controllers
 {
-    public class EquipmentController : Microsoft.AspNetCore.Mvc.Controller
+    /*public class EquipmentController : Microsoft.AspNetCore.Mvc.Controller
     {
 
         public IActionResult Index()
@@ -247,5 +247,5 @@ namespace FYP.Controllers
             }
             return View();
         }
-    }
+    }*/
 }
