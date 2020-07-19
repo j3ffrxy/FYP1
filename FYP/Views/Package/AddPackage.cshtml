@@ -1,4 +1,4 @@
-﻿@model FYP.Models.Equipment;
+﻿@model FYP.Models.Package;
 
 @section MoreScripts {
     <script src="~/lib/moment/moment.min.js"></script>
@@ -16,70 +16,47 @@
         });
     </script>
 }
-
-<form asp-controller="Equipment"
-      asp-action="EditEquipment"
+<form asp-controller="Package"
+      asp-action="AddPackage"
       method="post">
+
     <div class="form-group row">
         <div class="offset-sm-0 col-sm-6 ">
-            <h2>Edit Equipment</h2>
+            <h2>Add Package</h2>
         </div>
     </div>
+   
     <div class="form-group row">
-        <label class="control-label col-sm-2" asp-for="Serial_no">Serial Number :</label>
+        <label class="control-label col-sm-2" asp-for="Serial_no">Serial number of weapon :</label>
         <div class="col-sm-5">
             <input asp-for="Serial_no" class="form-control" />
         </div>
         <div class="col-sm-4">
             <span asp-validation-for="Serial_no" class="text-danger"></span>
         </div>
-    </div>    <div class="form-group row">
-        <label class="control-label col-sm-2" asp-for="Type_desc">Equipment type id :</label>
-        <div class="col-sm-5">
-            <input asp-for="Type_desc" class="form-control" />
-        </div>
-        <div class="col-sm-4">
-            <span asp-validation-for="Type_desc" class="text-danger"></span>
-        </div>
     </div>
 
     <div class="form-group row">
-        <label class="control-label col-sm-2" asp-for="Equipment_name">Equipment Name :</label>
+        <label class="control-label col-sm-2" asp-for="Equipment_accessories_id">Equipment accessories id :</label>
         <div class="col-sm-5">
-            <input asp-for="Equipment_name" class="form-control" />
+            <input asp-for="Equipment_accessories_id" class="form-control" />
         </div>
         <div class="col-sm-4">
-            <span asp-validation-for="Equipment_name" class="text-danger"></span>
+            <span asp-validation-for="Equipment_accessories_id" class="text-danger"></span>
         </div>
     </div>
 
-    <div class="form-group row">
-        <label class="control-label col-sm-2" asp-for="Storage_location">Storage Location:</label>
-        <div class="col-sm-4">
-            <select asp-for="Storage_location" class="form-control">
-                <option value="">--- Select ---</option>
-                <option value="Store A">Store A</option>
-                <option value="Store B">Store B</option>
-            </select>
-        </div>
-
-        <div class="col-sm-4">
-            <span asp-validation-for="Storage_location" class="text-danger"></span>
-        </div>
-    </div>
 
 
     <div class="form-group row">
-        <label class="control-label col-sm-2" asp-for="Quantity">Quantity :</label>
+        <label class="control-label col-sm-2" asp-for="Name">Package Name :</label>
         <div class="col-sm-5">
-            <input asp-for="Quantity" class="form-control" />
+            <input asp-for="Name" class="form-control" />
         </div>
         <div class="col-sm-4">
-            <span asp-validation-for="Quantity" class="text-danger"></span>
+            <span asp-validation-for="Name" class="text-danger"></span>
         </div>
     </div>
-
-
 
 
     <div class="form-group row">
@@ -92,7 +69,7 @@
     {
         <div class="form-group row">
             <div class="offset-sm-2 col-sm-6">
-                <div class="alert alert-@ViewData["MsgType"]">
+                <div class="alert alert-@ViewData[" MsgType"]">
                     <text>@Html.Raw(ViewData["Message"])</text>
                 </div>
             </div>

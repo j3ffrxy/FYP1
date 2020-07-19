@@ -14,10 +14,7 @@ namespace FYP.Models
 
         public int Serial_no { get; set; }
 
-        public int Equipment_accessories_id { get; set; }
-
-        public string Package_details { get; set; }
-    
+        public int Equipment_accessories_id { get; set; }    
 
         public string Name { get; set; }
 

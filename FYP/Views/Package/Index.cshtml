@@ -1,0 +1,77 @@
+﻿@section MoreScripts {
+    <link href="~/lib/datatables/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#jsActivity').DataTable({
+                ordering: true,
+                paging: true,
+                searching: true,
+                info: true,
+                lengthChange: true,
+                pageLength: 20
+            });
+        });
+    </script>
+
+}
+<h2>Inventory List</h2>
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-@TempData["MsgType"]">@TempData["Message"]</div>
+}
+
+<table id="jsMovieTable" class="table">
+    <thead>
+        <tr>
+            <th scope="col">Serial Number</th>
+            <th scope="col">Equipment accessories id</th>
+            <th scope="col">Package name</th>
+        
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (System.Data.DataRow row in Model)
+        {
+
+        <tr>
+            <td>@row["Package_id"]</td>
+            <td>@row["Serial_no"]</td>
+            <td>@row["Equipment_accessories_id"]</td>
+            <td>@row["Name"]</td>
+
+            @if (!User.IsInRole("3"))
+            {
+                <td>
+                    <a asp-controller="Package"
+                       asp-action="EditPackage"
+                       asp-route-id="@row["Package_id"]">
+                        Edit
+                    </a>
+                    <a asp-controller="Package"
+                       asp-action="EditPackage"
+                       asp-route-id="@row["Package_id"]"
+                       onclick="return confirm('Delete Package')">
+                        Delete
+                    </a>
+                    @if (User.IsInRole("1"))
+                    {
+                        <text> |</text>
+                        <a asp-controller="Package" asp-action="DeletePackage" asp-route-id="@row["Package_id"]" onclick="return confirm('Are you sure you want to delete: @row["Package_id"]?')">Delete</a>
+
+                    }
+
+                </td>
+            }
+
+
+
+
+
+        </tr>
+
+
+        }
+    </tbody>
+</table>
