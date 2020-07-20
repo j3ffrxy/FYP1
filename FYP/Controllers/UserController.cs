@@ -44,7 +44,7 @@ namespace FYP.Controllers
             {
                 string insert =
                     @"INSERT INTO Users(nric , password , full_name , dob , rank , unit , company , role )
-                      Values ('{0}' , HASHBYTES('SHA1', '{1}'), '{2}', '{3:yyyy-MM-dd}' , '{4}' , '{5}' , '{6}' , '{7}' , )";
+                      Values ('{0}' , HASHBYTES('SHA1', '{1}'), '{2}', '{3:yyyy-MM-dd}' , '{4}' , '{5}' , '{6}' , '{7}' )";
 
                 List<Users> existuser = DBUtl.GetList<Users>("SELECT * FROM USERS");
                 bool exists = false;
@@ -105,14 +105,14 @@ namespace FYP.Controllers
             {
                 ViewData["Message"] = "Invalid Input";
                 ViewData["MsgType"] = "warning";
-                return View("Edit");
+                return View("Edits");
             }
             else
             {
                 string update =
                   @"UPDATE Users
                      SET nric ='{1}', password = HASHBYTES('SHA1', '{2}') , full_name = '{3}' , dob = '{4:yyyy-MM-dd}' ,  rank = '{5}', 
-                        dob ='{6:dd-MM-yyyy}' , nric = '{7}' , password = HASHBYTES('SHA1', '{8}') , rank = '{9}' 
+                        unit = '{6}' , company = '{7}' , role = '{8}'
                         WHERE User_id = '{0}'";
                 int res = DBUtl.ExecSQL(update, user.User_id, user.nric, user.password, user.full_name, user.dob, user.rank, user.unit, user.company, user.role);
                 if (res == 1)
@@ -125,7 +125,7 @@ namespace FYP.Controllers
                     TempData["Message"] = DBUtl.DB_Message;
                     TempData["MsgType"] = "danger";
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("About");
             }
         }
         public IActionResult Delete(int id)
@@ -152,7 +152,7 @@ namespace FYP.Controllers
                     TempData["MsgType"] = "danger";
                 }
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("About");
         }
         public IActionResult VerifyDate(DateTime dob)
         {
@@ -233,7 +233,7 @@ namespace FYP.Controllers
                         {
                             string insert =
                                      @"INSERT INTO Users(nric , password , full_name , dob , rank , unit , company , role )
-                      Values ('{0}' , HASHBYTES('SHA1', '{1}'), '{2}', '{3:yyyy-MM-dd}' , '{4}' , '{5}' , '{6}' , '{7}' , )";
+                      Values ('{0}' , HASHBYTES('SHA1', '{1}'), '{2}', '{3:yyyy-MM-dd}' , '{4}' , '{5}' , '{6}' , '{7}')";
 
                             int res = DBUtl.ExecSQL(insert, u.nric, u.password, u.full_name, u.dob, u.rank, u.unit, u.company, u.role);
                             if (res == 1)
@@ -255,11 +255,11 @@ namespace FYP.Controllers
                     }
                     else
                     {
-                        TempData["Message"] = "Not all users have been created";
+                        TempData["Message"] = DBUtl.DB_Message;
                         TempData["MsgType"] = "danger";
                     }
 
-                    return RedirectToAction("Index");
+                    return RedirectToAction("About");
                 }
                 catch (Exception ex)
                 {

@@ -1,4 +1,4 @@
-﻿@model FYP.Models.Stocktake;
+﻿@model FYP.Models.Stocktaking;
 
 
 
@@ -11,12 +11,13 @@
         </div>
     </div>
 
-    <input asp-for="Stocktake_id" hidden />
+
+    <input asp-for="Stocktaking_id" hidden />
 
     <div class="form-group row">
         <label class="control-label col-sm-2" asp-for="comments">Description :</label>
         <div class="col-sm-7">
-            <textarea readonly asp-for="comments" class="form-control"></textarea>
+            <textarea readonly asp-for="comments" class="form-control" rows="50"></textarea>
         </div>
 
     </div>

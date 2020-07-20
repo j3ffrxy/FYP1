@@ -16,7 +16,7 @@ namespace FYP.Controller
         public IActionResult ViewStocktake()
         {
             updatearchive();
-            DataTable dt = DBUtl.GetTable(@"Select Stocktake_id , quantity as [Quantity] , date_created as [Date Created] , full_name as [Created By] from Stocktaking s 
+            DataTable dt = DBUtl.GetTable(@"Select Stocktaking_id , total_equipment_quantity as [Total Equipment Quantity] , total_accessories_quantity as [Total Accessories Quantity] , date_created as [Date Created] , full_name as [Created By] from Stocktaking s 
                                             INNER JOIN Users u ON s.User_id = u.User_id
                                             Where s.archive = 0");
             return View("ViewStocktake", dt.Rows);
@@ -24,15 +24,15 @@ namespace FYP.Controller
         public IActionResult ViewArchive()
         {
             updatearchive();
-            DataTable dt = DBUtl.GetTable(@"Select Stocktake_id , quantity as [Quantity] , date_created as [Date Created] , full_name as [Created By] from Stocktaking s 
+            DataTable dt = DBUtl.GetTable(@"Select Stocktaking_id , total_equipment_quantity as [Total Equipment Quantity] , total_accessories_quantity as [Total Accessories Quantity] , date_created as [Date Created] , full_name as [Created By] from Stocktaking s 
                                             INNER JOIN Users u ON s.User_id = u.User_id
-                                            Where s.archive = 1");
+                                            Where s.archive = ");
             return View("ViewArchive", dt.Rows);
         }
 
         private void updatearchive()
         {
-            var list = DBUtl.GetList<Stocktake>("Select * from Stocktaking");
+            var list = DBUtl.GetList<Stocktaking>("Select * from Stocktaking");
             DateTime firstdate = DateTime.Now;
             
             foreach (var a in list)
@@ -42,11 +42,21 @@ namespace FYP.Controller
                 double archivable = Double.Parse(diff);
                 if(archivable > 30)
                 {
-                    var update = "Update Stocktaking Set archive = '{0}' Where Stocktake_id = '{1}'";
-                    DBUtl.ExecSQL(update, true, a.Stocktake_id);
+                    var update = "Update Stocktaking Set archive = '{0}' Where Stocktaking_id = '{1}'";
+                    DBUtl.ExecSQL(update, true, a.Stocktaking_id);
 
                 }
             }
+        }
+
+        public int GetCurrentStocktake()
+        {
+            var user = DBUtl.GetList<Users>("SELECT * FROM Users WHERE nric = '" + User.Identity.Name + " ' ");
+            var stocktakingPerson = DBUtl.GetList<Stocktaking>(@"SELECT * FROM Stocktaking WHERE User_id ='" + user[0].User_id + "' ORDER BY date_created DESC");
+            var model = stocktakingPerson[0].Stocktaking_id;
+            return model;
+
+            
         }
 
         public IActionResult AddStocktake()
@@ -71,7 +81,7 @@ namespace FYP.Controller
 
 
                     var equipment = new List<Equipment>();
-                    var accessory = new List<Equipment_accessories>();
+                    var accessory = new List<Equipment_Accessories>();
                     using (var sreader = new StreamReader(postedFile.OpenReadStream()))
                     {
                         //First line is header. If header is not passed in csv then we can neglect the below line.
@@ -84,22 +94,25 @@ namespace FYP.Controller
 
                             equipment.Add(new Equipment
                             {
-                                Serial_no = rows[0].ToString(),
+                                Serial_no = Int32.Parse(rows[0].ToString()),
                                 Equipment_name = rows[1].ToString(),
                                 Storage_location = rows[2].ToString(),
                                 Quantity = int.Parse(rows[3].ToString()),
                                 Type_desc = rows[4].ToString()
 
                             }); ;
-
-                            accessory.Add(new Equipment_accessories
+                           
+                            accessory.Add(new Equipment_Accessories
                             {
-                                Equipment_accessories_id = Int32.Parse(rows[5].ToString()),
-                                Accessories_details = rows[6].ToString(),
-                                Storage_location = rows[7].ToString(),
-                                Quantity = Int32.Parse(rows[8].ToString())
-                                
-                            }); ; 
+                                 Equipment_accessories_id = Int32.Parse(rows[5].ToString()),
+                                 Accessories_details = rows[6].ToString(),
+                                 Storage_location = rows[7].ToString(),
+                                 Quantity = Int32.Parse(rows[8].ToString())
+
+                            }); ;
+                            
+
+                            
                         }
 
                     }
@@ -115,47 +128,39 @@ namespace FYP.Controller
                     foreach (var a in equipment)
                     {
                         equip_total += a.Quantity;
-                        bool correct = false;
                         var currequip = DBUtl.GetList<Equipment>("SELECT * FROM Equipment");
-
-
-                        foreach (var b in currequip)
+                        foreach(var b in currequip)
                         {
-                            if (a.Quantity == b.Quantity)
+                            if(a.Serial_no == b.Serial_no)
                             {
-                                correct = true;
-
+                                if(a.Quantity != b.Quantity)
+                                {
+                                    message += String.Format("Equipment {0} quantity do not match" + Environment.NewLine, a.Serial_no);
+                                }
                             }
-
+                           
                         }
-                        if (correct != true)
-                        {
-                            message += String.Format("Equipment {0} quantity do not match" + Environment.NewLine, a.Serial_no);
-                        }
-
-
                     }
 
                     foreach(var c in accessory)
                     {
                         access_total += c.Quantity;
-                        bool correct = false;
-                        var curracess = DBUtl.GetList<Equipment_accessories>("Select * From Equipment_accessories");
+                        
+                        var curracess = DBUtl.GetList<Equipment_Accessories>("Select * From Equipment_accessories");
                         foreach (var d in curracess)
                         {
-                            if (c.Quantity == d.Quantity)
+                            if(c.Equipment_accessories_id == d.Equipment_accessories_id)
                             {
-                                correct = true;
+                                if (c.Quantity != d.Quantity)
+                                {
+                                    message += String.Format("Accessory {0} quantity do not match" + Environment.NewLine, c.Equipment_accessories_id);
+                                }
                             }
-                        }
-                        if (correct != true)
-                        {
-                            message += String.Format("Accessory {0} quantity do not match" + Environment.NewLine, c.Equipment_accessories_id);
                         }
                     }
 
                     String insert = @"INSERT INTO Stocktaking(User_id , total_equipment_quantity , total_accessories_quantity, date_created , comments , archive)
-                                     Values ('{0}' , '{1}' , '{2:yyyy-MM-dd}' , '{3:yyyy-MM-dd}' , '{4}' , '{5}')";
+                                     Values ('{0}' , '{1}' , '{2}' , '{3:yyyy-MM-dd HH:mm:ss}' , '{4}' , '{5}')";
 
 
 
@@ -170,8 +175,39 @@ namespace FYP.Controller
                         DBUtl.ExecSQL(insert, user[0].User_id, equip_total,  access_total, DateTime.Now, message, archive);
 
                     }
+
+                    var stocktake = GetCurrentStocktake();
+                  
                    
+                    foreach ( var e in equipment)
+                    {
+                        String insertequip = @"INSERT INTO Stocktaking_Equipment(Serial_no , Stocktaking_id , Equipment_name , Quantity , Storage_location , Type_desc)
+                                     Values ('{0}' , '{1}' , '{2}' , '{3}' , '{4}' , '{5}')";
+
+                       int res = DBUtl.ExecSQL(insertequip, e.Serial_no, stocktake, e.Equipment_name, e.Quantity, e.Storage_location, e.Type_desc);
+                       
+                        
+                    }
+
+                    foreach(var f in accessory)
+                    {
+                        String insertacess = @"INSERT INTO Stocktaking_Accessories(Stocktaking_id , Equipment_accessories_id, Accessories_details , Storage_location , Quantity)
+                                     Values ('{0}' , '{1}' , '{2}' , '{3}' , '{4}')";
+
+                        DBUtl.ExecSQL(insertacess, stocktake, f.Equipment_accessories_id, f.Accessories_details, f.Storage_location, f.Quantity);
+                    }
+
+
+                    
                     return RedirectToAction("ViewComments");
+                    
+                       
+                  
+                    
+                       
+                    
+
+                    
                 }
                 catch (Exception ex)
                 {
@@ -187,23 +223,13 @@ namespace FYP.Controller
         }
 
             
-        public IActionResult ViewComments(int id)
+        public IActionResult ViewComments()
         {
-            bool newstocktake = true;
-            if(id > 0)
-            {
-                newstocktake = false;
-            }
-            if(newstocktake == true)
-            {
-                var list = DBUtl.GetList<Stocktake>("Select * From Stocktaking");
-                var count = 0;
-                foreach (var a in list)
-                {
-                    count++;
-                }
-                string select = "SELECT * FROM Stocktaking WHERE Stocktake_id = '{0}'";
-                List<Stocktake> list1 = DBUtl.GetList<Stocktake>(select, count);
+
+            string select = "SELECT * FROM Stocktaking WHERE Stocktaking_id = '{0}'";
+            var stocktake = GetCurrentStocktake();
+            
+            List<Stocktaking> list1 = DBUtl.GetList<Stocktaking>(select, stocktake);
                 if (list1.Count == 1)
                 {
                     return View(list1[0]);
@@ -215,23 +241,10 @@ namespace FYP.Controller
                     return RedirectToAction("ViewStocktake");
                 }
             }
-            else
-            {
-                string select = "SELECT * FROM Stocktaking WHERE Stocktake_id = '{0}'";
-                List<Stocktake> list1 = DBUtl.GetList<Stocktake>(select, id);
-                if (list1.Count == 1)
-                {
-                    return View(list1[0]);
-                }
-                else
-                {
-                    TempData["Message"] = "Stocktaking not found";
-                    TempData["MsgType"] = "warning";
-                    return RedirectToAction("ViewStocktake");
-                }
+           
             }
             
         }
       
-    }
-}
+    
+
