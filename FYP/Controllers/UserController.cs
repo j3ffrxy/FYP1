@@ -46,7 +46,7 @@ namespace FYP.Controllers
                     @"INSERT INTO Users(nric , password , full_name , dob , rank , unit , company , role )
                       Values ('{0}' , HASHBYTES('SHA1', '{1}'), '{2}', '{3:yyyy-MM-dd}' , '{4}' , '{5}' , '{6}' , '{7}' )";
 
-                List<Users> existuser = DBUtl.GetList<Users>("SELECT * FROM USERS");
+                List<Users> existuser = DBUtl.GetList<Users>("SELECT * FROM Users");
                 bool exists = false;
 
                 
@@ -180,9 +180,7 @@ namespace FYP.Controllers
                 {
                     string fileExtension = Path.GetExtension(postedFile.FileName);
 
-                   
-                   
-
+               
                     //Validate uploaded file and return error.
                     if (fileExtension != ".csv")
                     {
@@ -218,12 +216,14 @@ namespace FYP.Controllers
 
                     }
                     int count = 0;
-                    bool exists = false;
+                    
                     foreach (Users u in user)
                     {
-                        List<Users> existuser = DBUtl.GetList<Users>("SELECT * FROM USERS");
+                        List<Users> existuser = DBUtl.GetList<Users>("SELECT * FROM Users");
+                        bool exists = false;
                         foreach (var a in existuser)
                         {
+                      
                             if (u.nric.Equals(a.nric))
                             {
                                 exists = true;
@@ -232,8 +232,8 @@ namespace FYP.Controllers
                         if (exists == false)
                         {
                             string insert =
-                                     @"INSERT INTO Users(nric , password , full_name , dob , rank , unit , company , role )
-                      Values ('{0}' , HASHBYTES('SHA1', '{1}'), '{2}', '{3:yyyy-MM-dd}' , '{4}' , '{5}' , '{6}' , '{7}')";
+                     @"INSERT INTO Users(nric , password , full_name , dob , rank , unit , company , role )
+                      Values ('{0}' , HASHBYTES('SHA1', '{1}'), '{2}', '{3:yyyy-MM-dd}' , '{4}' , '{5}' , '{6}' , '{7}' )";
 
                             int res = DBUtl.ExecSQL(insert, u.nric, u.password, u.full_name, u.dob, u.rank, u.unit, u.company, u.role);
                             if (res == 1)
@@ -255,7 +255,7 @@ namespace FYP.Controllers
                     }
                     else
                     {
-                        TempData["Message"] = DBUtl.DB_Message;
+                        TempData["Message"] = "Not all users have been created";
                         TempData["MsgType"] = "danger";
                     }
 
