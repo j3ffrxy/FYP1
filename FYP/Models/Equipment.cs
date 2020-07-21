@@ -10,8 +10,7 @@ namespace FYP.Models
     public class Equipment
     {
         [Required(ErrorMessage = "Specify a valid Serial no")]
-
-        public string Serial_no { get; set; }
+        public int Serial_no { get; set; }
         [Required(ErrorMessage = "Enter Equipment name")]
 
         public string Equipment_name { get; set; }

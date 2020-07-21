@@ -4,7 +4,7 @@
 
     <script>
         $(document).ready(function () {
-            $('#jsActivity').DataTable({
+            $('#jsEquipment').DataTable({
                 ordering: true,
                 paging: true,
                 searching: true,
@@ -19,59 +19,56 @@
 <h2>Inventory List</h2>
 @if (TempData["Message"] != null)
 {
-    <div class="alert alert-@TempData["MsgType"]">@TempData["Message"]</div>
+<div class="alert alert-@TempData["MsgType"]">@TempData["Message"]</div>
 }
+<div>
+    <table id="jsEquipment" class="table">
+        <thead>
+            <tr>
+                <th scope="col">Serial Number</th>
+                <th scope="col">Equipment Name</th>
+                <th scope="col">Storage Location</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Type Description</th>
+                <th scope="col">Action</th>
 
-<table id="jsMovieTable" class="table">
-    <thead>
-        <tr>
-            <th scope="col">Serial Number</th>
-            <th scope="col">Equipment Name</th>
-            <th scope="col">Storage Location</th>
-            <th scope="col">Quantity</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (System.Data.DataRow row in Model)
-        {
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (System.Data.DataRow row in Model)
+            {
 
             <tr>
                 <td>@row["Serial_no"]</td>
                 <td>@row["Equipment_name"]</td>
                 <td>@row["Storage_location"]</td>
                 <td>@row["Quantity"]</td>
+                <td>@row["Type_desc"]</td>
 
-                @if (!User.IsInRole("3"))
+
+                @if (User.IsInRole("Admin"))
                 {
-            <td>
-                <a asp-controller="Equipment"
-                   asp-action="EditEquipment"
-                   asp-route-id="@row["Serial_no"]">
-                    Edit
-                </a>
-                <a asp-controller="Equipment"
-                   asp-action="DeleteEquipment"
-                   asp-route-id="@row["Serial_no"]"
-                   onclick="return confirm('Delete Equipment')">
-                    Delete
-                </a>
-                @if (User.IsInRole("1"))
-                {
-                    <text> |</text>
-                    <a asp-controller="Equipment" asp-action="DeleteEquipment" asp-route-id="@row["Serial_no"]" onclick="return confirm('Are you sure you want to delete: @row["Serial_no"]?')">Delete</a>
+                <td>
+                    <a asp-controller="Equipment"
+                       asp-action="EditEquipment"
+                       asp-route-id="@row["Serial_no"]">
+                        Edit
+                    </a>
+                    <a asp-controller="Equipment"
+                       asp-action="DeleteEquipment"
+                       asp-route-id="@row["Serial_no"]"
+                       onclick="return confirm('Delete Equipment')">
+                        Delete
+                    </a>
 
+                </td>
                 }
-
-            </td>
-                }
-
-
-
-
 
             </tr>
+            }
+        </tbody>
 
 
-        }
-    </tbody>
-</table>
+
+    </table>
+</div>

@@ -32,7 +32,8 @@
     <table id="jsStocktake" class="table">
         <thead>
             <tr>
-                <th>Quantity</th>
+                <th>Total Equipment Quantity</th>
+                <th>Total Accessories Quantity</th>
                 <th>Date Created</th>
                 <th>Created By</th>
                 @if (User.IsInRole("7") || User.IsInRole("6"))
@@ -47,7 +48,8 @@
             @foreach (System.Data.DataRow row in Model)
             {
                 <tr>
-                    <td>@row["Quantity"]</td>
+                    <td>@row["Total Equipment Quantity"]</td>
+                    <td>@row["Total Equipment Quantity"]</td>
                     <td>@String.Format("{0:dd-MM-yyyy}", row["Date Created"])</td>
                     <td>@row["Created By"]</td>
                     @if (User.IsInRole("7") || User.IsInRole("6"))
@@ -57,7 +59,8 @@
                                asp-action="ViewComments"
                                asp-route-id="@row["Stocktake_id"]">
                                 Comments
-                            </a>                            
+                            </a>
+
                         </td>
                     }
 
@@ -67,7 +70,8 @@
 
         <tfoot>
             <tr>
-                <th>Quantity</th>
+                <th>Total Equipment Quantity</th>
+                <th>Total Accessories Quantity</th>
                 <th>Date Created</th>
                 <th>Created By</th>
                 @if (User.IsInRole("7") || User.IsInRole("6"))
