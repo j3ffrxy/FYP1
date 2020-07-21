@@ -16,10 +16,6 @@ namespace FYP.Models
 
         public string Equipment_name { get; set; }
 
-
-       
-
-
         [Required(ErrorMessage = "Enter storage location")]
         public string Storage_location { get; set; }
     

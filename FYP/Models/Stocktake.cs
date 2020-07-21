@@ -11,7 +11,9 @@ namespace FYP.Models
 
         public int User_id { get; set; }
 
-        public int quantity { get; set; }
+        public int equip_quantity { get; set; }
+
+        public int accessory_quantity { get; set; }
 
         public DateTime date_created { get; set; }
 
