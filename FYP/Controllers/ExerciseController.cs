@@ -15,10 +15,9 @@ namespace FYP.Controllers
     {
         public IActionResult Index()
         {
-            DataTable dt = DBUtl.GetTable(@"SELECT Exercise_id, U.nric AS [SAF11B], E.company AS [Company], 
-                                            E.unit AS [Unit], P.Name AS [Weapon Package], E.date AS [Date], E.description AS [Description]
+            DataTable dt = DBUtl.GetTable(@"SELECT Exercise_id, Package_id, E.nric AS [SAF11B], E.company AS [Company], 
+                                            E.unit AS [Unit], P.Name AS [Weapon Package], E.start_date AS [Start Date], E.end_date AS [End Date], E.description AS [Description]
                                             FROM Exercise E 
-                                            INNER JOIN Users U ON E.User_id = U.User_id 
                                             INNER JOIN Package P ON E.Package_id = P.Package_id
                                             WHERE E.archive = 0");
             return View("Index", dt.Rows);
@@ -26,10 +25,10 @@ namespace FYP.Controllers
 
         public IActionResult ViewArchive()
         {
-            DataTable dt = DBUtl.GetTable(@"SELECT Exercise_id, U.nric AS [SAF11B], E.company AS [Company], 
+            DataTable dt = DBUtl.GetTable(@"SELECT Exercise_id, Package_id, U.nric AS [SAF11B], E.company AS [Company], 
                                             E.unit AS [Unit], P.Name AS [Weapon Package], E.date AS [Date], E.description AS [Description]
                                             FROM Exercise E 
-                                            INNER JOIN Users U ON E.User_id = U.User_id 
+                                            INNER JOIN Users U ON E.nric = U.nric 
                                             INNER JOIN Package P ON E.Package_id = P.Package_id
                                             WHERE E.archive = 1");
             return View("ViewArchive", dt.Rows);
@@ -52,14 +51,15 @@ namespace FYP.Controllers
             else
             {
                 string insert =
-                    @"INSERT INTO Exercise(Exercise_id, nric, Package_id, company, unit, description, start_date, end_date)
-                      Values ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6:yyyy-MM-dd}', '{7:yyyy-MM-dd}')";
+                    @"INSERT INTO Exercise(Exercise_id, nric, Package_id, company, unit, description, start_date, end_date, archive)
+                      Values ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6:yyyy-MM-dd}', '{7:yyyy-MM-dd}', '{8}')";
 
                 string nricSql = @"SELECT * FROM Users WHERE nric = '" + User.Identity.Name + "'";
                 List<Users> assigned = DBUtl.GetList<Users>(nricSql);
                 string nricFinal = assigned[0].nric;
 
-                int res = DBUtl.ExecSQL(insert, e.Exercise_id, nricFinal, e.Package_id, e.company, e.unit, e.description, e.start_date, e.end_date);
+                bool archived = false;
+                int res = DBUtl.ExecSQL(insert, e.Exercise_id, nricFinal, e.Package_id, e.company, e.unit, e.description, e.start_date, e.end_date, archived);
 
                 if (res == 1)
                 {

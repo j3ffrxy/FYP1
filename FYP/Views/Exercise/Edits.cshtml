@@ -14,6 +14,15 @@
                 });
         });
     </script>
+    <script language="javascript">
+        $(document).ready(function () {
+            $('#JSdate2')
+                .datetimepicker({
+                    format: 'DD-MM-YYYY',
+                    sideBySide: true
+                });
+        });
+    </script>
 
 }
 <form asp-controller="Exercise"
@@ -53,7 +62,6 @@
                 <option value="1"> A </option>
                 <option value="2"> B </option>
                 <option value="3"> C </option>
-                <option value="4"> N </option>
             </select>
         </div>
         <div class="col-sm-4">
@@ -66,10 +74,9 @@
         <div class="col-sm-5">
             <select id="Package_id" name="Package_id" class="form-control">
                 <option value="">-- Select One --</option>
-                <option value="1"> A </option>
-                <option value="2"> B </option>
-                <option value="3"> C </option>
-                <option value="4"> N </option>
+                <option value="1"> Field Training Pack (SAR-21 w/ Pistol & Accessories) </option>
+                <option value="2"> Marksman Practice (SAR-21 w/ Mag) </option>
+                <option value="3"> Target Practice (Revolver) </option>
             </select>
         </div>
         <div class="col-sm-4">
@@ -105,9 +112,9 @@
     <div class="form-group row">
         <label class="control-label col-sm-2" asp-for="end_date">End Date: </label>
         <div class="col-sm-5">
-            <div class="input-group date" id="JSdate" data-target-input="nearest">
+            <div class="input-group date" id="JSdate2" data-target-input="nearest">
                 <input type="text" asp-for="end_date" class="form-control" />
-                <div class="input-group-append" data-target="#JSdate" data-toggle="datetimepicker">
+                <div class="input-group-append" data-target="#JSdate2" data-toggle="datetimepicker">
                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                 </div>
             </div>
