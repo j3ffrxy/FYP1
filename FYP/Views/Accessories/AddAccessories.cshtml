@@ -1,4 +1,4 @@
-﻿@model FYP.Models.Equipment;
+﻿@model FYP.Models.Equipment_Accessories;
 
 @section MoreScripts {
     <script src="~/lib/moment/moment.min.js"></script>
@@ -16,31 +16,23 @@
         });
     </script>
 }
-<form asp-controller="Equipment"
-      asp-action="AddEquipment"
+<form asp-controller="Accessories"
+      asp-action="AddAccessories"
       method="post">
 
     <div class="form-group row">
         <div class="offset-sm-0 col-sm-6 ">
-            <h2>Add Equipment</h2>
+            <h2>Add Accessories</h2>
         </div>
     </div>
+   
     <div class="form-group row">
-        <label class="control-label col-sm-2" asp-for="Serial_no">Equipment serial number :</label>
+        <label class="control-label col-sm-2" asp-for="Accessories_details">Equipment Name :</label>
         <div class="col-sm-5">
-            <input asp-for="Serial_no" class="form-control" />
+            <input asp-for="Accessories_details" class="form-control" />
         </div>
         <div class="col-sm-4">
-            <span asp-validation-for="Serial_no" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group row">
-        <label class="control-label col-sm-2" asp-for="Equipment_name">Equipment Name :</label>
-        <div class="col-sm-5">
-            <input asp-for="Equipment_name" class="form-control" />
-        </div>
-        <div class="col-sm-4">
-            <span asp-validation-for="Equipment_name" class="text-danger"></span>
+            <span asp-validation-for="Accessories_details" class="text-danger"></span>
         </div>
     </div>
 
@@ -69,15 +61,6 @@
         </div>
         <div class="col-sm-4">
             <span asp-validation-for="Quantity" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group row">
-        <label class="control-label col-sm-2" asp-for="Type_desc">Equipment type description :</label>
-        <div class="col-sm-5">
-            <input asp-for="Type_desc" class="form-control" />
-        </div>
-        <div class="col-sm-4">
-            <span asp-validation-for="Type_desc" class="text-danger"></span>
         </div>
     </div>
 

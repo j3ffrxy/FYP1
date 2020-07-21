@@ -13,12 +13,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FYP.Controllers
 {
-    public class EquipmentController : Microsoft.AspNetCore.Mvc.Controller
+    public class Accessories : Microsoft.AspNetCore.Mvc.Controller
     {
 
         public IActionResult Index()
         {
-            DataTable dt = DBUtl.GetTable("SELECT * FROM Equipment");
+            DataTable dt = DBUtl.GetTable("SELECT * FROM Equipment_accessories");
             return View("Index", dt.Rows);
 
         }
@@ -26,7 +26,7 @@ namespace FYP.Controllers
 
 
         [HttpGet]
-        public IActionResult AddEquipment()
+        public IActionResult AddAccessories()
         {
 
             return View();
@@ -34,7 +34,7 @@ namespace FYP.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddEquipment(Equipment newEquipment)
+        public IActionResult AddAccessories(Equipment_Accessories newAccessories)
         {
 
             if (!ModelState.IsValid)
@@ -43,23 +43,23 @@ namespace FYP.Controllers
 
                 ViewData["Message"] = "Invalid Input";
                 ViewData["MsgType"] = "warning";
-                return View("AddEquipment");
+                return View("AddAccessories");
             }
             else
             {
 
                 string insert =
-                   @"INSERT INTO Equipment(Serial_no,Equipment_name,Storage_location,Quantity,Type_desc)
-                                 VALUES('{0}','{1}','{2}','{3}','{4}')";
+                   @"INSERT INTO Equipment_accessories(Accessories_details,Storage_location,Quantity)
+                                 VALUES('{0}','{1}','{2}')";
 
 
-                int result = DBUtl.ExecSQL(insert, newEquipment.Serial_no, newEquipment.Equipment_name,
-                    newEquipment.Storage_location,
-                    newEquipment.Quantity, newEquipment.Type_desc);
+                int result = DBUtl.ExecSQL(insert, newAccessories.Accessories_details,
+                    newAccessories.Storage_location,
+                    newAccessories.Quantity);
 
                 if (result == 1)
                 {
-                    TempData["Message"] = "Equipment added";
+                    TempData["Message"] = "Accessory Created";
                     TempData["MsgType"] = "success";
                 }
                 else
@@ -73,19 +73,19 @@ namespace FYP.Controllers
 
 
         [HttpGet]
-        public IActionResult EditEquipment(int id)
+        public IActionResult EditAccessories(int id)
         {
 
             // Get the record from the database using the id
-            string select = "SELECT * FROM Equipment WHERE  Serial_no='{0}'";
-            List<Equipment> list = DBUtl.GetList<Equipment>(select, id);
+            string select = "SELECT * FROM Equipment_accessories WHERE  Equipment_accessories_id='{0}'";
+            List<Equipment_Accessories> list = DBUtl.GetList<Equipment_Accessories>(select, id);
             if (list.Count == 1)
             {
                 return View(list[0]);
             }
             else
             {
-                TempData["Message"] = "Equipment not found.";
+                TempData["Message"] = "Accessory not found.";
                 TempData["MsgType"] = "warning";
                 return RedirectToAction("Index");
             }
@@ -93,7 +93,7 @@ namespace FYP.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditEquipment(Equipment EditEquip)
+        public IActionResult EditAccessories(Equipment_Accessories editAccessories)
         {
 
             if (!ModelState.IsValid)
@@ -104,15 +104,15 @@ namespace FYP.Controllers
             }
 
 
-            string update = @"UPDATE Equipment SET Equipment_name ='{1}', Storage_location = '{2}',Quantity='{3}', Type_desc='{4}' WHERE Serial_no ='{0}'";
+            string update = @"UPDATE Equipment_accessories SET Accessories_details='{1}', Quantity = '{2}',Storage_location='{3}' WHERE Equipment_accessories_id ='{0}'";
 
 
 
-            int res = DBUtl.ExecSQL(update, EditEquip.Serial_no, EditEquip.Equipment_name, EditEquip.Storage_location,
-                      EditEquip.Quantity, EditEquip.Type_desc);
+            int res = DBUtl.ExecSQL(update, editAccessories.Equipment_accessories_id, editAccessories.Accessories_details, editAccessories.Quantity,
+                      editAccessories.Storage_location);
             if (res == 1)
             {
-                TempData["Message"] = "Successfully updated Equipment";
+                TempData["Message"] = "Successfully updated Accessory";
                 TempData["MsgType"] = "success";
             }
             else
@@ -123,23 +123,23 @@ namespace FYP.Controllers
 
             return RedirectToAction("Index");
         }
-        public IActionResult DeleteEquipment(string id)
+        public IActionResult DeleteAccessory(string id)
         {
-            string select = @"SELECT * FROM Equipment 
-                              WHERE Serial_no='{0}'";
+            string select = @"SELECT * FROM Equipment_accessories 
+                              WHERE Equipment_accessories_id='{0}'";
             DataTable ds = DBUtl.GetTable(select, id);
             if (ds.Rows.Count != 1)
             {
-                TempData["Message"] = "Equipment record no longer exists.";
+                TempData["Message"] = "Accessory record no longer exists.";
                 TempData["MsgType"] = "warning";
             }
             else
             {
-                string delete = "DELETE FROM Equipment WHERE Serial_no='{0}'";
+                string delete = "DELETE FROM Equipment_accessories WHERE Equipment_accessories_id='{0}'";
                 int res = DBUtl.ExecSQL(delete, id);
                 if (res == 1)
                 {
-                    TempData["Message"] = "Equipment Deleted";
+                    TempData["Message"] = "Accessory Deleted";
                     TempData["MsgType"] = "success";
                 }
                 else
@@ -171,7 +171,7 @@ namespace FYP.Controllers
                     }
 
 
-                    var equipment = new List<Equipment>();
+                    var accessory = new List<Equipment_Accessories>();
                     using (var sreader = new StreamReader(postedFile.OpenReadStream()))
                     {
                         //First line is header. If header is not passed in csv then we can neglect the below line.
@@ -181,10 +181,10 @@ namespace FYP.Controllers
                         {
                             string[] rows = sreader.ReadLine().Split(',');
 
-                            equipment.Add(new Equipment
+                            accessory.Add(new Equipment_Accessories
                             {
-                                Type_desc = rows[0].ToString(),
-                                Equipment_name = rows[1].ToString(),
+                                Equipment_accessories_id = int.Parse(rows[0].ToString()),
+                                Accessories_details = rows[1].ToString(),
                                 Storage_location = rows[2].ToString(),
                                 Quantity = int.Parse(rows[3].ToString()),
                             });
@@ -193,12 +193,12 @@ namespace FYP.Controllers
                     }
                     int count = 0;
                     bool exists = false;
-                    foreach (Equipment u in equipment)
+                    foreach (Equipment_Accessories u in accessory)
                     {
-                        List<Equipment> list = DBUtl.GetList<Equipment>("SELECT * FROM Equipment");
+                        List<Equipment_Accessories> list = DBUtl.GetList<Equipment_Accessories>("SELECT * FROM Equipment_accessories");
                         foreach (var a in list)
                         {
-                            if (u.Serial_no==(a.Serial_no))
+                            if (u.Equipment_accessories_id == (a.Equipment_accessories_id))
                             {
                                 exists = true;
                             }
@@ -206,10 +206,10 @@ namespace FYP.Controllers
                         if (exists == false)
                         {
                             string insert =
-                                      @"INSERT INTO Equipment(Equipment_name, Storage_location , Quantity )
+                                      @"INSERT INTO Equipment(Accessories_details, Storage_location , Quantity )
                                      Values ('{0}' , '{1}' , '{2}')";
 
-                            int res = DBUtl.ExecSQL(insert, u.Equipment_name, u.Storage_location, u.Quantity);
+                            int res = DBUtl.ExecSQL(insert, u.Accessories_details, u.Storage_location, u.Quantity);
                             if (res == 1)
                             {
                                 count++;
@@ -217,20 +217,20 @@ namespace FYP.Controllers
                         }
                         else
                         {
-                            TempData["Message"] = "Equipment already exists";
+                            TempData["Message"] = "Accessory already exists";
                             TempData["MsgType"] = "danger";
                         }
 
 
                     }
-                    if (count == equipment.Count)
+                    if (count == accessory.Count)
                     {
-                        TempData["Message"] = "All equipments have been created";
+                        TempData["Message"] = "All accessory have been created";
                         TempData["MsgType"] = "success";
                     }
                     else
                     {
-                        TempData["Message"] = "Not all equipments have been created";
+                        TempData["Message"] = "Not all accessory have been created";
                         TempData["MsgType"] = "danger";
                     }
 

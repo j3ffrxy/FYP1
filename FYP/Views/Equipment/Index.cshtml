@@ -19,7 +19,7 @@
 <h2>Inventory List</h2>
 @if (TempData["Message"] != null)
 {
-    <div class="alert alert-@TempData["MsgType"]">@TempData["Message"]</div>
+<div class="alert alert-@TempData["MsgType"]">@TempData["Message"]</div>
 }
 <div>
     <table id="jsEquipment" class="table">
@@ -29,54 +29,46 @@
                 <th scope="col">Equipment Name</th>
                 <th scope="col">Storage Location</th>
                 <th scope="col">Quantity</th>
+                <th scope="col">Type Description</th>
+                <th scope="col">Action</th>
+
             </tr>
         </thead>
         <tbody>
             @foreach (System.Data.DataRow row in Model)
             {
 
-                <tr>
-                    <td>@row["Serial_no"]</td>
-                    <td>@row["Equipment_name"]</td>
-                    <td>@row["Storage_location"]</td>
-                    <td>@row["Quantity"]</td>
-
-                    @if (!User.IsInRole("Admin"))
-                    {
-                        <td>
-                            <a asp-controller="Equipment"
-                               asp-action="EditEquipment"
-                               asp-route-id="@row["Serial_no"]">
-                                Edit
-                            </a>
-                            <a asp-controller="Equipment"
-                               asp-action="DeleteEquipment"
-                               asp-route-id="@row["Serial_no"]"
-                               onclick="return confirm('Delete Equipment')">
-                                Delete
-                            </a>
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <text> |</text>
-                                <a asp-controller="Equipment" asp-action="DeleteEquipment" asp-route-id="@row["Serial_no"]" onclick="return confirm('Are you sure you want to delete: @row["Serial_no"]?')">Delete</a>
-
-                            }
-
-                        </td>
-                    }
-
-                </tr>
-            }
-
-        </tbody>
-        <tfoot>
             <tr>
-<th>Serial Number</th>
-        <th>Equipment Name</th>
-        <th>Storage Location</th>
-        <th>Quantity</th>
-       </tr>
-                </tfoot>
-        
+                <td>@row["Serial_no"]</td>
+                <td>@row["Equipment_name"]</td>
+                <td>@row["Storage_location"]</td>
+                <td>@row["Quantity"]</td>
+                <td>@row["Type_desc"]</td>
+
+
+                @if (User.IsInRole("Admin"))
+                {
+                <td>
+                    <a asp-controller="Equipment"
+                       asp-action="EditEquipment"
+                       asp-route-id="@row["Serial_no"]">
+                        Edit
+                    </a>
+                    <a asp-controller="Equipment"
+                       asp-action="DeleteEquipment"
+                       asp-route-id="@row["Serial_no"]"
+                       onclick="return confirm('Delete Equipment')">
+                        Delete
+                    </a>
+
+                </td>
+                }
+
+            </tr>
+            }
+        </tbody>
+
+
+
     </table>
-    </div>
+</div>

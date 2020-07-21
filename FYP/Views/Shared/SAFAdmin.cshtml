@@ -25,7 +25,14 @@
                     <li>@Html.ActionLink("Mass add equipments", "MassAdd", "Equipment", null, new { id = "item 3" })</li>
                 </ul>
             </li>
-
+            <li class="dropdown">
+                <a class="dropdown-toggle" role="button" aria-expanded="false" href="#" data-toggle="dropdown">Accessories<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li>@Html.ActionLink("View Accessories", "Index", "Accessories", null, new { id = "item 1" })</li>
+                    <li>@Html.ActionLink("Add Accessories", "AddAccessories", "Accessories", null, new { id = "item 2" })</li>
+                    <li>@Html.ActionLink("Mass add Accessories", "MassAdd", "Accessories", null, new { id = "item 3" })</li>
+                </ul>
+            </li>
             <li class="dropdown">
                 <a class="dropdown-toggle" role="button" aria-expanded="false" href="#" data-toggle="dropdown">Stocktake<span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
@@ -43,7 +50,7 @@
                     <li>@Html.ActionLink("Edit Appointment", "Edits", "Appointment", null, new { id = "item 3" })</li>
                 </ul>
             </li>
-           
+
 
         </ul>
 
