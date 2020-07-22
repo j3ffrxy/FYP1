@@ -32,7 +32,6 @@
     <table id="jsExercise" class="table">
         <thead>
             <tr>
-                <th>Exercise No.</th>
                 <th>SAF11B</th>
                 <th>Company</th>
                 <th>Unit</th>
@@ -40,7 +39,7 @@
                 <th>Description</th>
                 <th>Start Date</th>
                 <th>End Date</th>
-                @if (User.IsInRole("6"))
+                @if (User.IsInRole("Admin"))
                 {
                     <th>Action</th>
                 }
@@ -52,11 +51,10 @@
             @foreach (System.Data.DataRow row in Model)
             {
             <tr>
-                <td>@row["Exercise_id"]</td>
                 <td>@User.Identity.Name</td>
                 <td>@row["Company"]</td>
-                <td>@row["Unit"])</td>
-                <td>@row["Package"]</td>
+                <td>@row["Unit"]</td>
+                <td>@row["Package_id"]</td>
                 <td>@row["Description"]</td>
                 <td>@String.Format("{0:dd-MM-yyyy}", row["Start Date"])</td>
                 <td>@String.Format("{0:dd-MM-yyyy}", row["End Date"])</td>
@@ -87,7 +85,6 @@
 
         <tfoot>
             <tr>
-                <th>Exercise No.</th>
                 <th>SAF11B</th>
                 <th>Company</th>
                 <th>Unit</th>
@@ -95,7 +92,7 @@
                 <th>Description</th>
                 <th>Start Date</th>
                 <th>End Date</th>
-                @if (User.IsInRole("6"))
+                @if (User.IsInRole("Admin"))
                 {
                     <th>Action</th>
                 }

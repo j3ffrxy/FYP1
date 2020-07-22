@@ -10,7 +10,7 @@ namespace FYP.Models
     public class Package
     {
 
-        public string Package_id { get; set; }
+        public int Package_id { get; set; }
 
         public int Serial_no { get; set; }
 

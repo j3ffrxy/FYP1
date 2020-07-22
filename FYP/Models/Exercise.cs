@@ -14,10 +14,10 @@ namespace FYP.Models
         public string nric { get; set; }
 
         [Required(ErrorMessage = "Enter a valid company")]
-        public int company { get; set; }
+        public string company { get; set; }
 
         [Required(ErrorMessage = "Enter a valid unit")]
-        public int unit { get; set; }
+        public string unit { get; set; }
 
         [Required(ErrorMessage = "Enter a valid description")]
         public string description { get; set; }
