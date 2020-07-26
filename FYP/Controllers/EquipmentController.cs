@@ -175,6 +175,7 @@ namespace FYP.Controllers
                     using (var sreader = new StreamReader(postedFile.OpenReadStream()))
                     {
                         //First line is header. If header is not passed in csv then we can neglect the below line.
+                        string[] headers = sreader.ReadLine().Split(',');
 
                         //Loop through the records
                         while (!sreader.EndOfStream)
@@ -183,18 +184,20 @@ namespace FYP.Controllers
 
                             equipment.Add(new Equipment
                             {
-                                Type_desc = rows[0].ToString(),
+                                Serial_no = int.Parse(rows[0].ToString()),
                                 Equipment_name = rows[1].ToString(),
                                 Storage_location = rows[2].ToString(),
-                                Quantity = int.Parse(rows[3].ToString()),
+                                Type_desc = rows[3].ToString(),
+                                Quantity = int.Parse(rows[4].ToString())
                             });
                         }
 
                     }
                     int count = 0;
-                    bool exists = false;
                     foreach (Equipment u in equipment)
                     {
+                        bool exists = false;
+
                         List<Equipment> list = DBUtl.GetList<Equipment>("SELECT * FROM Equipment");
                         foreach (var a in list)
                         {
@@ -205,11 +208,12 @@ namespace FYP.Controllers
                         }
                         if (exists == false)
                         {
-                            string insert =
-                                      @"INSERT INTO Equipment(Equipment_name, Storage_location , Quantity )
-                                     Values ('{0}' , '{1}' , '{2}')";
+                             string insert =
+                   @"INSERT INTO Equipment(Serial_no,Equipment_name,Storage_location,Quantity,Type_desc)
+                                 VALUES('{0}','{1}','{2}','{3}','{4}')";
 
-                            int res = DBUtl.ExecSQL(insert, u.Equipment_name, u.Storage_location, u.Quantity);
+
+                            int res = DBUtl.ExecSQL(insert, u.Serial_no, u.Equipment_name, u.Storage_location, u.Quantity, u.Type_desc);
                             if (res == 1)
                             {
                                 count++;
