@@ -11,14 +11,20 @@ namespace FYP.Models
 
         public int User_id { get; set; }
 
+        public string full_name { get; set; }
+
         public int total_equipment_quantity { get; set; }
 
         public int total_accessories_quantity { get; set; }
 
         public DateTime date_created { get; set; }
 
-        public String comments { get; set; }
-
         public bool archive { get; set; }
+
+        public int diff_equip { get; set; }
+
+        public int diff_accessory { get; set; }
+
+        public string storage_loocation { get; set; }
     }
 }

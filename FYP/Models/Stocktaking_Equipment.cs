@@ -16,7 +16,13 @@ namespace FYP.Models
         public string Equipment_name { get; set; }
 
         public string Storage_location { get; set; }
-        public int Quantity { get; set; }
+
         public string Type_desc { get; set; }
+
+        public string Status { get; set; }
+
+        public string Assigned { get; set; }
+
+        public bool Matching { get; set; }
     }
 }

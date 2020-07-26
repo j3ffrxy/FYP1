@@ -17,12 +17,13 @@ namespace FYP.Models
 
         [Required(ErrorMessage = "Enter storage location")]
         public string Storage_location { get; set; }
-
-
-        public string Status { get; set; }
-
+  
         [Required(ErrorMessage = "Enter a valid  weapon type")]
         public string Type_desc { get; set; }
+
+        public string Status { get; set; }
+        
+        public bool Assigned { get; set; }
       
 
      
