@@ -4,7 +4,7 @@
 
     <script>
         $(document).ready(function () {
-            $('#jsEquipment').DataTable({
+            $('#jsAnnouncement').DataTable({
                 ordering: true,
                 paging: true,
                 searching: true,
@@ -16,20 +16,20 @@
     </script>
 
 }
-<h2>Inventory List</h2>
+<h2>Announcement List</h2>
 @if (TempData["Message"] != null)
 {
 <div class="alert alert-@TempData["MsgType"]">@TempData["Message"]</div>
 }
 <div>
-    <table id="jsEquipment" class="table">
+    <table id="jsAnnouncement" class="table">
         <thead>
             <tr>
-                <th scope="col">Serial Number</th>
-                <th scope="col">Equipment Name</th>
-                <th scope="col">Storage Location</th>
-                <th scope="col">Type Description</th>
-                <th scope="col">Status</th>
+                <th scope="col">Announcement ID</th>
+                <th scope="col">Announcement Description</th>
+                <th scope="col">Start date</th>
+                <th scope="col">End date</th>
+
                 <th scope="col">Action</th>
 
             </tr>
@@ -39,26 +39,25 @@
             {
 
             <tr>
-                <td>@row["Serial_no"]</td>
-                <td>@row["Equipment_name"]</td>
-                <td>@row["Storage_location"]</td>
-                <td>@row["Type_desc"]</td>
-                <td>@row["Status"]</td>
+                <td>@row["Announcement_id"]</td>
+                <td>@row["Announcement_desc"]</td>
+                <td>@row["Start_date"]</td>
+                <td>@row["End_date"]</td>
 
 
 
                 @if (User.IsInRole("Admin"))
                 {
                     <td>
-                        <a asp-controller="Equipment"
-                           asp-action="EditEquipment"
-                           asp-route-id="@row["Serial_no"]">
+                        <a asp-controller="Announcement"
+                           asp-action="EditAnnouncement"
+                           asp-route-id="@row["Announcement_id"]">
                             Edit
                         </a>
-                        <a asp-controller="Equipment"
-                           asp-action="DeleteEquipment"
-                           asp-route-id="@row["Serial_no"]"
-                           onclick="return confirm('Delete Equipment')">
+                        <a asp-controller="Announcement"
+                           asp-action="DeleteAnnouncement"
+                           asp-route-id="@row["Announcement_id"]"
+                           onclick="return confirm('Delete Announcement')">
                             Delete
                         </a>
 

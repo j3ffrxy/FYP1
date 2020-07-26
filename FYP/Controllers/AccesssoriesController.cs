@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FYP.Controllers
 {
-    public class Accessories : Microsoft.AspNetCore.Mvc.Controller
+    public class AccessoriesController : Microsoft.AspNetCore.Mvc.Controller
     {
 
         public IActionResult Index()

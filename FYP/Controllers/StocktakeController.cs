@@ -94,11 +94,12 @@ namespace FYP.Controller
 
                             equipment.Add(new Equipment
                             {
-                                Serial_no = Int32.Parse(rows[0].ToString()),
+                                Serial_no = rows[0].ToString(),
                                 Equipment_name = rows[1].ToString(),
                                 Storage_location = rows[2].ToString(),
-                                Quantity = int.Parse(rows[3].ToString()),
-                                Type_desc = rows[4].ToString()
+                                Type_desc = rows[4].ToString(),
+                                Status = rows[4].ToString(),
+
 
                             }); ;
                            
