@@ -18,7 +18,8 @@ namespace FYP.Models
 
         public string Storage_location { get; set; }
 
-        
         public int Quantity { get; set; }
+
+        public bool Matching { get; set; }
     }
 }

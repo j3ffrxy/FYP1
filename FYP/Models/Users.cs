@@ -11,7 +11,7 @@ namespace FYP.Models
     {
         public int User_id { get; set; }
 
-        public int Equipment_id { get; set; }
+        public string Serial_no { get; set; }
 
         [Required(ErrorMessage = "Enter your NRIC")]
         [RegularExpression("[STFG]\\d{7}[A-Z]", ErrorMessage = "Invalid NRIC format")]
