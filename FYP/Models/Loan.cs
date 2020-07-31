@@ -13,5 +13,8 @@ namespace FYP.Models
         public int Loan_id { get; set; }
         public int Exercise_id { get; set; }
         public bool archive { get; set; }
+        public DateTime start_date { get; set; }
+        public DateTime end_date { get; set; }
+        public string nric { get; set; }
     }
 }

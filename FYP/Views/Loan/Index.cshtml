@@ -18,7 +18,7 @@
 }
 
 @model System.Data.DataRowCollection
-<h2> Exercises </h2>
+<h2> Loans </h2>
 
 @if (TempData["Message"] != null)
 {
@@ -39,7 +39,6 @@
                 <th>Description</th>
                 <th>Start Date</th>
                 <th>End Date</th>
-                <th>Status</th>
                 @if (User.IsInRole("Admin"))
                 {
                     <th>Action</th>
@@ -51,30 +50,25 @@
         <tbody>
             @foreach (System.Data.DataRow row in Model)
             {
-            <tr>
-                <td>@User.Identity.Name</td>
-                <td>@row["Company"]</td>
-                <td>@row["Unit"]</td>
-                <td>@row["Package_id"]</td>
-                <td>@row["Description"]</td>
-                <td>@String.Format("{0:dd-MM-yyyy}", row["Start Date"])</td>
-                <td>@String.Format("{0:dd-MM-yyyy}", row["End Date"])</td>
-                <td>
-                    <a asp-controller="Exercise"
-                       asp-action="Edits"
-                       asp-route-id="@row["Exercise_id"]">
-                        Edit
-                    </a>
-                    <a asp-controller="Exercise"
-                       asp-action="Delete"
-                       asp-route-id="@row["Exercise_id"]"
-                       onclick="return confirm('Delete Exercise')">
-                        Delete
-                    </a>
-                </td>
+                <tr>
+                    <td>@User.Identity.Name</td>
+                    <td>@row["Company"]</td>
+                    <td>@row["Unit"]</td>
+                    <td>@row["Package_id"]</td>
+                    <td>@row["Description"]</td>
+                    <td>@String.Format("{0:dd-MM-yyyy}", row["Start Date"])</td>
+                    <td>@String.Format("{0:dd-MM-yyyy}", row["End Date"])</td>
+                    <td>
+                        <a asp-controller="Exercise"
+                           asp-action="Delete"
+                           asp-route-id="@row["Exercise_id"]"
+                           onclick="return confirm('Delete Exercise')">
+                            Delete
+                        </a>
+                    </td>
 
 
-            </tr>
+                </tr>
             }
         </tbody>
 
@@ -87,7 +81,6 @@
                 <th>Description</th>
                 <th>Start Date</th>
                 <th>End Date</th>
-                <th>Status</th>
                 @if (User.IsInRole("Admin"))
                 {
                     <th>Action</th>

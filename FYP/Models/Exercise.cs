@@ -31,5 +31,6 @@ namespace FYP.Models
         public DateTime end_date { get; set; }
 
         public bool archive { get; set; }
+        public string status { get; set; }
     }
 }
