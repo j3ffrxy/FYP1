@@ -17,6 +17,7 @@
 
 }
 <h2>Announcement List</h2>
+
 @if (TempData["Message"] != null)
 {
 <div class="alert alert-@TempData["MsgType"]">@TempData["Message"]</div>
@@ -48,20 +49,27 @@
 
                 @if (User.IsInRole("Admin"))
                 {
-                    <td>
-                        <a asp-controller="Announcement"
-                           asp-action="EditAnnouncement"
-                           asp-route-id="@row["Announcement_id"]">
-                            Edit
-                        </a>
-                        <a asp-controller="Announcement"
-                           asp-action="DeleteAnnouncement"
-                           asp-route-id="@row["Announcement_id"]"
-                           onclick="return confirm('Delete Announcement')">
-                            Delete
-                        </a>
+                <td>
+                    <a asp-controller="Announcement"
+                       asp-action="EditAnnouncement"
+                       asp-route-id="@row["Announcement_id"]">
+                        Edit
+                    </a>
+                    <a asp-controller="Announcement"
+                       asp-action="DeleteAnnouncement"
+                       asp-route-id="@row["Announcement_id"]"
+                       onclick="return confirm('Delete Announcement')">
+                        Delete
+                    </a>
+                
+                    <a asp-controller="Announcement"
+                       asp-action="RefreshAnnouncement"
+                       asp-route-id="@row["Announcement_id"]">
+                        Refresh
+                    </a>
+           
 
-                    </td>
+                </td>
                 }
 
             </tr>

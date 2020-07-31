@@ -50,7 +50,7 @@ namespace FYP.Controllers
 
                 string insert =
                    @"INSERT INTO Announcement(Announcement_id,Announcement_desc,Start_date,End_date)
-                                 VALUES('{0}','{1}','{2}','{3}')";
+                                 VALUES('{0}','{1}', '{2:yyyy-MM-dd}', '{3:yyyy-MM-dd}')";
 
 
                 int result = DBUtl.ExecSQL(insert, newAnnounce.Announcement_id, newAnnounce.Announcement_desc,
@@ -103,7 +103,7 @@ namespace FYP.Controllers
             }
 
 
-            string update = @"UPDATE Announcement SET Announcement_desc ='{1}', Start_date = '{2}', End_date='{3}' WHERE Announcement_id ='{0}'";
+            string update = @"UPDATE Announcement SET Announcement_desc ='{1}', Start_date = '{2:yyyy-MM-dd}', End_date = '{3:yyyy-MM-dd}' WHERE Announcement_id ='{0}'";
 
 
 
@@ -149,7 +149,51 @@ namespace FYP.Controllers
             }
             return RedirectToAction("Index");
         }
-        
+        public IActionResult RefreshAnnouncement(int id)
+        {
+
+            // Get the record from the database using the id
+            string select = "SELECT * FROM Announcement WHERE  Announcement_id='{0}'";
+            List<Announcement> list = DBUtl.GetList<Announcement>(select, id);
+            if (list.Count == 1)
+            {
+                return View(list[0]);
+            }
+            else
+            {
+                TempData["Message"] = "Announcement not found.";
+                TempData["MsgType"] = "warning";
+                return RedirectToAction("Index");
+            }
+
+        }
+        public IActionResult RefreshAnnouncement(string id)
+        {
+            string select = @"SELECT * FROM Announcement";
+            DataTable ds = DBUtl.GetTable(select, id);
+            if (ds.Rows.Count != 1)
+            {
+                TempData["Message"] = "Announcement record no longer exists.";
+                TempData["MsgType"] = "warning";
+            }
+            else
+            {
+                string delete = "DELETE FROM Announcement WHERE End_date < CURRENT_DATE"; 
+                int res = DBUtl.ExecSQL(delete, id);
+                if (res == 1)
+                {
+                    TempData["Message"] = "Announcement Deleted";
+                    TempData["MsgType"] = "success";
+                }
+                else
+                {
+                    TempData["Message"] = "Please delete related records before deleting this record!";
+                    TempData["MsgType"] = "danger";
+                }
+            }
+            return RedirectToAction("Index");
+        }
+
     }
 
 }
