@@ -1,0 +1,66 @@
+﻿@section MoreScripts {
+    <link href="~/lib/datatables/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#jsStocktakeAccessories').DataTable({
+                ordering: true,
+                paging: true,
+                searching: true,
+                info: true,
+                lengthChange: true,
+                pageLength: 20
+            });
+        });
+    </script>
+
+}
+
+@model List<FYP.Models.Stocktaking_Accessories>;
+<h2> Accessories </h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-@TempData["MsgType"]">
+        @TempData["Message"]
+    </div>
+}
+
+<div>
+
+    <table id="jsStocktakeAccessories" class="table">
+        <thead>
+            <tr>
+                <th>Accessory ID</th>
+                <th>Accessory Detail</th>
+                <th>Storage Location</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (FYP.Models.Stocktaking_Accessories s in Model)
+            {
+                <tr>
+                    <td>@s.Equipment_accessories_id</td>
+                    <td>@s.Accessories_details</td>
+                    <td>@s.Storage_location</td>
+                    <td>@s.Quantity</td>
+                </tr>
+            }
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <th>Accessory ID</th>
+                <th>Accessory Detail</th>
+                <th>Storage Location</th>
+                <th>Quantity</th>
+            </tr>
+        </tfoot>
+
+
+    </table>
+</div>
+

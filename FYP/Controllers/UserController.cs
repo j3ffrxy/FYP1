@@ -21,6 +21,15 @@ namespace FYP.Controllers
             return View("About");
         }
 
+        public string GetEquipment()
+        {
+            var list = DBUtl.GetList<Equipment>("Select * from Equipment WHERE Assigned = 'False' ");
+            var equip = list[0];
+            string update = "Update Equipment Set Assigned = 'True' Where Serial_no = '" + equip.Serial_no + "'";
+            DBUtl.ExecSQL(update);
+            return equip.Serial_no;
+        }
+
         public IActionResult About()
         {
             DataTable dt = DBUtl.GetTable(@"SELECT User_id ,  full_name AS [Full Name] , rank AS [Rank] , dob AS [Date of Birth] , unit AS [Unit] , company AS [Company] FROM Users");
@@ -43,8 +52,8 @@ namespace FYP.Controllers
             else
             {
                 string insert =
-                    @"INSERT INTO Users(nric , password , full_name , dob , rank , unit , company , role )
-                      Values ('{0}' , HASHBYTES('SHA1', '{1}'), '{2}', '{3:yyyy-MM-dd}' , '{4}' , '{5}' , '{6}' , '{7}' )";
+                    @"INSERT INTO Users(Serial_no , nric , password , full_name , dob , rank , unit , company , role )
+                      Values ('{0}' , '{1}' , HASHBYTES('SHA1', '{2}'), '{3}', '{4:yyyy-MM-dd}' , '{5}' , '{6}' , '{7}' , '{8}' )";
 
                 List<Users> existuser = DBUtl.GetList<Users>("SELECT * FROM Users");
                 bool exists = false;
@@ -60,7 +69,7 @@ namespace FYP.Controllers
                 }
                 if(exists == false)
                 {
-                    int res = DBUtl.ExecSQL(insert, user.nric , user.password , user.full_name , user.dob , user.rank , user.unit , user.company , user.role);
+                    int res = DBUtl.ExecSQL(insert, GetEquipment() , user.nric , user.password , user.full_name , user.dob , user.rank , user.unit , user.company , user.role);
                     if (res == 1)
                     {
                         TempData["Message"] = "User Created";
@@ -130,9 +139,9 @@ namespace FYP.Controllers
         }
         public IActionResult Delete(int id)
         {
-            string select = @"SELECT * FROM Users WHERE  User_id ={0}";
-            DataTable ds = DBUtl.GetTable(select, id);
-            if (ds.Rows.Count != 1)
+            var user = DBUtl.GetList<Users>(@"SELECT * FROM Users WHERE  User_id = '" + id + "'");
+            
+            if (user.Count != 1)
             {
                 TempData["Message"] = "User does not exist";
                 TempData["MsgType"] = "warning";
@@ -140,6 +149,8 @@ namespace FYP.Controllers
             else
             {
                 string delete = "DELETE FROM Users WHERE User_id={0}";
+                string unassign = "Update Equipment Set Assigned = 'False' Where Serial_no = '" + user[0].Serial_no + "'";
+                DBUtl.ExecSQL(unassign);
                 int res = DBUtl.ExecSQL(delete, id);
                 if (res == 1)
                 {
@@ -203,6 +214,7 @@ namespace FYP.Controllers
                             user.Add(new Users
                             {
                                 nric = rows[0].ToString(),
+                                Serial_no = GetEquipment(),
                                 password = rows[1].ToString(),
                                 full_name = rows[2].ToString(),
                                 dob = DateTime.Parse(rows[3].ToString()),
@@ -232,10 +244,10 @@ namespace FYP.Controllers
                         if (exists == false)
                         {
                             string insert =
-                     @"INSERT INTO Users(nric , password , full_name , dob , rank , unit , company , role )
-                      Values ('{0}' , HASHBYTES('SHA1', '{1}'), '{2}', '{3:yyyy-MM-dd}' , '{4}' , '{5}' , '{6}' , '{7}' )";
+                   @"INSERT INTO Users(Serial_no , nric , password , full_name , dob , rank , unit , company , role )
+                      Values ('{0}' , '{1}' , HASHBYTES('SHA1', '{2}'), '{3}', '{4:yyyy-MM-dd}' , '{5}' , '{6}' , '{7}' , '{8}' )";
 
-                            int res = DBUtl.ExecSQL(insert, u.nric, u.password, u.full_name, u.dob, u.rank, u.unit, u.company, u.role);
+                            int res = DBUtl.ExecSQL(insert,u.Serial_no , u.nric, u.password, u.full_name, u.dob, u.rank, u.unit, u.company, u.role);
                             if (res == 1)
                             {
                                 count++;
