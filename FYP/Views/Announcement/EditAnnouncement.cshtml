@@ -1,0 +1,99 @@
+﻿@model FYP.Models.Announcement;
+
+@section MoreScripts {
+    <script src="~/lib/moment/moment.min.js"></script>
+    <link href="~/lib/dtpicker/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <script src="~/lib/dtpicker/js/tempusdominus-bootstrap-4.min.js"></script>
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script language="javascript">
+            $(document).ready(function () {
+                $('#JSdate')
+                    .datetimepicker({
+                        format: 'DD-MM-YYYY',
+                        sideBySide: true
+                    });
+            });
+    </script>
+    <script language="javascript">
+                $(document).ready(function () {
+                    $('#JSdate2')
+                        .datetimepicker({
+                            format: 'DD-MM-YYYY',
+                            sideBySide: true
+                        });
+                });
+    </script>
+}
+
+<form asp-controller="Announcement"
+      asp-action="EditAnnouncement"
+      method="post">
+    <div class="form-group row">
+        <div class="offset-sm-0 col-sm-6 ">
+            <h2>Edit Announcement</h2>
+        </div>
+    </div>
+
+    <input asp-for="Announcement_id" hidden />
+
+    <div class="form-group row">
+        <label class="control-label col-sm-2" asp-for="Announcement_desc">Equipment Description :</label>
+        <div class="col-sm-5">
+            <input asp-for="Announcement_desc" class="form-control" />
+        </div>
+        <div class="col-sm-4">
+            <span asp-validation-for="Announcement_desc" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="control-label col-sm-2" asp-for="Start_date">Start Date: </label>
+        <div class="col-sm-5">
+            <div class="input-group date" id="JSdate" data-target-input="nearest">
+                <input type="text" asp-for="Start_date" class="form-control" />
+                <div class="input-group-append" data-target="#JSdate" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <span asp-validation-for="Start_date" class="text-danger"></span>
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <label class="control-label col-sm-2" asp-for="End_date">Start Date: </label>
+        <div class="col-sm-5">
+            <div class="input-group date" id="JSdate" data-target-input="nearest">
+                <input type="text" asp-for="End_date" class="form-control" />
+                <div class="input-group-append" data-target="#JSdate" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <span asp-validation-for="End_date" class="text-danger"></span>
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <div class="offset-sm-2 col-sm-6">
+            <input type="submit" value="Submit" class="btn btn-primary" />
+        </div>
+    </div>
+
+    @if (ViewData["Message"] != null)
+    {
+        <div class="form-group row">
+            <div class="offset-sm-2 col-sm-6">
+                <div class="alert alert-@ViewData["MsgType"]">
+                    <text>@Html.Raw(ViewData["Message"])</text>
+                </div>
+            </div>
+        </div>
+    }
+
+</form>

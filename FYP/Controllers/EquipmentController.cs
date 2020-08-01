@@ -49,13 +49,12 @@ namespace FYP.Controllers
             {
 
                 string insert =
-                   @"INSERT INTO Equipment(Serial_no,Equipment_name,Storage_location,Quantity,Type_desc)
-                                 VALUES('{0}','{1}','{2}','{3}','{4}')";
+                   @"INSERT INTO Equipment(Serial_no,Equipment_name,Storage_location,Type_desc, Status)
+                                 VALUES('{0}','{1}','{2}','{3}', '{4}')";
 
 
                 int result = DBUtl.ExecSQL(insert, newEquipment.Serial_no, newEquipment.Equipment_name,
-                    newEquipment.Storage_location,
-                    newEquipment.Quantity, newEquipment.Type_desc);
+                    newEquipment.Storage_location, newEquipment.Type_desc, newEquipment.Status);
 
                 if (result == 1)
                 {
@@ -104,12 +103,12 @@ namespace FYP.Controllers
             }
 
 
-            string update = @"UPDATE Equipment SET Equipment_name ='{1}', Storage_location = '{2}',Quantity='{3}', Type_desc='{4}' WHERE Serial_no ='{0}'";
+            string update = @"UPDATE Equipment SET Equipment_name ='{1}', Storage_location = '{2}', Type_desc='{3}', Status = '{4}' WHERE Serial_no ='{0}'";
 
 
 
             int res = DBUtl.ExecSQL(update, EditEquip.Serial_no, EditEquip.Equipment_name, EditEquip.Storage_location,
-                      EditEquip.Quantity, EditEquip.Type_desc);
+                     EditEquip.Type_desc, EditEquip.Status);
             if (res == 1)
             {
                 TempData["Message"] = "Successfully updated Equipment";
@@ -184,11 +183,11 @@ namespace FYP.Controllers
 
                             equipment.Add(new Equipment
                             {
-                                Serial_no = int.Parse(rows[0].ToString()),
+                                Serial_no = rows[0].ToString(),
                                 Equipment_name = rows[1].ToString(),
                                 Storage_location = rows[2].ToString(),
                                 Type_desc = rows[3].ToString(),
-                                Quantity = int.Parse(rows[4].ToString())
+                                Status =  rows[4].ToString(),
                             });
                         }
 
@@ -209,11 +208,11 @@ namespace FYP.Controllers
                         if (exists == false)
                         {
                              string insert =
-                   @"INSERT INTO Equipment(Serial_no,Equipment_name,Storage_location,Quantity,Type_desc)
-                                 VALUES('{0}','{1}','{2}','{3}','{4}')";
+                   @"INSERT INTO Equipment(Serial_no,Equipment_name,Storage_location,Type_desc)
+                                 VALUES('{0}','{1}','{2}','{3}')";
 
 
-                            int res = DBUtl.ExecSQL(insert, u.Serial_no, u.Equipment_name, u.Storage_location, u.Quantity, u.Type_desc);
+                            int res = DBUtl.ExecSQL(insert, u.Serial_no, u.Equipment_name, u.Storage_location, u.Type_desc);
                             if (res == 1)
                             {
                                 count++;
