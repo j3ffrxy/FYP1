@@ -16,7 +16,7 @@ namespace FYP.Controllers
     public class EquipmentController : Microsoft.AspNetCore.Mvc.Controller
     {
 
-        public IActionResult Index()
+        /*public IActionResult Index()
         {
             DataTable dt = DBUtl.GetTable("SELECT * FROM Equipment");
             return View("Index", dt.Rows);
@@ -250,6 +250,6 @@ namespace FYP.Controllers
                 ViewBag.Message = "Please select the file first to upload.";
             }
             return View();
-        }
+        }*/
     }
 }
