@@ -100,87 +100,119 @@ namespace FYP.Controllers
 
             if (packid.Equals(1))
             {
-                var pack1 = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = 'SAR-21' AND Status = 'Available' AND Assigned = 0");
+                var pack1 = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = 'SAR-21' AND Status = 'Available' AND Assigned = 1");
+                var pack1two = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = 'SAR-21' AND Status = 'Available' AND Assigned = 0");
+
                 entries = pack1.Count;
+                int availcounter = pack1two.Count;
+
 
                 if (entries == 0)
                 {
-                    entries = 0;
-                }
-                else
-                {
-                    int x = 0;
-                    while (x <= users - 1)
+                    if (availcounter == 0)
                     {
-                        var updateEq = DBUtl.ExecSQL(@"UPDATE Equipment
+                        entries = 0;
+                    }
+                    else
+                    {
+                        int x = 0;
+                        while (x <= users - 1)
+                        {
+                            var updateEq = DBUtl.ExecSQL(@"UPDATE Equipment
                                                 SET Assigned = '{0}'
-                                                WHERE Serial_no = '{1}'", true, pack1[x].Serial_no);
-                        x++;
+                                                WHERE Serial_no = '{1}'", true, pack1two[x].Serial_no);
+                            x++;
+                        }
+                        entries = availcounter;
                     }
                 }
+
             }
             else if (packid.Equals(2))
             {
-                var pack2 = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = 'SIG Sauer P226' AND Status = 'Available' AND Assigned = 0");
+                var pack2 = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = 'SIG Sauer P226' AND Status = 'Available' AND Assigned = 1");
+                var pack2two = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = 'SIG Sauer P226' AND Status = 'Available' AND Assigned = 0");
+
                 entries = pack2.Count;
+                int availcounter = pack2two.Count;
 
                 if (entries == 0)
                 {
-                    entries = 0;
-                }
-                else
-                {
-                    int x = 0;
-                    while (x <= users - 1)
+                    if (availcounter == 0)
                     {
-                        var updateEq = DBUtl.ExecSQL(@"UPDATE Equipment
+                        entries = 0;
+                    }
+                    else
+                    {
+                        int x = 0;
+                        while (x <= users - 1)
+                        {
+                            var updateEq = DBUtl.ExecSQL(@"UPDATE Equipment
                                                 SET Assigned = '{0}'
-                                                WHERE Serial_no = '{1}'", true, pack2[x].Serial_no);
-                        x++;
+                                                WHERE Serial_no = '{1}'", true, pack2two[x].Serial_no);
+                            x++;
+                        }
+                        entries = availcounter;
                     }
                 }
+
             }
             else if (packid.Equals(3))
             {
-                var pack3 = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = 'SAR-21' AND Status = 'Available' AND Assigned = 0");
+                var pack3 = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = 'SAR-21' AND Status = 'Available' AND Assigned = 1");
+                var pack3two = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = 'SAR-21' AND Status = 'Available' AND Assigned = 0");
+
                 entries = pack3.Count;
+                int availcounter = pack3two.Count;
 
                 if (entries == 0)
                 {
-                    entries = 0;
-                }
-                else
-                {
-                    int x = 0;
-                    while (x <= users - 1)
+                    if (availcounter == 0)
                     {
-                        var updateEq = DBUtl.ExecSQL(@"UPDATE Equipment
+                        entries = 0;
+                    }
+                    else
+                    {
+                        int x = 0;
+                        while (x <= users - 1)
+                        {
+                            var updateEq = DBUtl.ExecSQL(@"UPDATE Equipment
                                                 SET Assigned = '{0}'
-                                                WHERE Serial_no = '{1}'", true, pack3[x].Serial_no);
-                        x++;
+                                                WHERE Serial_no = '{1}'", true, pack3two[x].Serial_no);
+                            x++;
+                        }
+                        entries = availcounter;
                     }
                 }
+
             }
             else if (packid.Equals(4))
             {
-                var pack4 = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = 'AK-47' AND Status = 'Available' AND Assigned = 0");
+                var pack4 = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = 'AK-47' AND Status = 'Available' AND Assigned = 1");
+                var pack4two = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = 'AK-47' AND Status = 'Available' AND Assigned = 0");
+
                 entries = pack4.Count;
+                int availcounter = pack4two.Count;
 
                 if (entries == 0)
                 {
-                    entries = 0;
-                }
-                else
-                {
-                    int x = 0;
-                    while (x <= users - 1)
+                    if (availcounter == 0) {
+                        entries = 0;
+                    }
+                    else
                     {
-                        var updateEq = DBUtl.ExecSQL(@"UPDATE Equipment
+                        int x = 0;
+                        while (x <= users - 1)
+                        {
+                            var updateEq = DBUtl.ExecSQL(@"UPDATE Equipment
                                                 SET Assigned = '{0}'
-                                                WHERE Serial_no = '{1}'", true, pack4[x].Serial_no);
-                        x++;
+                                                WHERE Serial_no = '{1}'", true, pack4two[x].Serial_no);
+                            x++;
+                        }
+                        entries = availcounter;
                     }
                 }
+
             }
 
             return entries;
@@ -276,50 +308,48 @@ namespace FYP.Controllers
                     if (package[0].Type_desc == "SAR-21")
                     {
                         var packList = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = 'SAR-21' AND Status = 'Available' AND Assigned = '{0}'", true);
-                        int loops = packList.Count;
 
-                        /*foreach (var a in userList)
+                        foreach (var a in userList)
                         {
-                            foreach(var b in packList)
-                            if (b.Serial_no == a.Serial_no)
+                            foreach (var b in packList)
                             {
-                                int statChange = DBUtl.ExecSQL("UPDATE Equipment SET Status = 'Unavailable' WHERE Assigned = '{0}' AND Status = 'Available' AND Serial_no = '{1}'", true, b.Serial_no);
+                                if (b.Serial_no == a.Serial_no)
+                                {
+                                    int statChange = DBUtl.ExecSQL("UPDATE Equipment SET Status = 'Unavailable' WHERE Assigned = '{0}' AND Status = 'Available' AND Serial_no = '{1}'", true, b.Serial_no);
+                                }
                             }
-                        }*/
-                        int x = 0;
-                        while (x < loops)
-                        {
-                            var updateEq = DBUtl.ExecSQL(@"UPDATE Equipment
-                                                SET Status = 'Unavailable'
-                                                WHERE Assigned = '{0}' AND Status = 'Available' AND Serial_no = '{1}'", true, packList[x].Serial_no);
-                            x++;
                         }
+
                     }
                     
                     else if (package[0].Type_desc == "AK-47")
                     {
                         var packList = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = 'AK-47' AND Status = 'Available' AND Assigned = '{0}'", true);
-                        int loops = packList.Count;
-                        int x = 0;
-                        while (x < loops)
+                        
+                        foreach (var a in userList)
                         {
-                            var updateEq = DBUtl.ExecSQL(@"UPDATE Equipment
-                                                SET Status = 'Unavailable'
-                                                WHERE Assigned = '{0}' AND Status = 'Available' AND Serial_no = '{1}'", true, packList[x].Serial_no);
-                            x++;
+                            foreach (var b in packList)
+                            {
+                                if (b.Serial_no == a.Serial_no)
+                                {
+                                    int statChange = DBUtl.ExecSQL("UPDATE Equipment SET Status = 'Unavailable' WHERE Assigned = '{0}' AND Status = 'Available' AND Serial_no = '{1}'", true, b.Serial_no);
+                                }
+                            }
                         }
                     }
                     else if (package[0].Type_desc == "SIG Sauer P226")
                     {
                         var packList = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = 'SIG Sauer P226' AND Status = 'Available' AND Assigned = '{0}'", true);
-                        int loops = packList.Count;
-                        int x = 0;
-                        while (x < loops)
+                        
+                        foreach (var a in userList)
                         {
-                            var updateEq = DBUtl.ExecSQL(@"UPDATE Equipment
-                                                SET Status = 'Unavailable'
-                                                WHERE Assigned = '{0}' AND Status = 'Available' AND Serial_no = '{1}'", true, packList[x].Serial_no);
-                            x++;
+                            foreach (var b in packList)
+                            {
+                                if (b.Serial_no == a.Serial_no)
+                                {
+                                    int statChange = DBUtl.ExecSQL("UPDATE Equipment SET Status = 'Unavailable' WHERE Assigned = '{0}' AND Status = 'Available' AND Serial_no = '{1}'", true, b.Serial_no);
+                                }
+                            }
                         }
                     }
                     int exLoaned = DBUtl.ExecSQL("UPDATE Exercise SET status = 'Loaned Out' WHERE Exercise_id = '{0}'", exercise[0].Exercise_id);
@@ -440,8 +470,8 @@ namespace FYP.Controllers
                         while (x < loops)
                         {
                             var updateEq = DBUtl.ExecSQL(@"UPDATE Equipment
-                                                SET Status = 'Available', Assigned = '{0}'
-                                                WHERE Assigned = '{1}' AND Status = 'Unavailable' AND Serial_no = '{2}'", false, true, packList[x].Serial_no);
+                                                SET Status = 'Available'
+                                                WHERE Assigned = '{0}' AND Status = 'Unavailable' AND Serial_no = '{1}'", true, packList[x].Serial_no);
                             x++;
                         }
                     }
@@ -454,8 +484,8 @@ namespace FYP.Controllers
                         while (x < loops)
                         {
                             var updateEq = DBUtl.ExecSQL(@"UPDATE Equipment
-                                                SET Status = 'Available', Assigned = '{0}'
-                                                WHERE Assigned = '{1}' AND Status = 'Unavailable' AND Serial_no = '{2}'", false, true, packList[x].Serial_no);
+                                                SET Status = 'Available'
+                                                WHERE Assigned = '{0}' AND Status = 'Unavailable' AND Serial_no = '{1}'", true, packList[x].Serial_no);
                             x++;
                         }
                     }
@@ -468,7 +498,7 @@ namespace FYP.Controllers
                         {
                             var updateEq = DBUtl.ExecSQL(@"UPDATE Equipment
                                                 SET Status = 'Available', Assigned = '{0}'
-                                                WHERE Assigned = '{1}' AND Status = 'Unavailable' AND Serial_no = '{2}'", false, true, packList[x].Serial_no);
+                                                WHERE Assigned = '{0}' AND Status = 'Unavailable' AND Serial_no = '{1}'", true, packList[x].Serial_no);
                             x++;
                         }
                     }
