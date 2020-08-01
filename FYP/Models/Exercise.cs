@@ -32,5 +32,6 @@ namespace FYP.Models
 
         public bool archive { get; set; }
         public string status { get; set; }
+        public bool assigned_status { get; set; }
     }
 }

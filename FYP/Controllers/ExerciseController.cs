@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using FYP.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FYP.Controllers
@@ -74,15 +77,16 @@ namespace FYP.Controllers
             {
                  
                 string insert =
-                    @"INSERT INTO Exercise(nric, Package_id, company, unit, description, start_date, end_date, archive, status)
-                      Values ('{0}', '{1}', '{2}', '{3}', '{4}', '{5:yyyy-MM-dd}', '{6:yyyy-MM-dd}', '{7}', '{8}')";
+                    @"INSERT INTO Exercise(nric, Package_id, company, unit, description, start_date, end_date, archive, status, assigned_status)
+                      Values ('{0}', '{1}', '{2}', '{3}', '{4}', '{5:yyyy-MM-dd}', '{6:yyyy-MM-dd}', '{7}', '{8}', '{9}')";
 
                 string nricSql = @"SELECT * FROM Users WHERE nric = '" + User.Identity.Name + "'";
                 List<Users> assigned = DBUtl.GetList<Users>(nricSql);
                 string nricFinal = assigned[0].nric;
 
                 bool archived = false;
-                int res = DBUtl.ExecSQL(insert, nricFinal, e.Package_id, e.company, e.unit, e.description, e.start_date, e.end_date, archived, "Pending");
+                bool assignedStatus = false;
+                int res = DBUtl.ExecSQL(insert, nricFinal, e.Package_id, e.company, e.unit, e.description, e.start_date, e.end_date, archived, "Pending", assignedStatus);
 
                 if (res == 1)
                 {
@@ -170,115 +174,7 @@ namespace FYP.Controllers
             }
             return RedirectToAction("Index");
         }
-
-        //Loan Processes Start Here
-
-        public IActionResult Loan()
-        {
-            updateStatus();
-            updatearchive();
-            var loanList = DBUtl.GetList<Exercise>(@"SELECT * FROM Exercise E 
-                                                   INNER JOIN Users U ON E.nric = U.nric 
-                                                   INNER JOIN Package P ON E.Package_id = P.Package_id
-                                                   WHERE E.archive = 0");
-
-            return View("Loan", loanList);
-        }
-
-        public void updateStatus()
-        {
-            var loanList = DBUtl.GetList<Exercise>(@"SELECT * FROM Exercise E 
-                                                   INNER JOIN Users U ON E.nric = U.nric 
-                                                   INNER JOIN Package P ON E.Package_id = P.Package_id
-                                                   WHERE E.archive = 0");
-            foreach (var a in loanList)
-            {
-                string newStatus = Status(a);
-                string sqlstatement = "UPDATE Exercise SET status = '{0}' WHERE Exercise_id = '{1}'";
-                var abc = DBUtl.ExecSQL(sqlstatement, newStatus, a.Exercise_id);
-            }
-        }
-
-        public string Status(Exercise newex)
-        {
-            var user = DBUtl.GetList<Users>("SELECT * FROM Users WHERE company = '" + newex.company + "' AND unit = '" + newex.unit + "'");
-
-            int userCount = user.Count;
-            int pack = newex.Package_id;
-
-            int counter = packAvail(pack, userCount);
-            if (userCount > counter)
-            {
-                return "Insufficient Equipment Quantity";
-            }
-            else
-            {
-                    
-                return "Ready to Loan";
-            }
-        }
-
-        public int packAvail(int packid, int users)
-        {
-            int entries = 0;
-            if (packid.Equals(1))
-            {
-                var pack1 = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = 'SAR-21' AND Status = 'Available' AND Assigned = 0");
-                entries = pack1.Count;
-
-                int x = 0;
-                while (x <= users - 1)
-                {
-                    var updateEq = DBUtl.ExecSQL(@"UPDATE Equipment
-                                                    SET Assigned = '{0}'
-                                                    WHERE Serial_no = '{1}'", true, pack1[x].Serial_no);
-                    x++;
-                } 
-            }
-            else if (packid.Equals(2))
-            {
-                var pack2 = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = 'SIG Sauer P226' AND Status = 'Available' AND Assigned = 0");
-                entries = pack2.Count;
-
-                int x = 0;
-                while (x <= users - 1)
-                {
-                    var updateEq = DBUtl.ExecSQL(@"UPDATE Equipment
-                                                    SET Assigned = '{0}'
-                                                    WHERE Serial_no = '{1}'", true, pack2[x].Serial_no);
-                    x++;
-                }
-            }
-            else if (packid.Equals(3))
-            {
-                var pack3 = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = 'SAR-21' AND Status = 'Available' AND Assigned = 0");
-                entries = pack3.Count;
-
-                int x = 0;
-                while (x <= users - 1)
-                {
-                    var updateEq = DBUtl.ExecSQL(@"UPDATE Equipment
-                                                    SET Assigned = '{0}'
-                                                    WHERE Serial_no = '{1}'", true, pack3[x].Serial_no);
-                    x++;
-                }
-            }
-            else if (packid.Equals(4))
-            {
-                var pack4 = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = 'AK-47' AND Status = 'Available' AND Assigned = 0");
-                entries = pack4.Count;
-
-                int x = 0;
-                while (x <= users - 1)
-                {
-                    var updateEq = DBUtl.ExecSQL(@"UPDATE Equipment
-                                                    SET Assigned = '{0}'
-                                                    WHERE Serial_no = '{1}'", true, pack4[x].Serial_no);
-                    x++;
-                }
-            }
-            return entries;
-        }
+        
     }
 
 }
