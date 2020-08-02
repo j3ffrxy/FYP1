@@ -44,23 +44,30 @@ namespace FYP.Controller
             }
             else
             {
-
-                HttpContext.SignInAsync(
-               CookieAuthenticationDefaults.AuthenticationScheme,
-               principal,
-               new AuthenticationProperties
-               {
-                   IsPersistent = user.RememberMe
-               });
-
-                if (TempData["returnUrl"] != null)
+                if (user.Maintenance_status == true)
                 {
-                    string returnUrl = TempData["returnUrl"].ToString();
-                    if (Url.IsLocalUrl(returnUrl))
-                        return Redirect(returnUrl);
-                }
+                    return RedirectToAction("Forbidden", "Maintenance");
 
-                return RedirectToAction(REDIRECT_ACTN, REDIRECT_CNTR);
+                }
+                else
+                {
+                    HttpContext.SignInAsync(
+                   CookieAuthenticationDefaults.AuthenticationScheme,
+                   principal,
+                   new AuthenticationProperties
+                   {
+                       IsPersistent = user.RememberMe
+                   });
+
+                    if (TempData["returnUrl"] != null)
+                    {
+                        string returnUrl = TempData["returnUrl"].ToString();
+                        if (Url.IsLocalUrl(returnUrl))
+                            return Redirect(returnUrl);
+                    }
+
+                    return RedirectToAction(REDIRECT_ACTN, REDIRECT_CNTR);
+                }
             }
         }
 

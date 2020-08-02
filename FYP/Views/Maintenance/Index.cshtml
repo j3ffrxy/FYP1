@@ -1,0 +1,65 @@
+﻿@section MoreScripts {
+    <link href="~/lib/datatables/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#jsMaintenance').DataTable({
+                ordering: true,
+                paging: true,
+                searching: true,
+                info: true,
+                lengthChange: true,
+                pageLength: 20
+            });
+        });
+    </script>
+
+}
+<h2>Maintenance List</h2>
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-@TempData["MsgType"]">@TempData["Message"]</div>
+}
+<div>
+    <table id="jsMaintenance" class="table">
+        <thead>
+            <tr>
+                <th scope="col">Maintenance ID</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">End_date</th>
+                <th scope="col">Description</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (System.Data.DataRow row in Model)
+            {
+
+            <tr>
+                <td>@row["Maintenance_id"]</td>
+                <td>@row["Start_date"]</td>
+                <td>@row["End_date"]</td>
+                <td>@row["description"]</td>
+
+                @if (User.IsInRole("Admin"))
+                    {
+                <td>
+                    <a asp-controller="Maintenance"
+                       asp-action="ToggleMaint"
+                       asp-route-id="@row["Maintenance_id"]"
+                       onclick="return confirm('Toggle maintenance')">
+                        Toggle
+                    </a>
+
+                </td>
+                    }
+
+            </tr>
+            }
+        </tbody>
+
+
+
+    </table>
+</div>
