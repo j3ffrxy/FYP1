@@ -20,7 +20,7 @@ namespace Test
             services.AddMvc(options => options.EnableEndpointRouting = false);
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(options => {
-                        options.LoginPath = "/Account/Login/";
+                        options.LoginPath = "/Face/Index/";
                         options.AccessDeniedPath = "/Account/Forbidden/";
                     });
 

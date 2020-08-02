@@ -25,10 +25,10 @@ namespace FYP.Controller
         public IActionResult ViewArchive()
         {
             updatearchive();
-            DataTable dt = DBUtl.GetTable(@"Select Stocktaking_id , total_equipment_quantity as [Total Equipment Quantity] , total_accessories_quantity as [Total Accessories Quantity] , date_created as [Date Created] , full_name as [Created By] from Stocktaking s 
+            List<Stocktaking> list = DBUtl.GetList<Stocktaking>(@"Select Stocktaking_id , total_equipment_quantity , total_accessories_quantity, date_created, u.full_name, diff_equip, diff_accessory from Stocktaking s 
                                             INNER JOIN Users u ON s.User_id = u.User_id
-                                            Where s.archive = ");
-            return View("ViewArchive", dt.Rows);
+                                            Where s.archive = 1");
+            return View("ViewArchive", list);
         }
 
         private void updatearchive()

@@ -17,8 +17,8 @@
 
 }
 
-@model System.Data.DataRowCollection
-<h2> Archive </h2>
+@model List<FYP.Models.Stocktaking>;
+<h2> Stocktake </h2>
 
 @if (TempData["Message"] != null)
 {
@@ -36,33 +36,78 @@
                 <th>Total Accessories Quantity</th>
                 <th>Date Created</th>
                 <th>Created By</th>
-                @if (User.IsInRole("7") || User.IsInRole("6"))
-                {
-                    <th>Action</th>
-                }
-
+                <th>Equipment Difference</th>
+                <th>Accessory Difference</th>
             </tr>
         </thead>
 
         <tbody>
-            @foreach (System.Data.DataRow row in Model)
+            @foreach (FYP.Models.Stocktaking s in Model)
             {
                 <tr>
-                    <td>@row["Total Equipment Quantity"]</td>
-                    <td>@row["Total Equipment Quantity"]</td>
-                    <td>@String.Format("{0:dd-MM-yyyy}", row["Date Created"])</td>
-                    <td>@row["Created By"]</td>
-                    @if (User.IsInRole("7") || User.IsInRole("6"))
-                    {
-                        <td>
+                    <td>@s.total_equipment_quantity</td>
+                    <td>@s.total_accessories_quantity</td>
+                    <td>@String.Format("{0:dd-MM-yyyy}", @s.date_created)</td>
+                    <td>@s.full_name</td>
+                    <td>
+                        @if (s.diff_equip > 0)
+                        {
+
                             <a asp-controller="Stocktake"
-                               asp-action="ViewComments"
-                               asp-route-id="@row["Stocktake_id"]">
-                                Comments
+                               asp-action="View Equipment"
+                               asp-route-id="@ViewData["hi"]">
+                                Extra Equipment
                             </a>
 
-                        </td>
-                    }
+                        }
+                        else if (s.diff_equip < 0)
+                        {
+                            <a asp-controller="Stocktake"
+                               asp-action="ViewEquipment"
+                               asp-route-id="@s.Stocktaking_id">
+                                Missing Equipment
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Stocktake"
+                               asp-action="ViewEquipment"
+                               asp-route-id="@s.Stocktaking_id">
+                                View Details
+                            </a>
+                        }
+                    </td>
+                    <td>
+                        @if (s.diff_accessory > 0)
+                        {
+
+                            <a asp-controller="Stocktake"
+                               asp-action="ViewAccessory"
+                               asp-route-id="@s.Stocktaking_id">
+                                Extra Accessory
+                            </a>
+
+                        }
+                        else if (s.diff_accessory < 0)
+                        {
+                            <a asp-controller="Stocktake"
+                               asp-action="ViewAccessory"
+                               asp-route-id="@s.Stocktaking_id">
+                                Missing Accessory
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Stocktake"
+                               asp-action="ViewAccessory"
+                               asp-route-id="@s.Stocktaking_id">
+                                View Details
+                            </a>
+                        }
+                    </td>
+
+
+
 
                 </tr>
             }
@@ -74,10 +119,8 @@
                 <th>Total Accessories Quantity</th>
                 <th>Date Created</th>
                 <th>Created By</th>
-                @if (User.IsInRole("7") || User.IsInRole("6"))
-                {
-                    <th>Action</th>
-                }
+                <th>Equipment Difference</th>
+                <th>Accessory Difference</th>
 
             </tr>
         </tfoot>

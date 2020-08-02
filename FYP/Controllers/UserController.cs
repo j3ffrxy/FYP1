@@ -23,7 +23,7 @@ namespace FYP.Controllers
 
         public string GetEquipment()
         {
-            var list = DBUtl.GetList<Equipment>("Select * from Equipment WHERE Assigned = 'False' ");
+            var list = DBUtl.GetList<Equipment>("Select * from Equipment WHERE Assigned = 'False' AND Type_desc = 'SAR-21' ");
             var equip = list[0];
             string update = "Update Equipment Set Assigned = 'True' Where Serial_no = '" + equip.Serial_no + "'";
             DBUtl.ExecSQL(update);
