@@ -1,0 +1,89 @@
+﻿@section MoreScripts {
+    <link href="~/lib/datatables/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#jsEquipment').DataTable({
+                ordering: true,
+                paging: true,
+                searching: true,
+                info: true,
+                lengthChange: true,
+                pageLength: 20
+            });
+        });
+    </script>
+
+}
+
+@model List<FYP.Models.Equipment>;
+<h2> Equipment Maintenance </h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-@TempData["MsgType"]">
+        @TempData["Message"]
+    </div>
+}
+
+<div>
+
+    <table id="jsEquipment" class="table">
+        <thead>
+            <tr>
+                <th scope="col">Serial Number</th>
+                <th scope="col">Equipment Name</th>
+                <th scope="col">Storage Location</th>
+                <th scope="col">Type Description</th>
+                <th scope="col">Status</th>
+                @if (User.IsInRole("Admin"))
+                {
+                    <th>Action</th>
+                }
+
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (FYP.Models.Equipment e in Model)
+            {
+                <tr>
+                    <td>@e.Serial_no</td>
+                    <td>@e.Equipment_name</td>
+                    <td>@e.Storage_location</td>
+                    <td>@e.Type_desc</td>
+                    <td>@e.Status</td>
+                    <td>
+                        <a asp-controller="Equipment"
+                           asp-action="ConductMaint"
+                           asp-route-id="@e.Serial_no"
+                           onclick="return confirm('Send for Maintenance?')">
+                            Send for Maintenance
+                        </a>
+                    </td>
+
+
+                </tr>
+            }
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <th scope="col">Serial Number</th>
+                <th scope="col">Equipment Name</th>
+                <th scope="col">Storage Location</th>
+                <th scope="col">Type Description</th>
+                <th scope="col">Status</th>
+                @if (User.IsInRole("Admin"))
+                {
+                    <th>Action</th>
+                }
+
+            </tr>
+        </tfoot>
+
+
+    </table>
+</div>
+
