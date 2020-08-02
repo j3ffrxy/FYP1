@@ -28,6 +28,11 @@ namespace FYP.Controllers
 
             return View("Index", dt);
         }
+
+        public IActionResult UserView()
+        {
+            return View();
+        }
         private void updatearchive()
         {
             var list = DBUtl.GetList<Exercise>("SELECT * FROM Exercise");

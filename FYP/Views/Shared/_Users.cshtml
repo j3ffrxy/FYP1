@@ -23,7 +23,18 @@
         {
             <Partial name="SAFAdmin" />
         }
-
+        else if (User.IsInRole("Serviceman"))
+        {
+            <Partial name="SAFUser" />
+        }
+        else if (User.IsInRole("Store Supervisor"))
+        {
+            <Partial name="SAFStoreman" />
+        }
+        else
+        {
+            <Partial name="SAFStaff" />
+        }
     }
     else
     {
