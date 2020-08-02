@@ -20,10 +20,22 @@ namespace FYP.Controllers
         {
             DataTable dt = DBUtl.GetTable("SELECT * FROM Equipment");
             return View("Index", dt.Rows);
-
+            
         }
 
+        public IActionResult EquipmentMaint()
+        {
+            updateMaint();
+            List<Equipment> dt = DBUtl.GetList<Equipment>(@"SELECT * FROM Equipment WHERE Status = 'Available'");
+            return View("EquipmentMaint", dt);
+        }
 
+        public IActionResult EquipmentMaintCancel()
+        {
+            updateMaint();
+            List<Equipment> dt = DBUtl.GetList<Equipment>(@"SELECT * FROM Equipment WHERE Status = 'Maintenance'");
+            return View("EquipmentMaintCancel", dt);
+        }
 
         [HttpGet]
         public IActionResult AddEquipment()
@@ -249,6 +261,118 @@ namespace FYP.Controllers
                 ViewBag.Message = "Please select the file first to upload.";
             }
             return View();
+        }
+
+        
+        public IActionResult ConductMaint(int id)
+        {
+
+            string select = "SELECT * FROM Equipment WHERE  Serial_no='{0}'";
+            List<Equipment> list = DBUtl.GetList<Equipment>(select, id);
+            if (list.Count == 1)
+            {
+                return View(list[0]);
+            }
+            else
+            {
+                TempData["Message"] = "No records found.";
+                TempData["MsgType"] = "warning";
+                return RedirectToAction("EquipmentMaint");
+            }
+
+        }
+
+
+        [HttpPost]
+        public IActionResult ConductMaint(Equipment e)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                ViewData["Message"] = "Invalid Input";
+                ViewData["MsgType"] = "warning";
+                return View();
+            }
+            else
+            {
+                bool archive = false;
+                bool maint_type = true;
+                string statUpdate =
+                   @"INSERT INTO Maintenance(Serial_no, Start_date, End_date, description, maint_type, archive)
+                   VALUES('{0}', '{1:yyyy-MM-dd}','{2:yyyy-MM-dd}', '{3}', '{4}', '{5}')";
+                int plswork = DBUtl.ExecSQL(statUpdate, e.Serial_no, e.m_start_date, e.m_end_date, "Equipment Maintenance", maint_type, archive);
+                
+                string insert =
+                    @"UPDATE Equipment SET Status = 'Maintenance', m_start_date = '{0:yyyy-MM-dd}', m_end_date = '{1:yyyy-MM-dd}' WHERE Serial_no = '{2}' AND Status = 'Available'";
+                                
+               
+                int result = DBUtl.ExecSQL(insert, e.m_start_date, e.m_end_date, e.Serial_no);
+
+                if (result == 1 && plswork == 1)
+                {
+                    TempData["Message"] = "Sent for Maintenance";
+                    TempData["MsgType"] = "success";
+                }
+                else
+                {
+                    TempData["Message"] = DBUtl.DB_Message;
+                    TempData["MsgType"] = "danger";
+                }
+                return RedirectToAction("EquipmentMaint");
+            }
+        }
+
+
+
+        public IActionResult CancelMaint(string id)
+        {
+            string select = @"SELECT * FROM Equipment 
+                              WHERE Serial_no='{0}'";
+            DataTable ds = DBUtl.GetTable(select, id);
+            if (ds.Rows.Count != 1)
+            {
+                TempData["Message"] = "Equipment record no longer exists.";
+                TempData["MsgType"] = "warning";
+            }
+            else
+            {
+                string maintChange = "DELETE FROM Maintenance WHERE Serial_no = '{0}'";
+                int maint = DBUtl.ExecSQL(maintChange, id);
+
+                string update = "UPDATE Equipment SET Status = 'Available' WHERE Serial_no = '{0}' AND Status = 'Maintenance'";
+                int res = DBUtl.ExecSQL(update, id);
+                if (res == 1)
+                {
+                    TempData["Message"] = "Maintenance Notice Cancelled";
+                    TempData["MsgType"] = "success";
+                }
+                else
+                {
+                    TempData["Message"] = "Something went wrong.";
+                    TempData["MsgType"] = "danger";
+                }
+            }
+            return RedirectToAction("EquipmentMaintCancel");
+        }
+
+        private void updateMaint()
+        {
+            var list = DBUtl.GetList<Maintenance>("SELECT * FROM Maintenance WHERE maint_type = '{0}'", true);
+            DateTime currentdate = DateTime.Now;
+
+            foreach (var a in list)
+            {
+                DateTime enddate = a.End_date;
+                if (enddate < currentdate)
+                {
+                    var updateEq = "UPDATE Equipment SET Status = 'Available' WHERE Status = 'Maintenance' AND Serial_no = '{0}'";
+                    DBUtl.ExecSQL(updateEq, a.Serial_no);
+
+                    var update = "UPDATE Maintenance SET archive = '{0}' WHERE Serial_no = '{1}'";
+                    DBUtl.ExecSQL(update, true, a.Serial_no);
+
+                }
+            }
         }
     }
 }

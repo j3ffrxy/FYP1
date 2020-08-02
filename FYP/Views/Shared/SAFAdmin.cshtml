@@ -20,9 +20,11 @@
             <li class="dropdown">
                 <a class="dropdown-toggle" role="button" aria-expanded="false" href="#" data-toggle="dropdown">Equipments<span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
-                    <li>@Html.ActionLink("View Equipments", "Index", "Equipment", null, new { id = "item 1" })</li>
-                    <li>@Html.ActionLink("Add Equipments", "AddEquipment", "Equipment", null, new { id = "item 2" })</li>
-                    <li>@Html.ActionLink("Mass add equipments", "MassAdd", "Equipment", null, new { id = "item 3" })</li>
+                    <li>@Html.ActionLink("View Equipment", "Index", "Equipment", null, new { id = "item 1" })</li>
+                    <li>@Html.ActionLink("Add Equipment", "AddEquipment", "Equipment", null, new { id = "item 2" })</li>
+                    <li>@Html.ActionLink("Mass Add Equipment", "MassAdd", "Equipment", null, new { id = "item 3" })</li>
+                    <li>@Html.ActionLink("Equipment Maintenance", "EquipmentMaint", "Equipment", null, new { id = "item 4" })</li>
+                    <li>@Html.ActionLink("Cancel Maintenance", "EquipmentMaintCancel", "Equipment", null, new { id = "item 5" })</li>
                 </ul>
             </li>
             <li class="dropdown">
@@ -43,19 +45,20 @@
                 </ul>
             </li>
             <li class="dropdown">
-                <a class="dropdown-toggle" role="button" aria-expanded="false" href="#" data-toggle="dropdown">Appointment<span class="caret"></span></a>
+                <a class="dropdown-toggle" role="button" aria-expanded="false" href="#" data-toggle="dropdown">Exercises<span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
-                    <li>@Html.ActionLink("View Appointment", "Index", "Appointment", null, new { id = "item 1" })</li>
-                    <li>@Html.ActionLink("Create Appointment", "Create", "Appointment", null, new { id = "item 2" })</li>
-                    <li>@Html.ActionLink("Edit Appointment", "Edits", "Appointment", null, new { id = "item 3" })</li>
+                    <li>@Html.ActionLink("View Exercise", "Index", "Exercise", null, new { id = "item 1" })</li>
+                    <li>@Html.ActionLink("Create Exercise", "Create", "Exercise", null, new { id = "item 2" })</li>
+                    <li>@Html.ActionLink("View Archive", "ViewArchive", "Exercise", null, new { id = "item 3" })</li>
                 </ul>
             </li>
-
             <li class="dropdown">
-                <a class="dropdown-toggle" role="button" aria-expanded="false" href="#" data-toggle="dropdown">Annoucement<span class="caret"></span></a>
+                <a class="dropdown-toggle" role="button" aria-expanded="false" href="#" data-toggle="dropdown">Loans<span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
-                    <li>@Html.ActionLink("View Annoucement", "Index", "Announcement", null, new { id = "item 1" })</li>
-                    <li>@Html.ActionLink("Create Annoucement", "AddAnnouncement", "Announcement", null, new { id = "item 2" })</li>
+                    <li>@Html.ActionLink("View Loans", "Loan", "Loan", null, new { id = "item 1" })</li>
+                    <li>@Html.ActionLink("Facilitate Loans", "LoanProcess", "Loan", null, new { id = "item 2" })</li>
+                    <li>@Html.ActionLink("Facilitate Returns", "ReturnProcess", "Loan", null, new { id = "item 3" })</li>
+                    <li>@Html.ActionLink("View Finished Loans", "Index", "Loan", null, new { id = "item 4" })</li>
                 </ul>
             </li>
 
@@ -68,12 +71,13 @@
                 </ul>
             </li>
 
+
         </ul>
 
         <ul class="nav navbar-nav ml-auto">
             <li>
                 <p class="navbar-text">
-                    Welcome @User.Identity.Name<br />
+                    Welcome, @User.Identity.Name!<br />
                 </p>
             </li>
             <li>

@@ -11,6 +11,8 @@ namespace FYP.Models
     {
         public int Maintenance_id { get; set; }
 
+        public string Serial_no { get; set; }
+
         [Required(ErrorMessage = "Enter a valid date")]
         [DataType(DataType.DateTime)]
         public DateTime Start_date { get; set; }

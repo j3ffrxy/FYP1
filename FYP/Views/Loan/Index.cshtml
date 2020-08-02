@@ -17,8 +17,8 @@
 
 }
 
-@model System.Data.DataRowCollection
-<h2> Exercises </h2>
+@model List<FYP.Models.Exercise>;
+<h2> Loans </h2>
 
 @if (TempData["Message"] != null)
 {
@@ -49,25 +49,21 @@
         </thead>
 
         <tbody>
-            @foreach (System.Data.DataRow row in Model)
+            @foreach (FYP.Models.Exercise e in Model)
             {
             <tr>
-                <td>@User.Identity.Name</td>
-                <td>@row["Company"]</td>
-                <td>@row["Unit"]</td>
-                <td>@row["Package_id"]</td>
-                <td>@row["Description"]</td>
-                <td>@String.Format("{0:dd-MM-yyyy}", row["Start Date"])</td>
-                <td>@String.Format("{0:dd-MM-yyyy}", row["End Date"])</td>
+                <td>@e.nric</td>
+                <td>@e.company</td>
+                <td>@e.unit</td>
+                <td>@e.Package_id</td>
+                <td>@e.description</td>
+                <td>@String.Format("{0:dd-MM-yyyy}", @e.start_date)</td>
+                <td>@String.Format("{0:dd-MM-yyyy}", @e.end_date)</td>
+                <td>@e.status</td>
                 <td>
                     <a asp-controller="Exercise"
-                       asp-action="Edits"
-                       asp-route-id="@row["Exercise_id"]">
-                        Edit
-                    </a>
-                    <a asp-controller="Exercise"
                        asp-action="Delete"
-                       asp-route-id="@row["Exercise_id"]"
+                       asp-route-id="@e.Exercise_id"
                        onclick="return confirm('Delete Exercise')">
                         Delete
                     </a>

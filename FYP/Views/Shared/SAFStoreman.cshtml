@@ -9,21 +9,48 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Stocktake" asp-action="AddStocktake">New Stocktake</a>
+            <li class="dropdown">
+                <a class="dropdown-toggle" role="button" aria-expanded="false" href="#" data-toggle="dropdown">Equipments<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li>@Html.ActionLink("View Equipment", "Index", "Equipment", null, new { id = "item 1" })</li>
+                    <li>@Html.ActionLink("Add Equipment", "AddEquipment", "Equipment", null, new { id = "item 2" })</li>
+                    <li>@Html.ActionLink("Mass Add Equipment", "MassAdd", "Equipment", null, new { id = "item 3" })</li>
+                    <li>@Html.ActionLink("Equipment Maintenance", "EquipmentMaint", "Equipment", null, new { id = "item 4" })</li>
+                    <li>@Html.ActionLink("Cancel Maintenance", "EquipmentMaintCancel", "Equipment", null, new { id = "item 5" })</li>
+                </ul>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Stocktake" asp-action="ViewStocktake">View Recent Stocktake</a>
+            <li class="dropdown">
+                <a class="dropdown-toggle" role="button" aria-expanded="false" href="#" data-toggle="dropdown">Accessories<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li>@Html.ActionLink("View Accessories", "Index", "Accessories", null, new { id = "item 1" })</li>
+                    <li>@Html.ActionLink("Add Accessories", "AddAccessories", "Accessories", null, new { id = "item 2" })</li>
+                    <li>@Html.ActionLink("Mass add Accessories", "MassAdd", "Accessories", null, new { id = "item 3" })</li>
+                </ul>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Stocktake" asp-action="ViewArchive">View Archive</a>
+            <li class="dropdown">
+                <a class="dropdown-toggle" role="button" aria-expanded="false" href="#" data-toggle="dropdown">Stocktake<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li>@Html.ActionLink("View Stocktake", "ViewStocktake", "Stocktake", null, new { id = "item 1" })</li>
+                    <li>@Html.ActionLink("Add Stockstake", "AddStocktake", "Stocktake", null, new { id = "item 2" })</li>
+                    <li>@Html.ActionLink("View Archive", "ViewArchive", "Stocktake", null, new { id = "item 3" })</li>
+
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" role="button" aria-expanded="false" href="#" data-toggle="dropdown">Loans<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li>@Html.ActionLink("View Loans", "Loan", "Loan", null, new { id = "item 1" })</li>
+                    <li>@Html.ActionLink("Facilitate Loans", "LoanProcess", "Loan", null, new { id = "item 2" })</li>
+                    <li>@Html.ActionLink("Facilitate Returns", "ReturnProcess", "Loan", null, new { id = "item 3" })</li>
+                    <li>@Html.ActionLink("View Finished Loans", "Index", "Loan", null, new { id = "item 4" })</li>
+                </ul>
             </li>
         </ul>
 
         <ul class="nav navbar-nav ml-auto">
             <li>
                 <p class="navbar-text">
-                    Welcome @User.Identity.Name<br />
+                    Welcome, @User.Identity.Name!<br />
                 </p>
             </li>
             <li>

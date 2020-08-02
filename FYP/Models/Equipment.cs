@@ -24,8 +24,16 @@ namespace FYP.Models
         public string Status { get; set; }
         
         public bool Assigned { get; set; }
-      
 
-     
+        [Required(ErrorMessage = "Enter a valid date")]
+        [DataType(DataType.DateTime)]
+        public DateTime m_start_date { get; set; }
+
+        [Required(ErrorMessage = "Enter a valid date")]
+        [DataType(DataType.DateTime)]
+        public DateTime m_end_date { get; set; }
+
+
+
     }
 }
