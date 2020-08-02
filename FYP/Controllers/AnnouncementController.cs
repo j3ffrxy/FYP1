@@ -15,6 +15,7 @@ namespace FYP.Controllers
 {
     public class AnnouncementController : Microsoft.AspNetCore.Mvc.Controller
     {
+     
 
         public IActionResult Index()
         {
@@ -149,7 +150,7 @@ namespace FYP.Controllers
             }
             return RedirectToAction("Index");
         }
-        public IActionResult RefreshAnnouncement(int id)
+        public IActionResult UpdateAnnouncement(int id)
         {
 
             // Get the record from the database using the id
@@ -167,33 +168,25 @@ namespace FYP.Controllers
             }
 
         }
-        public IActionResult RefreshAnnouncement(string id)
+        private void UpdateAnnouncement()
         {
-            string select = @"SELECT * FROM Announcement";
-            DataTable ds = DBUtl.GetTable(select, id);
-            if (ds.Rows.Count != 1)
+            var list = DBUtl.GetList<Announcement>("Select * from Announcement");
+            DateTime firstdate = DateTime.Now;
+
+            foreach (var a in list)
             {
-                TempData["Message"] = "Announcement record no longer exists.";
-                TempData["MsgType"] = "warning";
-            }
-            else
-            {
-                string delete = "DELETE FROM Announcement WHERE End_date < CURRENT_DATE"; 
-                int res = DBUtl.ExecSQL(delete, id);
-                if (res == 1)
+                DateTime seconddate = a.End_date;
+                String diff = (firstdate - seconddate).TotalDays.ToString();
+                double archivable = Double.Parse(diff);
+                if (archivable > 0)
                 {
-                    TempData["Message"] = "Announcement Deleted";
-                    TempData["MsgType"] = "success";
-                }
-                else
-                {
-                    TempData["Message"] = "Please delete related records before deleting this record!";
-                    TempData["MsgType"] = "danger";
+                    string delete = "DELETE FROM Announcement WHERE Announcement_id='{0}'";
+                    DBUtl.ExecSQL(delete, true, a.Announcement_id);
+
                 }
             }
-            return RedirectToAction("Index");
         }
-
+       
     }
-
 }
+        
