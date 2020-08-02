@@ -40,7 +40,7 @@
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Status</th>
-                @if (User.IsInRole("Admin"))
+                @if (User.IsInRole("Admin") || User.IsInRole("Officer Commander") || User.IsInRole("Platoon Commander") || User.IsInRole("Commandant Officer"))
                 {
                     <th>Action</th>
                 }
@@ -88,7 +88,7 @@
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Status</th>
-                @if (User.IsInRole("Admin"))
+                @if (User.IsInRole("Admin") || User.IsInRole("Officer Commander") || User.IsInRole("Platoon Commander") || User.IsInRole("Commandant Officer"))
                 {
                     <th>Action</th>
                 }

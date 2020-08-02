@@ -40,7 +40,7 @@
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Status</th>
-                @if (User.IsInRole("Admin"))
+                @if (User.IsInRole("Admin") || User.IsInRole("Store Supervisor"))
                 {
                     <th>Action</th>
                 }
@@ -84,7 +84,7 @@
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Status</th>
-                @if (User.IsInRole("Admin"))
+                @if (User.IsInRole("Admin") || User.IsInRole("Store Supervisor"))
                 {
                     <th>Action</th>
                 }

@@ -37,7 +37,7 @@
                 <th scope="col">Storage Location</th>
                 <th scope="col">Type Description</th>
                 <th scope="col">Status</th>
-                @if (User.IsInRole("Admin"))
+                @if (User.IsInRole("Admin") || User.IsInRole("Store Supervisor"))
                 {
                     <th>Action</th>
                 }
@@ -75,7 +75,7 @@
                 <th scope="col">Storage Location</th>
                 <th scope="col">Type Description</th>
                 <th scope="col">Status</th>
-                @if (User.IsInRole("Admin"))
+                @if (User.IsInRole("Admin") || User.IsInRole("Store Supervisor"))
                 {
                     <th>Action</th>
                 }
