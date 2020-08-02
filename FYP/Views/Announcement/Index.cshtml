@@ -26,7 +26,6 @@
     <table id="jsAnnouncement" class="table">
         <thead>
             <tr>
-                <th scope="col">Announcement ID</th>
                 <th scope="col">Announcement Description</th>
                 <th scope="col">Start date</th>
                 <th scope="col">End date</th>
@@ -40,7 +39,6 @@
             {
 
             <tr>
-                <td>@row["Announcement_id"]</td>
                 <td>@row["Announcement_desc"]</td>
                 <td>@row["Start_date"]</td>
                 <td>@row["End_date"]</td>
@@ -62,12 +60,7 @@
                         Delete
                     </a>
                 
-                    <a asp-controller="Announcement"
-                       asp-action="RefreshAnnouncement"
-                       asp-route-id="@row["Announcement_id"]">
-                        Refresh
-                    </a>
-           
+                 
 
                 </td>
                 }

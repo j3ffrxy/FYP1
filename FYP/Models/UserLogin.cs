@@ -18,7 +18,7 @@ namespace FYP.Models
         public string password { get; set; }
 
         public bool RememberMe { get; set; }
-        public bool Maintenance_status { get; set; }
+        public string Maintenance_status { get; set; }
 
     }
 }

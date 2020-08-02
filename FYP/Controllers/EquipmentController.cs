@@ -59,14 +59,15 @@ namespace FYP.Controllers
             }
             else
             {
+                bool Assigned = false;
 
                 string insert =
-                   @"INSERT INTO Equipment(Serial_no,Equipment_name,Storage_location,Type_desc, Status)
-                                 VALUES('{0}','{1}','{2}','{3}', '{4}')";
+                   @"INSERT INTO Equipment(Serial_no,Equipment_name,Storage_location,Type_desc, Status, Assigned)
+                                 VALUES('{0}','{1}','{2}','{3}', '{4}', '{5}')";
 
 
                 int result = DBUtl.ExecSQL(insert, newEquipment.Serial_no, newEquipment.Equipment_name,
-                    newEquipment.Storage_location, newEquipment.Type_desc, newEquipment.Status);
+                    newEquipment.Storage_location, newEquipment.Type_desc, newEquipment.Status, newEquipment.Assigned);
 
                 if (result == 1)
                 {

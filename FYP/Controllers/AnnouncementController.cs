@@ -50,11 +50,11 @@ namespace FYP.Controllers
             {
 
                 string insert =
-                   @"INSERT INTO Announcement(Announcement_id,Announcement_desc,Start_date,End_date)
-                                 VALUES('{0}','{1}', '{2:yyyy-MM-dd}', '{3:yyyy-MM-dd}')";
+                   @"INSERT INTO Announcement(Announcement_desc,Start_date,End_date)
+                                 VALUES('{0}', '{1:yyyy-MM-dd}', '{2:yyyy-MM-dd}')";
 
 
-                int result = DBUtl.ExecSQL(insert, newAnnounce.Announcement_id, newAnnounce.Announcement_desc,
+                int result = DBUtl.ExecSQL(insert, newAnnounce.Announcement_desc,
                     newAnnounce.Start_date, newAnnounce.End_date);
 
                 if (result == 1)
@@ -150,43 +150,9 @@ namespace FYP.Controllers
             }
             return RedirectToAction("Index");
         }
-        public IActionResult UpdateAnnouncement(int id)
-        {
-
-            // Get the record from the database using the id
-            string select = "SELECT * FROM Announcement WHERE  Announcement_id='{0}'";
-            List<Announcement> list = DBUtl.GetList<Announcement>(select, id);
-            if (list.Count == 1)
-            {
-                return View(list[0]);
-            }
-            else
-            {
-                TempData["Message"] = "Announcement not found.";
-                TempData["MsgType"] = "warning";
-                return RedirectToAction("Index");
-            }
-
-        }
-        private void UpdateAnnouncement()
-        {
-            var list = DBUtl.GetList<Announcement>("Select * from Announcement");
-            DateTime firstdate = DateTime.Now;
-
-            foreach (var a in list)
-            {
-                DateTime seconddate = a.End_date;
-                String diff = (firstdate - seconddate).TotalDays.ToString();
-                double archivable = Double.Parse(diff);
-                if (archivable > 0)
-                {
-                    string delete = "DELETE FROM Announcement WHERE Announcement_id='{0}'";
-                    DBUtl.ExecSQL(delete, true, a.Announcement_id);
-
-                }
-            }
-        }
+      
+    }
        
     }
-}
+
         

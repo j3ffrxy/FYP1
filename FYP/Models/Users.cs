@@ -39,7 +39,7 @@ namespace FYP.Models
         [Required(ErrorMessage = "Select a role")]
         public String role { get; set; }
 
-        public bool Maintenance_status { get; set; }
+        public String Maintenance_status { get; set; }
 
 
 

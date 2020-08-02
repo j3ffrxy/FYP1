@@ -30,6 +30,7 @@ namespace FYP.Controller
         {
             return View();
         }
+
         [HttpGet]
         public IActionResult Start()
         {
@@ -93,6 +94,36 @@ namespace FYP.Controller
                 else
                 {
                     TempData["Message"] = "Toggle maintenance unsuccessful";
+                    TempData["MsgType"] = "danger";
+                }
+            }
+            return RedirectToAction("Index");
+
+
+
+
+        }
+        public IActionResult StopToggleMaint(string id)
+        {
+            string select = @"SELECT * FROM Users WHERE role !='Admin'";
+            DataTable ds = DBUtl.GetTable(select, id);
+            if (ds.Rows.Count < 0)
+            {
+                TempData["Message"] = "Stop Toggle failed";
+                TempData["MsgType"] = "warning";
+            }
+            else
+            {
+                string set = "UPDATE Users SET Maintenance_status = 0 WHERE role != 'Admin'";
+                int res = DBUtl.ExecSQL(set, id);
+                if (res > 0)
+                {
+                    TempData["Message"] = "Maintenance stop Toggle successful";
+                    TempData["MsgType"] = "success";
+                }
+                else
+                {
+                    TempData["Message"] = "Toggle stop maintenance unsuccessful";
                     TempData["MsgType"] = "danger";
                 }
             }

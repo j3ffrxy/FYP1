@@ -45,6 +45,14 @@
                     <li>@Html.ActionLink("View Finished Loans", "Index", "Loan", null, new { id = "item 4" })</li>
                 </ul>
             </li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" role="button" aria-expanded="false" href="#" data-toggle="dropdown">Announcement<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li>@Html.ActionLink("Add Announcement", "AddAnnouncement", "Announcement", null, new { id = "item 1" })</li>
+                    <li>@Html.ActionLink("View Announcement list", "Index", "Announcement", null, new { id = "item 2" })</li>
+
+                </ul>
+            </li>
         </ul>
 
         <ul class="nav navbar-nav ml-auto">

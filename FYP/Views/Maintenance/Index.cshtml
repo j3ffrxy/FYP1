@@ -29,6 +29,7 @@
                 <th scope="col">Start Date</th>
                 <th scope="col">End_date</th>
                 <th scope="col">Description</th>
+                <th scope="col">Action</th>
 
             </tr>
         </thead>
@@ -44,15 +45,21 @@
 
                 @if (User.IsInRole("Admin"))
                     {
-                <td>
-                    <a asp-controller="Maintenance"
-                       asp-action="ToggleMaint"
-                       asp-route-id="@row["Maintenance_id"]"
-                       onclick="return confirm('Toggle maintenance')">
-                        Toggle
-                    </a>
+            <td>
+                <a asp-controller="Maintenance"
+                   asp-action="ToggleMaint"
+                   asp-route-id="@row["Maintenance_id"]"
+                   onclick="return confirm('Toggle maintenance')">
+                    Toggle
+                </a>
+                <a asp-controller="Maintenance"
+                   asp-action="StopToggleMaint"
+                   asp-route-id="@row["Maintenance_id"]"
+                   onclick="return confirm('Stop maintenance')">
+                    Stop
+                </a>
 
-                </td>
+            </td>
                     }
 
             </tr>

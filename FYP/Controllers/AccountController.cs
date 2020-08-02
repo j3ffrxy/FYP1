@@ -44,12 +44,6 @@ namespace FYP.Controller
             }
             else
             {
-                if (user.Maintenance_status == true)
-                {
-                    return RedirectToAction("Forbidden", "Maintenance");
-
-                }
-                else
                 {
                     HttpContext.SignInAsync(
                    CookieAuthenticationDefaults.AuthenticationScheme,
@@ -58,15 +52,25 @@ namespace FYP.Controller
                    {
                        IsPersistent = user.RememberMe
                    });
+                    if (user.Maintenance_status == "True")
 
-                    if (TempData["returnUrl"] != null)
                     {
-                        string returnUrl = TempData["returnUrl"].ToString();
-                        if (Url.IsLocalUrl(returnUrl))
-                            return Redirect(returnUrl);
-                    }
+                        return RedirectToAction("Forbidden", "Maintenance");
 
-                    return RedirectToAction(REDIRECT_ACTN, REDIRECT_CNTR);
+                    }
+                    else
+                    {
+
+                        if (TempData["returnUrl"] != null)
+                        {
+
+                            string returnUrl = TempData["returnUrl"].ToString();
+                            if (Url.IsLocalUrl(returnUrl))
+                                return Redirect(returnUrl);
+                        }
+
+                        return RedirectToAction(REDIRECT_ACTN, REDIRECT_CNTR);
+                    }
                 }
             }
         }
