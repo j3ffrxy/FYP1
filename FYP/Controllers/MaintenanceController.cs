@@ -84,7 +84,7 @@ namespace FYP.Controller
             }
             else
             {
-                string set = "UPDATE Users SET Maintenance_status = 1 WHERE role != 'Admin'";
+                string set = "UPDATE Users SET Maintenance_status = 'True' WHERE role != 'Admin'";
                 int res = DBUtl.ExecSQL(set, id);
                 if (res > 0)
                 {
@@ -114,7 +114,7 @@ namespace FYP.Controller
             }
             else
             {
-                string set = "UPDATE Users SET Maintenance_status = 0 WHERE role != 'Admin'";
+                string set = "UPDATE Users SET Maintenance_status = 'False' WHERE role != 'Admin'";
                 int res = DBUtl.ExecSQL(set, id);
                 if (res > 0)
                 {

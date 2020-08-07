@@ -45,7 +45,7 @@
 
 
 
-                @if (User.IsInRole("Admin"))
+                @if (User.IsInRole("Admin") || User.IsInRole("Store Supervisor"))
                 {
                 <td>
                     <a asp-controller="Announcement"

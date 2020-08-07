@@ -24,6 +24,9 @@ namespace FYP.Controller
         private const string REDIRECT_CNTR = "User";
         private const string REDIRECT_ACTN = "Index";
 
+        //private const string forbiddenpage = "Forbidden";
+        //private const string controller = "Maintenance";
+
         private const string LOGIN_VIEW = "UserLogin";
 
 
@@ -43,8 +46,11 @@ namespace FYP.Controller
                 return View(LOGIN_VIEW);
             }
             else
-            {
+
                 {
+
+                var listt = DBUtl.GetList<Users>("SELECT * FROM Users WHERE nric = '{0}'", user.nric);
+
                     HttpContext.SignInAsync(
                    CookieAuthenticationDefaults.AuthenticationScheme,
                    principal,
@@ -52,7 +58,7 @@ namespace FYP.Controller
                    {
                        IsPersistent = user.RememberMe
                    });
-                    if (user.Maintenance_status == "True")
+                    if (listt[0].Maintenance_status == "True")
 
                     {
                         return RedirectToAction("Forbidden", "Maintenance");
@@ -72,7 +78,7 @@ namespace FYP.Controller
                         return RedirectToAction(REDIRECT_ACTN, REDIRECT_CNTR);
                     }
                 }
-            }
+            
         }
 
         public IActionResult Logoff(string returnUrl = null)
