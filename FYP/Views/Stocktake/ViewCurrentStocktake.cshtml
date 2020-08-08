@@ -1,0 +1,131 @@
+﻿@section MoreScripts {
+    <link href="~/lib/datatables/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#jsStocktake').DataTable({
+                ordering: true,
+                paging: true,
+                searching: true,
+                info: true,
+                lengthChange: true,
+                pageLength: 20
+            });
+        });
+    </script>
+
+}
+
+@model List<FYP.Models.Stocktaking>;
+<h2> Stocktake </h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-@TempData["MsgType"]">
+        @TempData["Message"]
+    </div>
+}
+
+<div>
+
+    <table id="jsStocktake" class="table">
+        <thead>
+            <tr>
+                <th>Total Equipment Quantity</th>
+                <th>Total Accessories Quantity</th>
+                <th>Date Created</th>
+                <th>Created By</th>
+                <th>Equipment Difference</th>
+                <th>Accessory Difference</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (FYP.Models.Stocktaking s in Model)
+            {
+                <tr>
+                    <td>@s.total_equipment_quantity</td>
+                    <td>@s.total_accessories_quantity</td>
+                    <td>@String.Format("{0:dd-MM-yyyy}", @s.date_created)</td>
+                    <td>@s.full_name</td>
+                    <td>
+                        @if (s.diff_equip > 0)
+                        {
+
+                            <a asp-controller="Stocktake"
+                               asp-action="View Equipment"
+                               asp-route-id="@ViewData["hi"]">
+                                Extra Equipment
+                            </a>
+
+                        }
+                        else if (s.diff_equip < 0)
+                        {
+                            <a asp-controller="Stocktake"
+                               asp-action="ViewEquipment"
+                               asp-route-id="@s.Stocktaking_id">
+                                Missing Equipment
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Stocktake"
+                               asp-action="ViewEquipment"
+                               asp-route-id="@s.Stocktaking_id">
+                                View Details
+                            </a>
+                        }
+                    </td>
+                    <td>
+                        @if (s.diff_accessory > 0)
+                        {
+
+                            <a asp-controller="Stocktake"
+                               asp-action="ViewAccessory"
+                               asp-route-id="@s.Stocktaking_id">
+                                Extra Accessory
+                            </a>
+
+                        }
+                        else if (s.diff_accessory < 0)
+                        {
+                            <a asp-controller="Stocktake"
+                               asp-action="ViewAccessory"
+                               asp-route-id="@s.Stocktaking_id">
+                                Missing Accessory
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Stocktake"
+                               asp-action="ViewAccessory"
+                               asp-route-id="@s.Stocktaking_id">
+                                View Details
+                            </a>
+                        }
+                    </td>
+
+
+
+
+                </tr>
+            }
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <th>Total Equipment Quantity</th>
+                <th>Total Accessories Quantity</th>
+                <th>Date Created</th>
+                <th>Created By</th>
+                <th>Equipment Difference</th>
+                <th>Accessory Difference</th>
+
+            </tr>
+        </tfoot>
+
+
+    </table>
+</div>
+

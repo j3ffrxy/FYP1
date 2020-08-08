@@ -133,7 +133,7 @@ namespace FYP.Controller
                     int curr_equip_total = currequip.Count;
                     int curr_access_total = 0;
 
-                    foreach(var z in curracess)
+                    foreach (var z in curracess)
                     {
                         curr_access_total += z.Quantity;
                     }
@@ -167,13 +167,13 @@ namespace FYP.Controller
                         {
                             stock_access += c.Quantity;
                         }
-                        
-                        
+
+
                         foreach (var d in curracess)
                         {
                             if (c.Storage_location.Equals(d.Storage_location))
                             {
-  
+
                                 access.Add(c);
                                 if (c.Equipment_accessories_id == d.Equipment_accessories_id)
                                 {
@@ -187,7 +187,7 @@ namespace FYP.Controller
                     }
 
                     int stock_equip = equip.Count;
-                   
+
                     int curr_equip_avail = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Storage_location = '" + Storage_location + "' AND Status = 'Available'").Count;
 
                     int diff_equip = stock_equip - curr_equip_avail;
@@ -198,11 +198,11 @@ namespace FYP.Controller
                     String insert = @"INSERT INTO Stocktaking(User_id , total_equipment_quantity , total_accessories_quantity, date_created, archive , diff_equip , diff_accessory , storage_location)
                                      Values ('{0}' , '{1}' , '{2}' , '{3:yyyy-MM-dd HH:mm:ss}', '{4}' , '{5}' , '{6}' , '{7}')";
 
-                    int resu = DBUtl.ExecSQL(insert, user[0].User_id , stock_equip , stock_access , DateTime.Now , archive , diff_equip , diff_access , Storage_location) ;
+                    int resu = DBUtl.ExecSQL(insert, user[0].User_id, stock_equip, stock_access, DateTime.Now, archive, diff_equip, diff_access, Storage_location);
 
 
 
-                   
+
 
 
                     foreach (var e in equipment)
@@ -212,7 +212,7 @@ namespace FYP.Controller
                             String insertequip = @"INSERT INTO Stocktaking_Equipment(Serial_no , Stocktaking_id , Equipment_name , Storage_location , Type_desc , Status , Assigned , Matching)
                                      Values ('{0}' , '{1}' , '{2}' , '{3}' , '{4}' , '{5}' , '{6}' , '{7}')";
 
-                            DBUtl.ExecSQL(insertequip, e.Serial_no, GetCurrentStocktake(), e.Equipment_name, e.Storage_location, e.Type_desc, e.Status, e.Assigned , false);
+                            DBUtl.ExecSQL(insertequip, e.Serial_no, GetCurrentStocktake(), e.Equipment_name, e.Storage_location, e.Type_desc, e.Status, e.Assigned, false);
                         }
                         else
                         {
@@ -221,7 +221,7 @@ namespace FYP.Controller
 
                             DBUtl.ExecSQL(insertequip, e.Serial_no, GetCurrentStocktake(), e.Equipment_name, e.Storage_location, e.Type_desc, e.Status, e.Assigned, true);
                         }
-                       
+
 
 
                     }
@@ -233,7 +233,7 @@ namespace FYP.Controller
                             String insertacess = @"INSERT INTO Stocktaking_Accessories(Stocktaking_id , Equipment_accessories_id, Accessories_details , Storage_location , Quantity , Matching)
                                      Values ('{0}' , '{1}' , '{2}' , '{3}' , '{4}' , '{5}')";
 
-                            DBUtl.ExecSQL(insertacess, GetCurrentStocktake(), f.Equipment_accessories_id, f.Accessories_details, f.Storage_location, f.Quantity , false);
+                            DBUtl.ExecSQL(insertacess, GetCurrentStocktake(), f.Equipment_accessories_id, f.Accessories_details, f.Storage_location, f.Quantity, false);
                         }
                         else
                         {
@@ -242,10 +242,10 @@ namespace FYP.Controller
 
                             DBUtl.ExecSQL(insertacess, GetCurrentStocktake(), f.Equipment_accessories_id, f.Accessories_details, f.Storage_location, f.Quantity, true);
                         }
-                        
+
                     }
-                        
-                    return RedirectToAction("ViewStocktake");
+
+                    return RedirectToAction("ViewCurrentStocktake");
 
                 }
                 catch (Exception ex)
@@ -270,6 +270,12 @@ namespace FYP.Controller
         {
             var stockaccesslist = DBUtl.GetList<Stocktaking_Accessories>("Select * FROM Stocktaking_Accessories WHERE Stocktaking_id = '" + id + "' AND Matching = 'false'");
             return View("ViewAccessory", stockaccesslist);
+        }
+        public IActionResult ViewCurrentStocktake()
+        {
+            int stocktake_id = GetCurrentStocktake();
+            var currstocktake = DBUtl.GetList<Stocktaking>("Select * From Stocktaking Where Stocktaking_id = '" + stocktake_id + "'");
+            return View("ViewCurrentStocktake", currstocktake);
         }
     }
 }
