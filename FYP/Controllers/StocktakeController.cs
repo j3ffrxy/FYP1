@@ -134,6 +134,7 @@ namespace FYP.Controller
 
                     foreach (var z in curracess)
                     {
+                        
                         curr_access_total += z.Quantity;
                     }
 
