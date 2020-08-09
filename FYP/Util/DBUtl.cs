@@ -22,9 +22,7 @@ public static class DBUtl
             .AddJsonFile("appsettings.json")
             .Build();
       string env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-        if (env.Equals("Development"))
-            DB_CONNECTION = config.GetConnectionString("DefaultConnection");
-        else if (env.Equals("Production"))
+        
             DB_CONNECTION = config.GetConnectionString("ProductionConnection");
     }
 

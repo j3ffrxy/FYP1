@@ -13,7 +13,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using FYP.Models;
-//bfd6486e-e7cd-4a2b-87e2-37b74ee80083
+//457961bc-15dc-46b4-9717-c21615521646
 namespace FYP.Controllers
 {
     public class FaceController : Microsoft.AspNetCore.Mvc.Controller
@@ -98,7 +98,25 @@ namespace FYP.Controllers
                 contentStringFace = response.Content.ReadAsStringAsync().Result;
 
             }
-           
+            string faceId = contentStringFace.Substring(12, 36);
+            string str = "{\"personGroupId\": \"supervisor\", \"faceIds\": [\"" + faceId + "\"]}";
+            var buffer = System.Text.Encoding.UTF8.GetBytes(str);
+            using (ByteArrayContent content2 = new ByteArrayContent(buffer))
+            {
+                // This example uses content type "application/octet-stream".
+                // The other content types you can use are "application/json" and "multipart/form-data".
+
+                content2.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                // Execute the REST API call.
+                var response2 = client.PostAsync(uriIdentify, content2).Result;
+
+
+                // Get the JSON response.
+                contentStringFace = response2.Content.ReadAsStringAsync().Result;
+
+            }
+
 
             string personId = contentStringFace;
             TempData["json"] = personId;

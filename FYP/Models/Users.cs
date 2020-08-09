@@ -22,6 +22,7 @@ namespace FYP.Models
         public string password { get; set; }
 
         [Required(ErrorMessage = "Enter your name")]
+        [StringLength(40, ErrorMessage = "Max 40 chars")]
         public string full_name { get; set; }
 
         [DataType(DataType.DateTime)]
@@ -39,7 +40,13 @@ namespace FYP.Models
         [Required(ErrorMessage = "Select a role")]
         public String role { get; set; }
 
+        public String Person_Id {get; set;}
+
         public String Maintenance_status { get; set; }
+
+        public String deployed_status {get; set;}
+
+        
 
 
 
