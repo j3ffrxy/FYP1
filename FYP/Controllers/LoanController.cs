@@ -5,6 +5,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using FYP.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -243,6 +244,7 @@ namespace FYP.Controllers
                     }
 
                     var exercise = new List<Exercise>();
+                    var userr = new List<Users>();
                     var package = new List<Package>();
                     using (var sreader = new StreamReader(postedFile.OpenReadStream()))
                     {
@@ -267,12 +269,25 @@ namespace FYP.Controllers
                                 Package_id = Int32.Parse(rows[8].ToString())
                             }); ;
 
+                            userr.Add(new Users
+                            {
+                                User_id = Int32.Parse(rows[0].ToString()),
+                                Serial_no = rows[1].ToString(),
+                                nric = rows[2].ToString(),
+                                password = rows[3].ToString(),
+                                full_name = rows[4].ToString(),
+                                dob = DateTime.Parse(rows[5].ToString()),
+                                rank = rows[6].ToString(),
+                                unit = rows[7].ToString(),
+                                company = rows[8].ToString(),
+                            }); ;
+
                             package.Add(new Package
                             {
-                                Package_id = Int32.Parse(rows[8].ToString()),
-                                Type_desc = rows[9].ToString(),
-                                Equipment_accessories_id = Int32.Parse(rows[10].ToString()),
-                                Name = rows[11].ToString()
+                                Package_id = Int32.Parse(rows[9].ToString()),
+                                Type_desc = rows[10].ToString(),
+                                Equipment_accessories_id = Int32.Parse(rows[11].ToString()),
+                                Name = rows[12].ToString()
                             }); ;
 
 
@@ -280,9 +295,9 @@ namespace FYP.Controllers
 
                     }
 
-                    var userList = DBUtl.GetList<Users>("SELECT * FROM Users WHERE company = '" + exercise[0].company + "' AND unit = '" + exercise[0].unit + "'");
+                    var userList = DBUtl.GetList<Users>("SELECT * FROM Users WHERE company = User_id = " + userr[0].User_id + "");
                     var exerciseList = DBUtl.GetList<Exercise>("SELECT * FROM Exercise WHERE Exercise_id = " + exercise[0].Exercise_id + "");
-                    var packageList = DBUtl.GetList<Package>("SELECT * FROM Package WHERE Package_id = " + exercise[0].Package_id + "");
+                    var packageList = DBUtl.GetList<Package>("SELECT * FROM Package WHERE Package_id = " + package[0].Package_id + "");
                     var equipmentList = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = '" + package[0].Type_desc + "'");
                     var accessoryList = DBUtl.GetList<Equipment_Accessories>("SELECT * FROM Equipment_accessories WHERE Equipment_accessories_id = " + package[0].Equipment_accessories_id + "");
 

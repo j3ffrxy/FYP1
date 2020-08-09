@@ -304,10 +304,10 @@ namespace FYP.Controllers
                 int plswork = DBUtl.ExecSQL(statUpdate, e.Serial_no, e.m_start_date, e.m_end_date, "Equipment Maintenance", maint_type, archive);
                 
                 string insert =
-                    @"UPDATE Equipment SET Status = 'Maintenance', m_start_date = '{0:yyyy-MM-dd}', m_end_date = '{1:yyyy-MM-dd}' WHERE Serial_no = '{2}' AND Status = 'Available'";
+                    @"UPDATE Equipment SET Status = '{0}', m_start_date = '{1:yyyy-MM-dd}', m_end_date = '{2:yyyy-MM-dd}' WHERE Serial_no = '{3}' AND Status = 'Available'";
                                 
                
-                int result = DBUtl.ExecSQL(insert, e.m_start_date, e.m_end_date, e.Serial_no);
+                int result = DBUtl.ExecSQL(insert, "Maintenance", e.m_start_date, e.m_end_date, e.Serial_no);
 
                 if (result == 1 && plswork == 1)
                 {
@@ -337,9 +337,6 @@ namespace FYP.Controllers
             }
             else
             {
-                string maintChange = "DELETE FROM Maintenance WHERE Serial_no = '{0}'";
-                int maint = DBUtl.ExecSQL(maintChange, id);
-
                 string update = "UPDATE Equipment SET Status = 'Available' WHERE Serial_no = '{0}' AND Status = 'Maintenance'";
                 int res = DBUtl.ExecSQL(update, id);
                 if (res == 1)
@@ -366,11 +363,11 @@ namespace FYP.Controllers
                 DateTime enddate = a.End_date;
                 if (enddate < currentdate)
                 {
-                    var updateEq = "UPDATE Equipment SET Status = 'Available' WHERE Status = 'Maintenance' AND Serial_no = '{0}'";
-                    DBUtl.ExecSQL(updateEq, a.Serial_no);
+                    var updateEq = "UPDATE Equipment SET Status = 'Available' WHERE Status = 'Maintenance' AND Serial_no = '{0}' AND m_end_date < '{1}'";
+                    DBUtl.ExecSQL(updateEq, a.Serial_no, currentdate);
 
-                    var update = "UPDATE Maintenance SET archive = '{0}' WHERE Serial_no = '{1}'";
-                    DBUtl.ExecSQL(update, true, a.Serial_no);
+                    var update = "UPDATE Maintenance SET archive = '{0}' WHERE End_date < '{1}'";
+                    DBUtl.ExecSQL(update, true, currentdate);
 
                 }
             }
