@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using FYP.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,7 @@ namespace FYP.Controllers
 {
     public class LoanController : Microsoft.AspNetCore.Mvc.Controller
     {
+        [Authorize(Roles = "Admin, Store Supervisor")]
         public IActionResult Index()
         {
             List<Exercise> dt = DBUtl.GetList<Exercise>(@"SELECT Exercise_id, E.Package_id, U.nric, E.company, 
@@ -29,7 +31,7 @@ namespace FYP.Controllers
 
             return View("Index", dt);
         }
-
+                
         public IActionResult UserView()
         {
             return View();
@@ -50,6 +52,8 @@ namespace FYP.Controllers
                 }
             }
         }
+
+        [Authorize(Roles = "Admin, Store Supervisor")]
         public IActionResult Loan()
         {
             updateStatus();
@@ -225,10 +229,14 @@ namespace FYP.Controllers
 
             return entries;
         }
+
+        [Authorize(Roles = "Admin, Store Supervisor")]
         public IActionResult LoanProcess()
         {
             return View();
         }
+
+        [Authorize(Roles = "Admin, Store Supervisor")]
         [HttpPost]
         public IActionResult LoanProcess(IFormFile postedFile)
         {
@@ -484,10 +492,13 @@ namespace FYP.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin, Store Supervisor")]
         public IActionResult ReturnProcess()
         {
             return View();
         }
+
+        [Authorize(Roles = "Admin, Store Supervisor")]
         [HttpPost]
         public IActionResult ReturnProcess(IFormFile postedFile)
         {

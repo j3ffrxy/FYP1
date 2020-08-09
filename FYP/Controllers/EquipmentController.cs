@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using FYP.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,7 @@ namespace FYP.Controllers
             
         }
 
+        [Authorize(Roles = "Admin, Store Supervisor")]
         public IActionResult EquipmentMaint()
         {
             updateMaint();
@@ -30,6 +32,7 @@ namespace FYP.Controllers
             return View("EquipmentMaint", dt);
         }
 
+        [Authorize(Roles = "Admin, Store Supervisor")]
         public IActionResult EquipmentMaintCancel()
         {
             updateMaint();
@@ -263,7 +266,7 @@ namespace FYP.Controllers
             return View();
         }
 
-        
+        [Authorize(Roles = "Admin, Store Supervisor")]
         public IActionResult ConductMaint(int id)
         {
 
@@ -282,7 +285,7 @@ namespace FYP.Controllers
 
         }
 
-
+        [Authorize(Roles = "Admin, Store Supervisor")]
         [HttpPost]
         public IActionResult ConductMaint(Equipment e)
         {
@@ -323,7 +326,7 @@ namespace FYP.Controllers
         }
 
 
-
+        [Authorize(Roles = "Admin, Store Supervisor")]
         public IActionResult CancelMaint(string id)
         {
             string select = @"SELECT * FROM Equipment 

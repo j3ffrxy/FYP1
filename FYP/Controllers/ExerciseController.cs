@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using FYP.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,7 @@ namespace FYP.Controllers
 {
     public class ExerciseController : Microsoft.AspNetCore.Mvc.Controller
     {
+        [Authorize(Roles = "Admin, Platoon Commander, Officer Commander, Commandant Officer")]
         public IActionResult Index()
         {
             updatearchive();
@@ -29,6 +31,7 @@ namespace FYP.Controllers
             return View("Index", dt.Rows);
         }
 
+        [Authorize(Roles = "Admin, Platoon Commander, Officer Commander, Commandant Officer")]
         public IActionResult ViewArchive()
         {
             updatearchive();
@@ -59,11 +62,13 @@ namespace FYP.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Platoon Commander, Officer Commander, Commandant Officer")]
         public IActionResult Create()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin, Platoon Commander, Officer Commander, Commandant Officer")]
         [HttpPost]
         public IActionResult Create(Exercise e)
         {
@@ -101,6 +106,8 @@ namespace FYP.Controllers
                 return RedirectToAction("Index");
             }
         }
+
+        [Authorize(Roles = "Admin, Platoon Commander, Officer Commander, Commandant Officer")]
         public IActionResult Edits(int id)
         {
             string select = "SELECT * FROM Exercise WHERE Exercise_id = '{0}'";
@@ -117,6 +124,7 @@ namespace FYP.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Platoon Commander, Officer Commander, Commandant Officer")]
         [HttpPost]
         public IActionResult Edits(Exercise e)
         {
@@ -148,6 +156,8 @@ namespace FYP.Controllers
                 return RedirectToAction("Index");
             }
         }
+
+        [Authorize(Roles = "Admin, Platoon Commander, Officer Commander, Commandant Officer")]
         public IActionResult Delete(int id)
         {
             string select = "SELECT * FROM Exercise WHERE Exercise_id = {0}";
