@@ -39,6 +39,7 @@ namespace FYP.Controllers
             List<Equipment> dt = DBUtl.GetList<Equipment>(@"SELECT * FROM Equipment WHERE Status = 'Maintenance'");
             return View("EquipmentMaintCancel", dt);
         }
+        [Authorize(Roles = "Admin, Store Supervisor")]
 
         [HttpGet]
         public IActionResult AddEquipment()
@@ -47,6 +48,7 @@ namespace FYP.Controllers
             return View();
 
         }
+        [Authorize(Roles = "Admin, Store Supervisor")]
 
         [HttpPost]
         public IActionResult AddEquipment(Equipment newEquipment)
@@ -85,6 +87,7 @@ namespace FYP.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Store Supervisor")]
 
         [HttpGet]
         public IActionResult EditEquipment(int id)
@@ -105,6 +108,8 @@ namespace FYP.Controllers
             }
 
         }
+        [Authorize(Roles = "Admin, Store Supervisor")]
+
 
         [HttpPost]
         public IActionResult EditEquipment(Equipment EditEquip)
@@ -137,6 +142,8 @@ namespace FYP.Controllers
 
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin, Store Supervisor")]
+
         public IActionResult DeleteEquipment(string id)
         {
             string select = @"SELECT * FROM Equipment 
@@ -164,11 +171,16 @@ namespace FYP.Controllers
             }
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin, Store Supervisor")]
+
         public IActionResult MassAdd()
         {
             return View();
         }
+        [Authorize(Roles = "Admin, Store Supervisor")]
+
         [HttpPost]
+
         public ActionResult MassAdd(IFormFile postedFile)
         {
             if (postedFile != null)
