@@ -37,30 +37,30 @@
             @foreach (System.Data.DataRow row in Model)
             {
 
-                <tr>
-                    <td>@row["Equipment_accessories_id"]</td>
-                    <td>@row["Accessories_details"]</td>
-                    <td>@row["Storage_location"]</td>
-                    <td>@row["Quantity"]</td>
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <td>
-                            <a asp-controller="Accessories"
-                               asp-action="EditAccessories"
-                               asp-route-id="@row["Equipment_accessories_id"]">
-                                Edit
-                            </a>
-                            <a asp-controller="Accessories"
-                               asp-action="DeleteAccessory"
-                               asp-route-id="@row["Equipment_accessories_id"]"
-                               onclick="return confirm('Delete accessory')">
-                                Delete
-                            </a>
+            <tr>
+                <td>@row["Equipment_accessories_id"]</td>
+                <td>@row["Accessories_details"]</td>
+                <td>@row["Storage_location"]</td>
+                <td>@row["Quantity"]</td>
+                @if (User.IsInRole("Admin") || User.IsInRole("Store Supervisor"))
+                {
+                    <td>
+                        <a asp-controller="Accessories"
+                           asp-action="EditAccessories"
+                           asp-route-id="@row["Equipment_accessories_id"]">
+                            Edit
+                        </a>
+                        <a asp-controller="Accessories"
+                           asp-action="DeleteAccessory"
+                           asp-route-id="@row["Equipment_accessories_id"]"
+                           onclick="return confirm('Delete accessory')">
+                            Delete
+                        </a>
 
-                        </td>
-                    }
+                    </td>
+                }
 
-                </tr>
+            </tr>
             }
         </tbody>
 
