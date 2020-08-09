@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using FYP.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,6 +25,7 @@ namespace FYP.Controllers
         }
 
 
+        [Authorize(Roles = "Admin,Store Supervisor")]
 
         [HttpGet]
         public IActionResult AddAccessories()
@@ -32,6 +34,7 @@ namespace FYP.Controllers
             return View();
 
         }
+        [Authorize(Roles = "Admin,Store Supervisor")]
 
         [HttpPost]
         public IActionResult AddAccessories(Equipment_Accessories newAccessories)
@@ -70,6 +73,7 @@ namespace FYP.Controllers
                 return RedirectToAction("Index");
             }
         }
+        [Authorize(Roles = "Admin,Store Supervisor")]
 
 
         [HttpGet]
@@ -91,6 +95,7 @@ namespace FYP.Controllers
             }
 
         }
+        [Authorize(Roles = "Admin,Store Supervisor")]
 
         [HttpPost]
         public IActionResult EditAccessories(Equipment_Accessories editAccessories)
@@ -123,6 +128,8 @@ namespace FYP.Controllers
 
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin,Store Supervisor")]
+
         public IActionResult DeleteAccessory(string id)
         {
             string select = @"SELECT * FROM Equipment_accessories 
@@ -150,10 +157,14 @@ namespace FYP.Controllers
             }
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin,Store Supervisor")]
+
         public IActionResult MassAdd()
         {
             return View();
         }
+        [Authorize(Roles = "Admin,Store Supervisor")]
+
         [HttpPost]
         public ActionResult MassAdd(IFormFile postedFile)
         {

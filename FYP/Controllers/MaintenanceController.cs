@@ -73,6 +73,8 @@ namespace FYP.Controller
 
             return RedirectToAction("Start");
         }
+        [Authorize(Roles = "Admin")]
+
         public IActionResult ToggleMaint(string id)
         {
             string select = @"SELECT * FROM Users WHERE role !='Admin'";
@@ -103,6 +105,8 @@ namespace FYP.Controller
 
 
         }
+        [Authorize(Roles = "Admin")]
+
         public IActionResult StopToggleMaint(string id)
         {
             string select = @"SELECT * FROM Users WHERE role !='Admin'";

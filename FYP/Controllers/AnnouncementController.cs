@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using FYP.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,7 +26,7 @@ namespace FYP.Controllers
         }
 
 
-
+        [Authorize(Roles = "Admin,Store Supervisor")]
         [HttpGet]
         public IActionResult AddAnnouncement()
         {
@@ -33,6 +34,7 @@ namespace FYP.Controllers
             return View();
 
         }
+        [Authorize(Roles = "Admin,Store Supervisor")]
 
         [HttpPost]
         public IActionResult AddAnnouncement(Announcement newAnnounce)
@@ -71,6 +73,7 @@ namespace FYP.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,Store Supervisor")]
 
         [HttpGet]
         public IActionResult EditAnnouncement(int id)
@@ -91,6 +94,7 @@ namespace FYP.Controllers
             }
 
         }
+        [Authorize(Roles = "Admin,Store Supervisor")]
 
         [HttpPost]
         public IActionResult EditAnnouncement(Announcement EditAnnounce)
@@ -123,6 +127,8 @@ namespace FYP.Controllers
 
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin,Store Supervisor")]
+
         public IActionResult DeleteAnnouncement(string id)
         {
             string select = @"SELECT * FROM Announcement 

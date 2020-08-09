@@ -13,15 +13,16 @@ namespace FYP.Models
 
         public string Serial_no { get; set; }
 
-        [Required(ErrorMessage = "Enter your NRIC")]
+        [Required(ErrorMessage = "Enter Users NRIC")]
         [RegularExpression("[STFG]\\d{7}[A-Z]", ErrorMessage = "Invalid NRIC format")]
         public string nric { get; set; }
 
-        [Required(ErrorMessage = "Enter your password")]
+        [Required(ErrorMessage = "Enter Users password")]
         [DataType(DataType.Password)]
         public string password { get; set; }
 
-        [Required(ErrorMessage = "Enter your name")]
+        [Required(ErrorMessage = "Enter Users name")]
+        [StringLength(40, ErrorMessage = "Max 40 chars")]
         public string full_name { get; set; }
 
         [DataType(DataType.DateTime)]
