@@ -35,10 +35,12 @@ namespace FYP.Controllers
             DataTable dt = DBUtl.GetTable(@"SELECT User_id ,  full_name AS [Full Name] , rank AS [Rank] , dob AS [Date of Birth] , unit AS [Unit] , company AS [Company] FROM Users");
             return View("Index", dt.Rows);
         }
+        [Authorize (Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
 
         public IActionResult Create(Users user)
@@ -91,6 +93,7 @@ namespace FYP.Controllers
                 return RedirectToAction("About");
             }
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult Edits(int id)
         {
             string select = "SELECT * FROM Users WHERE User_id = '{0}'";
@@ -106,7 +109,7 @@ namespace FYP.Controllers
                 return RedirectToAction("Edits");
             }
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult Edits(Users user)
         {
@@ -137,6 +140,7 @@ namespace FYP.Controllers
                 return RedirectToAction("About");
             }
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             var user = DBUtl.GetList<Users>(@"SELECT * FROM Users WHERE  User_id = '" + id + "'");
@@ -165,6 +169,7 @@ namespace FYP.Controllers
             }
             return RedirectToAction("About");
         }
+
         public IActionResult VerifyDate(DateTime dob)
         {
             DateTime firstdate = DateTime.Today;
@@ -178,10 +183,13 @@ namespace FYP.Controllers
             }
             return Json(true);
         }
+
+        [Authorize(Roles = "Admin")]
         public IActionResult MassAdd()
         {
             return View();
         }
+        [Authorize (Roles = "Admin")]
         [HttpPost]
         public ActionResult MassAdd(IFormFile postedFile)
         {

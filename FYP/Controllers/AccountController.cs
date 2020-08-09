@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using FYP.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FYP.Controller
@@ -34,6 +35,11 @@ namespace FYP.Controller
         {
             TempData["ReturnUrl"] = returnUrl;
             return View(LOGIN_VIEW);
+        }
+
+        public IActionResult Forbidden()
+        {
+            return View();
         }
 
         [HttpPost]

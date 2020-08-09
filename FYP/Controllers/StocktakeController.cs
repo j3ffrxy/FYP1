@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FYP.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +15,8 @@ namespace FYP.Controller
 {
     public class StocktakeController : Microsoft.AspNetCore.Mvc.Controller
     {
+
+        [Authorize(Roles = "Admin , Store Supervisor")]
         public IActionResult ViewStocktake()
         {
             updatearchive();
@@ -22,6 +25,7 @@ namespace FYP.Controller
                                             Where s.archive = 0 ORDER BY date_created DESC");
             return View("ViewStocktake", list);
         }
+        [Authorize(Roles = "Admin , Store Supervisor")]
         public IActionResult ViewArchive()
         {
             updatearchive();
@@ -59,11 +63,12 @@ namespace FYP.Controller
 
 
         }
-
+        [Authorize(Roles = "Admin , Store Supervisor")]
         public IActionResult AddStocktake()
         {
             return View();
         }
+        [Authorize(Roles = "Admin , Store Supervisor")]
         [HttpPost]
         public IActionResult AddStocktake(IFormFile postedFile, String Storage_location)
         {
@@ -264,16 +269,19 @@ namespace FYP.Controller
             return View();
         }
 
+        [Authorize(Roles = "Admin , Store Supervisor")]
         public IActionResult ViewEquipment(int id)
         {
             var stockequiplist = DBUtl.GetList<Stocktaking_Equipment>("Select * FROM Stocktaking_Equipment WHERE Stocktaking_id = '" + id + "' AND Matching = 'false'");
             return View("ViewEquipment", stockequiplist);
         }
+        [Authorize(Roles = "Admin , Store Supervisor")]
         public IActionResult ViewAccessory(int id)
         {
             var stockaccesslist = DBUtl.GetList<Stocktaking_Accessories>("Select * FROM Stocktaking_Accessories WHERE Stocktaking_id = '" + id + "' AND Matching = 'false'");
             return View("ViewAccessory", stockaccesslist);
         }
+        [Authorize(Roles = "Admin , Store Supervisor")]
         public IActionResult ViewCurrentStocktake()
         {
             int stocktake_id = GetCurrentStocktake();
