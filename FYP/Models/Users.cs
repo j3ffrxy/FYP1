@@ -43,7 +43,7 @@ namespace FYP.Models
 
         public String Maintenance_status { get; set; }
 
-        public String deployed_stuats {get; set;}
+        public String deployed_status {get; set;}
 
         
 
