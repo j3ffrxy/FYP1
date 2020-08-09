@@ -60,10 +60,10 @@ namespace FYP.Controllers
             else
             {
                 bool Assigned = false;
-
+                String avail = "Available";
                 string insert =
-                   @"INSERT INTO Equipment(Serial_no,Equipment_name,Storage_location,Type_desc, Status, Assigned)
-                                 VALUES('{0}','{1}','{2}','{3}', '{4}', '{5}')";
+                   @"INSERT INTO Equipment(Serial_no,Equipment_name,Storage_location,Type_desc, Status, Assigned )
+                                 VALUES('{0}','{1}','{2}','{3}', 'Available', '{5}')";
 
 
                 int result = DBUtl.ExecSQL(insert, newEquipment.Serial_no, newEquipment.Equipment_name,
