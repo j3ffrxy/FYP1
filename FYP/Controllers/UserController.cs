@@ -52,8 +52,8 @@ namespace FYP.Controllers
             else
             {
                 string insert =
-                    @"INSERT INTO Users(Serial_no , nric , password , full_name , dob , rank , unit , company , role )
-                      Values ('{0}' , '{1}' , HASHBYTES('SHA1', '{2}'), '{3}', '{4:yyyy-MM-dd}' , '{5}' , '{6}' , '{7}' , '{8}' )";
+                    @"INSERT INTO Users(Serial_no , nric , password , full_name , dob , rank , unit , company , role , deployed_status )
+                      Values ('{0}' , '{1}' , HASHBYTES('SHA1', '{2}'), '{3}', '{4:yyyy-MM-dd}' , '{5}' , '{6}' , '{7}' , '{8}' , '{9}' )";
 
                 List<Users> existuser = DBUtl.GetList<Users>("SELECT * FROM Users");
                 bool exists = false;
@@ -69,7 +69,7 @@ namespace FYP.Controllers
                 }
                 if(exists == false)
                 {
-                    int res = DBUtl.ExecSQL(insert, GetEquipment() , user.nric , user.password , user.full_name , user.dob , user.rank , user.unit , user.company , user.role);
+                    int res = DBUtl.ExecSQL(insert, GetEquipment() , user.nric , user.password , user.full_name , user.dob , user.rank , user.unit , user.company , user.role , "Standby");
                     if (res == 1)
                     {
                         TempData["Message"] = "User Created";
@@ -244,10 +244,10 @@ namespace FYP.Controllers
                         if (exists == false)
                         {
                             string insert =
-                   @"INSERT INTO Users(Serial_no , nric , password , full_name , dob , rank , unit , company , role )
-                      Values ('{0}' , '{1}' , HASHBYTES('SHA1', '{2}'), '{3}', '{4:yyyy-MM-dd}' , '{5}' , '{6}' , '{7}' , '{8}' )";
+                   @"INSERT INTO Users(Serial_no , nric , password , full_name , dob , rank , unit , company , role , deployed_status )
+                      Values ('{0}' , '{1}' , HASHBYTES('SHA1', '{2}'), '{3}', '{4:yyyy-MM-dd}' , '{5}' , '{6}' , '{7}' , '{8}' , '{9}' )";
 
-                            int res = DBUtl.ExecSQL(insert,u.Serial_no , u.nric, u.password, u.full_name, u.dob, u.rank, u.unit, u.company, u.role);
+                            int res = DBUtl.ExecSQL(insert,u.Serial_no , u.nric, u.password, u.full_name, u.dob, u.rank, u.unit, u.company, u.role , "Standby" );
                             if (res == 1)
                             {
                                 count++;
