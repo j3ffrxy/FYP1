@@ -22,6 +22,7 @@ namespace FYP.Models
         public string password { get; set; }
 
         [Required(ErrorMessage = "Enter your name")]
+        [StringLength(40, ErrorMessage = "Max 40 chars")]
         public string full_name { get; set; }
 
         [DataType(DataType.DateTime)]
