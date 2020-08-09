@@ -34,7 +34,7 @@
             <tr>
                 <th>Total Equipment Quantity</th>
                 <th>Total Accessories Quantity</th>
-                <th>Date Created</th>
+                <th>DateTime Created</th>
                 <th>Created By</th>
                 <th>Equipment Difference</th>
                 <th>Accessory Difference</th>
@@ -47,7 +47,7 @@
             <tr>
                 <td>@s.total_equipment_quantity</td>
                 <td>@s.total_accessories_quantity</td>
-                <td>@String.Format("{0:dd-MM-yyyy}", @s.date_created)</td>
+                <td>@String.Format("{0:dd-MM-yyyy HH:mm:ss}", @s.date_created)</td>
                 <td>@s.full_name</td>
                 <td>
                     @if (s.diff_equip > 0)
@@ -55,7 +55,7 @@
 
                         <a asp-controller="Stocktake"
                            asp-action="View Equipment"
-                           asp-route-id="@ViewData["hi"]">
+                           asp-route-id="@s.Stocktaking_id">
                             Extra Equipment
                         </a>
 
@@ -117,7 +117,7 @@
             <tr>
                 <th>Total Equipment Quantity</th>
                 <th>Total Accessories Quantity</th>
-                <th>Date Created</th>
+                <th>DateTime Created</th>
                 <th>Created By</th>
                 <th>Equipment Difference</th>
                 <th>Accessory Difference</th>

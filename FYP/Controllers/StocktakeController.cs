@@ -134,7 +134,6 @@ namespace FYP.Controller
 
                     foreach (var z in curracess)
                     {
-                        
                         curr_access_total += z.Quantity;
                     }
 
@@ -278,7 +277,9 @@ namespace FYP.Controller
         public IActionResult ViewCurrentStocktake()
         {
             int stocktake_id = GetCurrentStocktake();
-            var currstocktake = DBUtl.GetList<Stocktaking>("Select * From Stocktaking Where Stocktaking_id = '" + stocktake_id + "'");
+            var currstocktake = DBUtl.GetList<Stocktaking>(@"Select Stocktaking_id , total_equipment_quantity , total_accessories_quantity, date_created, u.full_name, diff_equip, diff_accessory from Stocktaking s 
+                                            INNER JOIN Users u ON s.User_id = u.User_id
+                                            Where Stocktaking_id = '" + stocktake_id + "'");
             return View("ViewCurrentStocktake", currstocktake);
         }
     }
