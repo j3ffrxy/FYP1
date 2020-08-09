@@ -70,6 +70,7 @@ namespace FYP.Controllers
                                                    INNER JOIN Package P ON E.Package_id = P.Package_id
                                                    WHERE E.archive = 0
                                                    AND status != 'Returned'");
+       
             foreach (var a in loanList)
             {
                 if (a.assigned_status == false)
@@ -79,6 +80,7 @@ namespace FYP.Controllers
                     var abc = DBUtl.ExecSQL(sqlstatement, newStatus, true, a.Exercise_id);
                 }
             }
+
         }
 
         public string Status(Exercise newex)
@@ -255,19 +257,6 @@ namespace FYP.Controllers
                         {
                             string[] rows = sreader.ReadLine().Split(',');
 
-                            exercise.Add(new Exercise
-                            {
-                                Exercise_id = Int32.Parse(rows[9].ToString()),
-                                nric = rows[2].ToString(),
-                                company = rows[8].ToString(),
-                                unit = rows[7].ToString(),
-                                description = rows[10].ToString(),
-                                start_date = DateTime.Parse(rows[11].ToString()),
-                                end_date = DateTime.Parse(rows[12].ToString()),
-                                archive = Boolean.Parse(rows[13]),
-                                Package_id = Int32.Parse(rows[14].ToString())
-                            }); ;
-
                             userr.Add(new Users
                             {
                                 User_id = Int32.Parse(rows[0].ToString()),
@@ -279,14 +268,29 @@ namespace FYP.Controllers
                                 rank = rows[6].ToString(),
                                 unit = rows[7].ToString(),
                                 company = rows[8].ToString(),
+                                role = rows[9].ToString()
                             }); ;
 
+                            exercise.Add(new Exercise
+                            {
+                                Exercise_id = Int32.Parse(rows[10].ToString()),
+                                nric = rows[11].ToString(),
+                                company = rows[8].ToString(),
+                                unit = rows[7].ToString(),
+                                description = rows[12].ToString(),
+                                start_date = DateTime.Parse(rows[13].ToString()),
+                                end_date = DateTime.Parse(rows[14].ToString()),
+                                archive = Boolean.Parse(rows[15]),
+                                Package_id = Int32.Parse(rows[16].ToString())
+                            }); ;
+                                                        
                         }
 
                     }
 
                     var userList = DBUtl.GetList<Users>("SELECT * FROM Users WHERE User_id = " + userr[0].User_id + "");
                     var exerciseList = DBUtl.GetList<Exercise>("SELECT * FROM Exercise WHERE Exercise_id = " + exercise[0].Exercise_id + "");
+                    var roleList = DBUtl.GetList<Users>("SELECT * FROM Users WHERE nric = '" + exerciseList[0].nric + "'");
                     var packageList = DBUtl.GetList<Package>("SELECT * FROM Package WHERE Package_id = " + exercise[0].Package_id + "");
                     var equipmentList = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = '" + packageList[0].Type_desc + "'");
                     var accessoryList = DBUtl.GetList<Equipment_Accessories>("SELECT * FROM Equipment_accessories WHERE Equipment_accessories_id = " + packageList[0].Equipment_accessories_id + "");
@@ -325,14 +329,47 @@ namespace FYP.Controllers
                             {
                                 if (b.Serial_no == a.Serial_no)
                                 {
-                                    int deploying = DBUtl.ExecSQL("UPDATE Users SET deployed_status = 'Deployed' WHERE User_id = '{0}' AND deployed_status = 'Standby'", userr[0].User_id);
-                                    int statChange = DBUtl.ExecSQL("UPDATE Equipment SET Status = 'Unavailable' WHERE Assigned = '{0}' AND Status = 'Available' AND Serial_no = '{1}'", true, b.Serial_no);
+                                    if (roleList[0].role == "Platoon Commander")
+                                    {
+                                        int deploying = DBUtl.ExecSQL("UPDATE Users SET deployed_status = 'Deployed' WHERE User_id = '{0}' AND deployed_status = 'Standby' AND role = 'Serviceman'", userr[0].User_id);
+                                        int statChange = DBUtl.ExecSQL("UPDATE Equipment SET Status = 'Unavailable' WHERE Assigned = '{0}' AND Status = 'Available' AND Serial_no = '{1}'", true, b.Serial_no);
+
+                                        var deployCheck = DBUtl.GetList<Users>("SELECT * FROM Users WHERE company = '{0}' AND unit = '{1}' AND deployed_status = 'Standby' AND role = 'Serviceman'", exercise[0].company, exercise[0].unit);
+                                        if (deployCheck.Count == 0)
+                                        {
+                                            int exLoaned = DBUtl.ExecSQL("UPDATE Exercise SET status = 'Loaned Out' WHERE Exercise_id = '{0}'", exercise[0].Exercise_id);
+                                        }
+                                    }
+                                    else if (roleList[0].role == "Officer Commander")
+                                    {
+                                        int deploying = DBUtl.ExecSQL("UPDATE Users SET deployed_status = 'Deployed' WHERE User_id = '{0}' AND deployed_status = 'Standby' AND (role = 'Serviceman' OR role = 'Platoon Commander')", userr[0].User_id);
+                                        int statChange = DBUtl.ExecSQL("UPDATE Equipment SET Status = 'Unavailable' WHERE Assigned = '{0}' AND Status = 'Available' AND Serial_no = '{1}'", true, b.Serial_no);
+
+                                        var deployCheck = DBUtl.GetList<Users>("SELECT * FROM Users WHERE company = '{0}' AND unit = '{1}' AND deployed_status = 'Standby' AND (role = 'Serviceman' OR role = 'Platoon Commander')", exercise[0].company, exercise[0].unit);
+                                        if (deployCheck.Count == 0)
+                                        {
+                                            int exLoaned = DBUtl.ExecSQL("UPDATE Exercise SET status = 'Loaned Out' WHERE Exercise_id = '{0}'", exercise[0].Exercise_id);
+                                        }
+                                    }
+                                    else if (roleList[0].role == "Commandant Officer")
+                                    {
+                                        int deploying = DBUtl.ExecSQL("UPDATE Users SET deployed_status = 'Deployed' WHERE User_id = '{0}' AND deployed_status = 'Standby' AND (role = 'Serviceman' OR role = 'Platoon Commander' OR role = 'Officer Commander')", userr[0].User_id);
+                                        int statChange = DBUtl.ExecSQL("UPDATE Equipment SET Status = 'Unavailable' WHERE Assigned = '{0}' AND Status = 'Available' AND Serial_no = '{1}'", true, b.Serial_no);
+
+
+                                        var deployCheck = DBUtl.GetList<Users>("SELECT * FROM Users WHERE company = '{0}' AND unit = '{1}' AND deployed_status = 'Standby' AND (role = 'Serviceman' OR role = 'Platoon Commander' OR role = 'Officer Commander')", exercise[0].company, exercise[0].unit);
+                                        if (deployCheck.Count == 0)
+                                        {
+                                            int exLoaned = DBUtl.ExecSQL("UPDATE Exercise SET status = 'Loaned Out' WHERE Exercise_id = '{0}'", exercise[0].Exercise_id);
+                                        }
+                                    }
+                                    
                                 }
                             }
                         }
 
                     }
-                    
+
                     else if (packageList[0].Type_desc == "AK-47")
                     {
                         var packList = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = 'AK-47' AND Status = 'Available' AND Assigned = '{0}'", true);
@@ -343,8 +380,40 @@ namespace FYP.Controllers
                             {
                                 if (b.Serial_no == a.Serial_no)
                                 {
-                                    int deploying = DBUtl.ExecSQL("UPDATE Users SET deployed_status = 'Deployed' WHERE User_id = '{0}' AND deployed_status = 'Standby'", userr[0].User_id);
-                                    int statChange = DBUtl.ExecSQL("UPDATE Equipment SET Status = 'Unavailable' WHERE Assigned = '{0}' AND Status = 'Available' AND Serial_no = '{1}'", true, b.Serial_no);
+                                    if (roleList[0].role == "Platoon Commander")
+                                    {
+                                        int deploying = DBUtl.ExecSQL("UPDATE Users SET deployed_status = 'Deployed' WHERE User_id = '{0}' AND deployed_status = 'Standby' AND role = 'Serviceman'", userr[0].User_id);
+                                        int statChange = DBUtl.ExecSQL("UPDATE Equipment SET Status = 'Unavailable' WHERE Assigned = '{0}' AND Status = 'Available' AND Serial_no = '{1}'", true, b.Serial_no);
+
+                                        var deployCheck = DBUtl.GetList<Users>("SELECT * FROM Users WHERE company = '{0}' AND unit = '{1}' AND deployed_status = 'Standby' AND role = 'Serviceman'", exercise[0].company, exercise[0].unit);
+                                        if (deployCheck.Count == 0)
+                                        {
+                                            int exLoaned = DBUtl.ExecSQL("UPDATE Exercise SET status = 'Loaned Out' WHERE Exercise_id = '{0}'", exercise[0].Exercise_id);
+                                        }
+                                    }
+                                    else if (roleList[0].role == "Officer Commander")
+                                    {
+                                        int deploying = DBUtl.ExecSQL("UPDATE Users SET deployed_status = 'Deployed' WHERE User_id = '{0}' AND deployed_status = 'Standby' AND (role = 'Serviceman' OR role = 'Platoon Commander')", userr[0].User_id);
+                                        int statChange = DBUtl.ExecSQL("UPDATE Equipment SET Status = 'Unavailable' WHERE Assigned = '{0}' AND Status = 'Available' AND Serial_no = '{1}'", true, b.Serial_no);
+
+                                        var deployCheck = DBUtl.GetList<Users>("SELECT * FROM Users WHERE company = '{0}' AND unit = '{1}' AND deployed_status = 'Standby' AND (role = 'Serviceman' OR role = 'Platoon Commander')", exercise[0].company, exercise[0].unit);
+                                        if (deployCheck.Count == 0)
+                                        {
+                                            int exLoaned = DBUtl.ExecSQL("UPDATE Exercise SET status = 'Loaned Out' WHERE Exercise_id = '{0}'", exercise[0].Exercise_id);
+                                        }
+                                    }
+                                    else if (roleList[0].role == "Commandant Officer")
+                                    {
+                                        int deploying = DBUtl.ExecSQL("UPDATE Users SET deployed_status = 'Deployed' WHERE User_id = '{0}' AND deployed_status = 'Standby' AND (role = 'Serviceman' OR role = 'Platoon Commander' OR role = 'Officer Commander')", userr[0].User_id);
+                                        int statChange = DBUtl.ExecSQL("UPDATE Equipment SET Status = 'Unavailable' WHERE Assigned = '{0}' AND Status = 'Available' AND Serial_no = '{1}'", true, b.Serial_no);
+
+
+                                        var deployCheck = DBUtl.GetList<Users>("SELECT * FROM Users WHERE company = '{0}' AND unit = '{1}' AND deployed_status = 'Standby' AND (role = 'Serviceman' OR role = 'Platoon Commander' OR role = 'Officer Commander')", exercise[0].company, exercise[0].unit);
+                                        if (deployCheck.Count == 0)
+                                        {
+                                            int exLoaned = DBUtl.ExecSQL("UPDATE Exercise SET status = 'Loaned Out' WHERE Exercise_id = '{0}'", exercise[0].Exercise_id);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -359,21 +428,46 @@ namespace FYP.Controllers
                             {
                                 if (b.Serial_no == a.Serial_no)
                                 {
-                                    int deploying = DBUtl.ExecSQL("UPDATE Users SET deployed_status = 'Deployed' WHERE User_id = '{0}' AND deployed_status = 'Standby'", userr[0].User_id);
-                                    int statChange = DBUtl.ExecSQL("UPDATE Equipment SET Status = 'Unavailable' WHERE Assigned = '{0}' AND Status = 'Available' AND Serial_no = '{1}'", true, b.Serial_no);
+                                    if (roleList[0].role == "Platoon Commander")
+                                    {
+                                        int deploying = DBUtl.ExecSQL("UPDATE Users SET deployed_status = 'Deployed' WHERE User_id = '{0}' AND deployed_status = 'Standby' AND role = 'Serviceman'", userr[0].User_id);
+                                        int statChange = DBUtl.ExecSQL("UPDATE Equipment SET Status = 'Unavailable' WHERE Assigned = '{0}' AND Status = 'Available' AND Serial_no = '{1}'", true, b.Serial_no);
+
+                                        var deployCheck = DBUtl.GetList<Users>("SELECT * FROM Users WHERE company = '{0}' AND unit = '{1}' AND deployed_status = 'Standby' AND role = 'Serviceman'", exercise[0].company, exercise[0].unit);
+                                        if (deployCheck.Count == 0)
+                                        {
+                                            int exLoaned = DBUtl.ExecSQL("UPDATE Exercise SET status = 'Loaned Out' WHERE Exercise_id = '{0}'", exercise[0].Exercise_id);
+                                        }
+                                    }
+                                    else if (roleList[0].role == "Officer Commander")
+                                    {
+                                        int deploying = DBUtl.ExecSQL("UPDATE Users SET deployed_status = 'Deployed' WHERE User_id = '{0}' AND deployed_status = 'Standby' AND (role = 'Serviceman' OR role = 'Platoon Commander')", userr[0].User_id);
+                                        int statChange = DBUtl.ExecSQL("UPDATE Equipment SET Status = 'Unavailable' WHERE Assigned = '{0}' AND Status = 'Available' AND Serial_no = '{1}'", true, b.Serial_no);
+
+                                        var deployCheck = DBUtl.GetList<Users>("SELECT * FROM Users WHERE company = '{0}' AND unit = '{1}' AND deployed_status = 'Standby' AND (role = 'Serviceman' OR role = 'Platoon Commander')", exercise[0].company, exercise[0].unit);
+                                        if (deployCheck.Count == 0)
+                                        {
+                                            int exLoaned = DBUtl.ExecSQL("UPDATE Exercise SET status = 'Loaned Out' WHERE Exercise_id = '{0}'", exercise[0].Exercise_id);
+                                        }
+                                    }
+                                    else if (roleList[0].role == "Commandant Officer")
+                                    {
+                                        int deploying = DBUtl.ExecSQL("UPDATE Users SET deployed_status = 'Deployed' WHERE User_id = '{0}' AND deployed_status = 'Standby' AND (role = 'Serviceman' OR role = 'Platoon Commander' OR role = 'Officer Commander')", userr[0].User_id);
+                                        int statChange = DBUtl.ExecSQL("UPDATE Equipment SET Status = 'Unavailable' WHERE Assigned = '{0}' AND Status = 'Available' AND Serial_no = '{1}'", true, b.Serial_no);
+
+
+                                        var deployCheck = DBUtl.GetList<Users>("SELECT * FROM Users WHERE company = '{0}' AND unit = '{1}' AND deployed_status = 'Standby' AND (role = 'Serviceman' OR role = 'Platoon Commander' OR role = 'Officer Commander')", exercise[0].company, exercise[0].unit);
+                                        if (deployCheck.Count == 0)
+                                        {
+                                            int exLoaned = DBUtl.ExecSQL("UPDATE Exercise SET status = 'Loaned Out' WHERE Exercise_id = '{0}'", exercise[0].Exercise_id);
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
 
-                    int deployCheck = DBUtl.ExecSQL("SELECT * FROM Users WHERE company = '{0}' AND unit = '{1}' AND deployed_status = 'Standby'", exercise[0].company, exercise[0].unit);
-                    if (deployCheck == 0)
-                    {
-                        int exLoaned = DBUtl.ExecSQL("UPDATE Exercise SET status = 'Loaned Out' WHERE Exercise_id = '{0}'", exercise[0].Exercise_id);
-                    }
-
-
-
+                    
                     return RedirectToAction("Loan");
 
                 }
@@ -411,7 +505,7 @@ namespace FYP.Controllers
                     }
 
                     var exercise = new List<Exercise>();
-                    var package = new List<Package>();
+                    var userr = new List<Users>();
                     using (var sreader = new StreamReader(postedFile.OpenReadStream()))
                     {
                         //First line is header. If header is not passed in csv then we can neglect the below line.
@@ -422,25 +516,31 @@ namespace FYP.Controllers
                         {
                             string[] rows = sreader.ReadLine().Split(',');
 
-                            exercise.Add(new Exercise
+                            userr.Add(new Users
                             {
-                                Exercise_id = Int32.Parse(rows[0].ToString()),
-                                nric = rows[1].ToString(),
-                                company = rows[2].ToString(),
-                                unit = rows[3].ToString(),
-                                description = rows[4].ToString(),
-                                start_date = DateTime.Parse(rows[5].ToString()),
-                                end_date = DateTime.Parse(rows[6].ToString()),
-                                archive = Boolean.Parse(rows[7]),
-                                Package_id = Int32.Parse(rows[8].ToString())
+                                User_id = Int32.Parse(rows[0].ToString()),
+                                Serial_no = rows[1].ToString(),
+                                nric = rows[2].ToString(),
+                                password = rows[3].ToString(),
+                                full_name = rows[4].ToString(),
+                                dob = DateTime.Parse(rows[5].ToString()),
+                                rank = rows[6].ToString(),
+                                unit = rows[7].ToString(),
+                                company = rows[8].ToString(),
+                                role = rows[9].ToString()
                             }); ;
 
-                            package.Add(new Package
+                            exercise.Add(new Exercise
                             {
-                                Package_id = Int32.Parse(rows[8].ToString()),
-                                Type_desc = rows[9].ToString(),
-                                Equipment_accessories_id = Int32.Parse(rows[10].ToString()),
-                                Name = rows[11].ToString()
+                                Exercise_id = Int32.Parse(rows[10].ToString()),
+                                nric = rows[11].ToString(),
+                                company = rows[8].ToString(),
+                                unit = rows[7].ToString(),
+                                description = rows[12].ToString(),
+                                start_date = DateTime.Parse(rows[13].ToString()),
+                                end_date = DateTime.Parse(rows[14].ToString()),
+                                archive = Boolean.Parse(rows[15]),
+                                Package_id = Int32.Parse(rows[16].ToString())
                             }); ;
 
 
@@ -448,25 +548,26 @@ namespace FYP.Controllers
 
                     }
 
-                    var userList = DBUtl.GetList<Users>("SELECT * FROM Users WHERE company = '" + exercise[0].company + "' AND unit = '" + exercise[0].unit + "'");
+                    var userList = DBUtl.GetList<Users>("SELECT * FROM Users WHERE User_id = " + userr[0].User_id + "");
                     var exerciseList = DBUtl.GetList<Exercise>("SELECT * FROM Exercise WHERE Exercise_id = " + exercise[0].Exercise_id + "");
+                    var roleList = DBUtl.GetList<Users>("SELECT * FROM Users WHERE nric = '" + exerciseList[0].nric + "'");
                     var packageList = DBUtl.GetList<Package>("SELECT * FROM Package WHERE Package_id = " + exercise[0].Package_id + "");
-                    var equipmentList = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = '" + package[0].Type_desc + "'");
-                    var accessoryList = DBUtl.GetList<Equipment_Accessories>("SELECT * FROM Equipment_accessories WHERE Equipment_accessories_id = " + package[0].Equipment_accessories_id + "");
+                    var equipmentList = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = '" + packageList[0].Type_desc + "'");
+                    var accessoryList = DBUtl.GetList<Equipment_Accessories>("SELECT * FROM Equipment_accessories WHERE Equipment_accessories_id = " + packageList[0].Equipment_accessories_id + "");
 
                     var userListCheck = DBUtl.GetList<Users>("SELECT * FROM Users");
                     int usersNo = userList.Count;
                     int quantPerPack = 0;
 
-                    if (package[0].Equipment_accessories_id.Equals(1))
+                    if (packageList[0].Equipment_accessories_id.Equals(1))
                     {
                         quantPerPack += 1;
                     }
-                    else if (package[0].Equipment_accessories_id.Equals(2))
+                    else if (packageList[0].Equipment_accessories_id.Equals(2))
                     {
                         quantPerPack += 5;
                     }
-                    else if (package[0].Equipment_accessories_id.Equals(3))
+                    else if (packageList[0].Equipment_accessories_id.Equals(3))
                     {
                         quantPerPack += 1;
                     }
@@ -475,10 +576,10 @@ namespace FYP.Controllers
                     if (accessoryList[0].Quantity > totalAcc)
                     {
                         string accLoan = "UPDATE Equipment_accessories SET Quantity = (Quantity + {0}) WHERE Equipment_accessories_id = {1}";
-                        int accUpdate = DBUtl.ExecSQL(accLoan, totalAcc, package[0].Equipment_accessories_id);
+                        int accUpdate = DBUtl.ExecSQL(accLoan, totalAcc, packageList[0].Equipment_accessories_id);
                     }
 
-                    if (package[0].Type_desc == "SAR-21")
+                    if (packageList[0].Type_desc == "SAR-21")
                     {
                         var packList = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = 'SAR-21' AND Status = 'Unavailable' AND Assigned = '{0}'", true);
                         int loops = packList.Count;
@@ -491,9 +592,11 @@ namespace FYP.Controllers
                                                 WHERE Assigned = '{0}' AND Status = 'Unavailable' AND Serial_no = '{1}'", true, packList[x].Serial_no);
                             x++;
                         }
+                        int deploying = DBUtl.ExecSQL("UPDATE Users SET deployed_status = 'Standby' WHERE User_id = '{0}' AND deployed_status = 'Deployed'", userr[0].User_id);
+
                     }
 
-                    else if (package[0].Type_desc == "AK-47")
+                    else if (packageList[0].Type_desc == "AK-47")
                     {
                         var packList = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = 'AK-47' AND Status = 'Unavailable' AND Assigned = '{0}'", true);
                         int loops = packList.Count;
@@ -505,8 +608,10 @@ namespace FYP.Controllers
                                                 WHERE Assigned = '{0}' AND Status = 'Unavailable' AND Serial_no = '{1}'", true, packList[x].Serial_no);
                             x++;
                         }
+                        int deploying = DBUtl.ExecSQL("UPDATE Users SET deployed_status = 'Standby' WHERE User_id = '{0}' AND deployed_status = 'Deployed'", userr[0].User_id);
+
                     }
-                    else if (package[0].Type_desc == "SIG Sauer P226")
+                    else if (packageList[0].Type_desc == "SIG Sauer P226")
                     {
                         var packList = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Type_desc = 'SIG Sauer P226' AND Status = 'Unavailable' AND Assigned = '{0}'", true);
                         int loops = packList.Count;
@@ -518,13 +623,20 @@ namespace FYP.Controllers
                                                 WHERE Assigned = '{0}' AND Status = 'Unavailable' AND Serial_no = '{1}'", true, packList[x].Serial_no);
                             x++;
                         }
+                        int deploying = DBUtl.ExecSQL("UPDATE Users SET deployed_status = 'Standby' WHERE User_id = '{0}' AND deployed_status = 'Deployed'", userr[0].User_id);
+
                     }
-                    int exLoaned = DBUtl.ExecSQL("UPDATE Exercise SET status = 'Returned' WHERE Exercise_id = '{0}'", exercise[0].Exercise_id);
+
+                    var deployCheck = DBUtl.GetList<Users>("SELECT * FROM Users WHERE company = '{0}' AND unit = '{1}' AND deployed_status = 'Deployed'", exercise[0].company, exercise[0].unit);
+
+                    if (deployCheck.Count == 0)
+                    {
+                        int exLoaned = DBUtl.ExecSQL("UPDATE Exercise SET status = 'Returned' WHERE Exercise_id = '{0}'", exercise[0].Exercise_id);
+                    }
 
 
 
-
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Loan");
 
                 }
                 catch (Exception ex)
@@ -538,6 +650,76 @@ namespace FYP.Controllers
                 ViewBag.Message = "Please select the file first to upload.";
             }
             return View();
+        }
+
+
+        private const string LOGIN_SQL =
+        @"SELECT * FROM Users 
+            WHERE nric = '{0}' 
+              AND password =  HASHBYTES('SHA1', '{1}')";
+
+        private const string ROLE_COL = "role";
+        private const string NAME_COL = "nric";
+
+        private const string REDIRECT_CNTR = "Loan";
+        private const string REDIRECT_ACTN = "UserView";
+        private const string LOGIN_VIEW = "UserAuthen";
+        public IActionResult UserAuthen(string returnUrl = null)
+        {
+            TempData["ReturnUrl"] = returnUrl;
+            return View(LOGIN_VIEW);
+        }
+
+        [HttpPost]
+        public IActionResult UserAuthen(UserLogin u)
+        {
+            if (!AuthenticateUser(u.nric, u.password, out ClaimsPrincipal principal))
+            {
+                ViewData["Message"] = "Incorrect NRIC or Password";
+                ViewData["MsgType"] = "warning";
+                return View(LOGIN_VIEW);
+            }
+            else
+
+            {
+                    if (TempData["returnUrl"] != null)
+                    {
+
+                        string returnUrl = TempData["returnUrl"].ToString();
+                        if (Url.IsLocalUrl(returnUrl))
+                            return Redirect(returnUrl);
+                    }
+
+                    return RedirectToAction(REDIRECT_ACTN, REDIRECT_CNTR);
+                
+            }
+        }
+
+        private bool AuthenticateUser(string uid, string pw, out ClaimsPrincipal principal)
+        {
+            principal = null;
+
+            DataTable ds = DBUtl.GetTable(LOGIN_SQL, uid, pw);
+            if (ds.Rows.Count == 1)
+            {
+                principal =
+                   new ClaimsPrincipal(
+                      new ClaimsIdentity(
+                         new Claim[] {
+                        new Claim(ClaimTypes.NameIdentifier, uid),
+                        new Claim(ClaimTypes.Name, ds.Rows[0][NAME_COL].ToString()),
+                        new Claim(ClaimTypes.Role, ds.Rows[0][ROLE_COL].ToString())
+                         }, "Basic"
+                      )
+                   );
+                if (principal != null)
+                {
+                    bool d = true;
+                    return d;
+                }
+                return false;
+            }
+            return false;
         }
     }
 }
