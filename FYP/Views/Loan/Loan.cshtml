@@ -51,26 +51,60 @@
         <tbody>
             @foreach (FYP.Models.Exercise e in Model)
             {
-                <tr>
-                    <td>@e.nric</td>
-                    <td>@e.company</td>
-                    <td>@e.unit</td>
-                    <td>@e.Package_id</td>
-                    <td>@e.description</td>
-                    <td>@String.Format("{0:dd-MM-yyyy}", @e.start_date)</td>
-                    <td>@String.Format("{0:dd-MM-yyyy}", @e.end_date)</td>
-                    <td>@e.status</td>
-                    <td>
-                        <a asp-controller="Exercise"
-                           asp-action="Delete"
-                           asp-route-id="@e.Exercise_id"
-                           onclick="return confirm('Delete Exercise')">
-                            Delete
-                        </a>
-                    </td>
+            <tr>
+                <td>@e.nric</td>
+                <td>@e.company</td>
+                <td>@e.unit</td>
+                <td>
+                    @if (e.Package_id == 1)
+                        {
+                    <a asp-controller="Loan"
+                       asp-action="ViewPackage"
+                       asp-route-id="@e.Package_id">
+                        SAR-21 Field Training
+                    </a>
+                        }
+                    else if (e.Package_id == 2)
+                        {
+                    <a asp-controller="Loan"
+                    asp-action="ViewPackage"
+                     asp-route-id="@e.Package_id">
+                        Close Range Accuracy
+                    </a>
+                        }
+                    else if (e.Package_id == 3)
+                        {
+                    <a asp-controller="Loan"
+                       asp-action="ViewPackage"
+                       asp-route-id="@e.Package_id">
+                        Mid to Long Range Training
+                    </a>
+                        }
+                    else if (e.Package_id == 4)
+                        {
+                    <a asp-controller="Loan"
+                       asp-action="ViewPackage"
+                       asp-route-id="@e.Package_id">
+                        AK-47 Field Training
+                    </a>
+                        }
+                </td>
+
+                <td>@e.description</td>
+                <td>@String.Format("{0:dd-MM-yyyy}", @e.start_date)</td>
+                <td>@String.Format("{0:dd-MM-yyyy}", @e.end_date)</td>
+                <td>@e.status</td>
+                <td>
+                    <a asp-controller="Exercise"
+                       asp-action="Delete"
+                       asp-route-id="@e.Exercise_id"
+                       onclick="return confirm('Delete Exercise')">
+                        Delete
+                    </a>
+                </td>
 
 
-                </tr>
+            </tr>
             }
         </tbody>
 

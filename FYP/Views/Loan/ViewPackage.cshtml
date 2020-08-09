@@ -1,0 +1,99 @@
+﻿@section MoreScripts {
+    <link href="~/lib/datatables/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#jsPackage').DataTable({
+                ordering: true,
+                paging: true,
+                searching: true,
+                info: true,
+                lengthChange: true,
+                pageLength: 20
+            });
+        });
+    </script>
+
+}
+
+@model List<FYP.Models.Package>;
+<h2> Package </h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-@TempData["MsgType"]">
+        @TempData["Message"]
+    </div>
+}
+
+<div>
+
+    <table id="jsPackage" class="table">
+        <thead>
+            <tr>
+                <th>Package ID</th>
+                <th>Equipment Name</th>
+                <th>Accessory ID</th>
+                <th>Package Name</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (FYP.Models.Package p in Model)
+            {
+                <tr>
+                    <td>@p.Package_id</td>
+                    <td>@p.Type_desc</td>
+                    <td>
+                        @if (p.Equipment_accessories_id == 1)
+                        {
+                            <a asp-controller="Loan"
+                               asp-action="ViewAccessory"
+                               asp-route-id="@p.Equipment_accessories_id">
+                                Muzzles
+                            </a>
+                        }
+                        else if (p.Equipment_accessories_id == 2)
+                        {
+                            <a asp-controller="Loan"
+                               asp-action="ViewAccessory"
+                               asp-route-id="@p.Equipment_accessories_id">
+                                Magazines
+                            </a>
+                        }
+                        else if (p.Equipment_accessories_id == 3)
+                        {
+                            <a asp-controller="Loan"
+                               asp-action="ViewAccessory"
+                               asp-route-id="@p.Equipment_accessories_id">
+                                Scopes
+                            </a>
+                        }
+                        else if (p.Equipment_accessories_id == 4)
+                        {
+                            <a asp-controller="Loan"
+                               asp-action="ViewAccessory"
+                               asp-route-id="@p.Equipment_accessories_id">
+                                Hand Grenades
+                            </a>
+                        }
+                    </td>
+                    <td>@p.Name</td>
+                </tr>
+            }
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <th>Package ID</th>
+                <th>Equipment Name</th>
+                <th>Accessory ID</th>
+                <th>Package Name</th>
+            </tr>
+        </tfoot>
+
+
+    </table>
+</div>
+

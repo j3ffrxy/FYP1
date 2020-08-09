@@ -732,5 +732,19 @@ namespace FYP.Controllers
             }
             return false;
         }
+
+        [Authorize(Roles = "Admin, Store Supervisor")]
+        public IActionResult ViewPackage(int id)
+        {
+            var packageList = DBUtl.GetList<Package>("SELECT * FROM Package WHERE Package_id = '" + id + "'");
+            return View("ViewPackage", packageList);
+        }
+
+        [Authorize(Roles = "Admin, Store Supervisor")]
+        public IActionResult ViewAccessory(int id)
+        {
+            var accessoryList = DBUtl.GetList<Equipment_Accessories>("SELECT * FROM Equipment_accessories WHERE Equipment_accessories_id = '" + id + "'");
+            return View("ViewAccessory", accessoryList);
+        }
     }
 }
