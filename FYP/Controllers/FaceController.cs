@@ -98,7 +98,25 @@ namespace FYP.Controllers
                 contentStringFace = response.Content.ReadAsStringAsync().Result;
 
             }
-           
+            string faceId = contentStringFace.Substring(12, 36);
+            string str = "{\"personGroupId\": \"supervisor\", \"faceIds\": [\"" + faceId + "\"]}";
+            var buffer = System.Text.Encoding.UTF8.GetBytes(str);
+            using (ByteArrayContent content2 = new ByteArrayContent(buffer))
+            {
+                // This example uses content type "application/octet-stream".
+                // The other content types you can use are "application/json" and "multipart/form-data".
+
+                content2.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                // Execute the REST API call.
+                var response2 = client.PostAsync(uriIdentify, content2).Result;
+
+
+                // Get the JSON response.
+                contentStringFace = response2.Content.ReadAsStringAsync().Result;
+
+            }
+
 
             string personId = contentStringFace;
             TempData["json"] = personId;
