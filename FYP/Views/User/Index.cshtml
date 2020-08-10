@@ -17,14 +17,15 @@
 
 }
 
-@model System.Data.DataRowCollection
+@model List<FYP.Models.Users>;
 <h2> Users </h2>
 
 
 @if (TempData["Message"] != null)
 {
-    <div class="alert alert-@TempData["MsgType"]">@TempData["Message"]
-    </div>
+    <div class="alert alert-@TempData["MsgType"]">
+        @TempData["Message"]
+</div>
 }
 
 <div>
@@ -37,6 +38,7 @@
                 <th>Date Of Birth</th>
                 <th>Unit</th>
                 <th>Company</th>
+                <th>Current Status</th>
                 @if (User.IsInRole("Admin"))
                 {
                     <th>Action</th>
@@ -46,32 +48,33 @@
         </thead>
 
         <tbody>
-            @foreach (System.Data.DataRow row in Model)
+            @foreach (FYP.Models.Users u in Model)
             {
-            <tr>
-                <td>@row["Full name"]</td>
-                <td>@row["Rank"]</td>
-                <td>@String.Format("{0:dd-MM-yyyy}", row["Date of Birth"])</td>
-                <td>@row["Unit"]</td>
-                <td>@row["Company"]</td>
-                @if (User.IsInRole("Admin"))
-                {
-                    <td>
-                        <a asp-controller="User"
-                           asp-action="Edits"
-                           asp-route-id="@row["User_id"]">
-                            Edit
-                        </a>
-                        <a asp-controller="User"
-                           asp-action="Delete"
-                           asp-route-id="@row["User_id"]"
-                           onclick="return confirm('Delete User <@row["Full Name"]>')">
-                            Delete
-                        </a>
-                    </td>
-                }
+                <tr>
+                    <td>@u.full_name</td>
+                    <td>@u.rank</td>
+                    <td>@String.Format("{0:dd-MM-yyyy}", @u.dob)</td>
+                    <td>@u.unit</td>
+                    <td>@u.company</td>
+                    <td>@u.deployed_status</td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <td>
+                            <a asp-controller="User"
+                               asp-action="Edits"
+                               asp-route-id="@u.User_id">
+                                Edit
+                            </a>
+                            <a asp-controller="User"
+                               asp-action="Delete"
+                               asp-route-id="@u.User_id"
+                               onclick="return confirm('Delete User <@u.full_name>')">
+                                Delete
+                            </a>
+                        </td>
+                    }
 
-            </tr>
+                </tr>
             }
         </tbody>
 
@@ -82,6 +85,7 @@
                 <th>Date Of Birth</th>
                 <th>Unit</th>
                 <th>Company</th>
+                <th>Current Status</th>
                 @if (User.IsInRole("Admin"))
                 {
                     <th>Action</th>

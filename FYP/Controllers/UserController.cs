@@ -32,8 +32,9 @@ namespace FYP.Controllers
 
         public IActionResult About()
         {
-            DataTable dt = DBUtl.GetTable(@"SELECT User_id ,  full_name AS [Full Name] , rank AS [Rank] , dob AS [Date of Birth] , unit AS [Unit] , company AS [Company] FROM Users");
-            return View("Index", dt.Rows);
+            updateLOA();
+            var list = DBUtl.GetList<Users>("SELECT User_id, full_name, rank, dob , unit, company, deployed_status FROM Users");
+            return View("Index", list);
         }
         [Authorize (Roles = "Admin")]
         public IActionResult Create()
@@ -291,6 +292,108 @@ namespace FYP.Controllers
                 ViewBag.Message = "Please select the file first to upload.";
             }
             return View();
+        }
+
+
+        [Authorize(Roles = "Admin , Medic")]
+        public IActionResult AssignLOA()
+        {
+            return View();
+        }
+        [Authorize(Roles = "Admin , Medic")]
+        [HttpPost]
+        public IActionResult AssignLOA(IFormFile postedFile)
+        {
+            if (postedFile != null)
+            {
+                try
+                {
+                    string fileExtension = Path.GetExtension(postedFile.FileName);
+
+                    //Validate uploaded file and return error.
+                    if (fileExtension != ".csv")
+                    {
+                        ViewBag.Message = "Please select the csv file with .csv extension";
+                        return View();
+                    }
+
+
+                    var userr = new List<Users>();
+                    using (var sreader = new StreamReader(postedFile.OpenReadStream()))
+                    {
+                        //First line is header. If header is not passed in csv then we can neglect the below line.
+                        string[] headers = sreader.ReadLine().Split(',');
+
+                        //Loop through the records
+                        while (!sreader.EndOfStream)
+                        {
+                            string[] rows = sreader.ReadLine().Split(',');
+
+                            userr.Add(new Users
+                            {
+                                User_id = Int32.Parse(rows[0].ToString()),
+                                Serial_no = rows[1].ToString(),
+                                nric = rows[2].ToString(),
+                                password = rows[3].ToString(),
+                                full_name = rows[4].ToString(),
+                                dob = DateTime.Parse(rows[5].ToString()),
+                                rank = rows[6].ToString(),
+                                unit = rows[7].ToString(),
+                                company = rows[8].ToString(),
+                                role = rows[9].ToString(),
+                                deployed_status = rows[10].ToString()
+                            }); ;
+
+
+
+                        }
+
+                    }
+
+
+                    var user = DBUtl.GetList<Users>("SELECT * FROM Users WHERE User_id = '{0}'", userr[0].User_id);
+
+                    DateTime currentdate = DateTime.Now;
+                    if (user[0].deployed_status == "Standby")
+                    {
+                        int setLOA = DBUtl.ExecSQL("UPDATE Users SET loa_start_date = '{0}', deployed_status = 'LOA' WHERE User_id = '{1}'", currentdate, user[0].User_id);
+                    }
+
+
+
+                    return RedirectToAction("About");
+
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Message = ex.Message;
+                }
+
+            }
+            else
+            {
+                ViewBag.Message = "Please select the file first to upload.";
+            }
+            return View();
+        }
+
+        public void updateLOA()
+        {
+            var list = DBUtl.GetList<Users>("SELECT * FROM Users");
+            DateTime currentdate = DateTime.Now;
+
+            foreach (var a in list)
+            {
+                DateTime loadate = a.loa_start_date.AddDays(3);
+                if (loadate != null) {
+                    if (loadate == currentdate)
+                    {
+                        var update = "UPDATE Exercise SET loa_start_date = '{0}' AND deployed_status = 'Standby' WHERE User_id = '{1}'";
+                        DBUtl.ExecSQL(update, null, a.User_id);
+
+                    }
+                }
+            }
         }
     }
 }

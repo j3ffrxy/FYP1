@@ -46,7 +46,7 @@ namespace FYP.Models
 
         public String deployed_status {get; set;}
 
-        
+        public DateTime loa_start_date { get; set; }
 
 
 
