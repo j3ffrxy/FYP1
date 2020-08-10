@@ -70,7 +70,7 @@ namespace FYP.Controller
         }
         [Authorize(Roles = "Admin , Store Supervisor")]
         [HttpPost]
-        public IActionResult AddStocktake(IFormFile postedFile, String Storage_location)
+        public IActionResult AddStocktake(IFormFile postedFile, String storage_location)
         {
             if (postedFile != null)
             {
@@ -128,8 +128,8 @@ namespace FYP.Controller
 
 
                     var user = DBUtl.GetList<Users>("SELECT * FROM Users WHERE nric = '" + User.Identity.Name + " ' ");
-                    var currequip = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Storage_location = '" + Storage_location + "'");
-                    var curracess = DBUtl.GetList<Equipment_Accessories>("Select * From Equipment_accessories WHERE Storage_location ='" + Storage_location + "'");
+                    var currequip = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Storage_location = '" + storage_location + "'");
+                    var curracess = DBUtl.GetList<Equipment_Accessories>("Select * From Equipment_accessories WHERE Storage_location ='" + storage_location + "'");
                     ArrayList diffequip = new ArrayList();
                     ArrayList diffaccess = new ArrayList();
                     ArrayList equip = new ArrayList();
@@ -151,7 +151,7 @@ namespace FYP.Controller
                         }
                         foreach (var b in currequip)
                         {
-                            if (a.Storage_location.Equals(Storage_location))
+                            if (a.Storage_location.Equals(storage_location))
                             {
                                 if (a.Serial_no.Equals(b.Serial_no))
                                 {
@@ -167,14 +167,14 @@ namespace FYP.Controller
                     int stock_access = 0;
                     foreach (var c in accessory)
                     {
-                        if (c.Storage_location.Equals(Storage_location))
+                        if (c.Storage_location.Equals(storage_location))
                         {
                             stock_access += c.Quantity;
                         }
 
                         foreach (var d in curracess)
                         {
-                            if (c.Storage_location.Equals(Storage_location))
+                            if (c.Storage_location.Equals(storage_location))
                             {
                                 if (c.Equipment_accessories_id == d.Equipment_accessories_id)
                                 {
@@ -189,7 +189,7 @@ namespace FYP.Controller
 
                     int stock_equip = equip.Count;
 
-                    int curr_equip_avail = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Storage_location = '" + Storage_location + "' AND Status = 'Available'").Count;
+                    int curr_equip_avail = DBUtl.GetList<Equipment>("SELECT * FROM Equipment WHERE Storage_location = '" + storage_location + "' AND Status = 'Available'").Count;
 
                     int diff_equip = stock_equip - curr_equip_avail;
                     int diff_access = stock_access - curr_access_total;
@@ -199,7 +199,7 @@ namespace FYP.Controller
                     String insert = @"INSERT INTO Stocktaking(User_id , total_equipment_quantity , total_accessories_quantity, date_created, archive , diff_equip , diff_accessory , storage_location)
                                      Values ('{0}' , '{1}' , '{2}' , '{3:yyyy-MM-dd HH:mm:ss}', '{4}' , '{5}' , '{6}' , '{7}')";
 
-                    int resu = DBUtl.ExecSQL(insert, user[0].User_id, stock_equip, stock_access, DateTime.Now, archive, diff_equip, diff_access, Storage_location);
+                    int resu = DBUtl.ExecSQL(insert, user[0].User_id, stock_equip, stock_access, DateTime.Now, archive, diff_equip, diff_access, storage_location);
 
 
 
@@ -208,7 +208,7 @@ namespace FYP.Controller
 
                     foreach (var e in equipment)
                     {
-                        if (e.Storage_location.Equals(Storage_location))
+                        if (e.Storage_location.Equals(storage_location))
                         {
                             if (diffequip.Contains(e))
                             {
@@ -233,7 +233,7 @@ namespace FYP.Controller
 
                     foreach (var f in accessory)
                     {
-                        if (f.Storage_location.Equals(Storage_location))
+                        if (f.Storage_location.Equals(storage_location))
                         {
                             if (diffaccess.Contains(f))
                             {

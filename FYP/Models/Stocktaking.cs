@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace FYP.Models
 {
@@ -25,6 +28,7 @@ namespace FYP.Models
 
         public int diff_accessory { get; set; }
 
-        public string storage_loocation { get; set; }
+        [Required(ErrorMessage = "Please select a store to stocktake from")]
+        public string storage_location { get; set; }
     }
 }

@@ -1,20 +1,22 @@
 ﻿<h2>Upload CSV Files for stocktake</h2>
 
-@model FYP.Models.Equipment;
+@model FYP.Models.Stocktaking;
 
 <form enctype="multipart/form-data" asp-controller="Stocktake"
       asp-action="AddStocktake" method="post">
 
     <div class="form-group row">
-        <label class="control-label col-sm-2" asp-for="Storage_location">Store :</label>
+        <label class="control-label col-sm-2" asp-for="storage_location">Store :</label>
         <div class="col-sm-5">
-            <select id="Storage_location" name="Storage_location" class="form-control">
+            <select id="storage_location" name="storage_location" class="form-control">
                 <option value="">-- Select One --</option>
                 <option value="Store A"> Store A </option>
                 <option value="Store B"> Store B </option>
             </select>
         </div>
-       
+        <div class="col-sm-4">
+            <span asp-validation-for="storage_location" class="text-danger"></span>
+        </div>
     </div>
 
 
