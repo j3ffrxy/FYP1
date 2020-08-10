@@ -5,19 +5,17 @@
 </head>
 <body>
 
-
-    <p>Package 1</p>
-    <p>Items to Collect:</p>
+    <p>Items to return:</p>
 
     <p>SAR-21 Assault Rifle x1</p>
     <p>Magazines x5</p>
 
 
 
-    <p>Please head to the counter to collect your items. Ensure that your item is scanned before retrieving it.</p>
+    <p>Please head to the counter to return your items. Ensure that your item is scanned.</p>
 
     <form enctype="multipart/form-data" asp-controller="Loan"
-          asp-action="SuccessLoan" method="post">
+          asp-action="SuccessReturn" method="post">
         <div class="form-group row">
             <div class="offset-sm-2 col-sm-3">
                 <input type="submit" name="Upload" value="Submit" class="btn btn-primary" />

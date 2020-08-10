@@ -36,6 +36,18 @@ namespace FYP.Controllers
         {
             return View();
         }
+        public IActionResult SuccessLoan()
+        {
+            return View();
+        }
+        public IActionResult ReturnView()
+        {
+            return View();
+        }
+        public IActionResult SuccessReturn()
+        {
+            return View();
+        }
         private void updatearchive()
         {
             var list = DBUtl.GetList<Exercise>("SELECT * FROM Exercise");
@@ -703,6 +715,41 @@ namespace FYP.Controllers
 
                     return RedirectToAction(REDIRECT_ACTN, REDIRECT_CNTR);
                 
+            }
+        }
+
+
+        private const string REDIRECT_CNTRR = "Loan";
+        private const string REDIRECT_ACTNR = "ReturnView";
+        private const string LOGIN_VIEWR = "UserAuthenR";
+        public IActionResult UserAuthenR(string returnUrl = null)
+        {
+            TempData["ReturnUrl"] = returnUrl;
+            return View(LOGIN_VIEWR);
+        }
+
+        [HttpPost]
+        public IActionResult UserAuthenR(UserLogin u)
+        {
+            if (!AuthenticateUser(u.nric, u.password, out ClaimsPrincipal principal))
+            {
+                ViewData["Message"] = "Incorrect NRIC or Password";
+                ViewData["MsgType"] = "warning";
+                return View(LOGIN_VIEWR);
+            }
+            else
+
+            {
+                if (TempData["returnUrl"] != null)
+                {
+
+                    string returnUrl = TempData["returnUrl"].ToString();
+                    if (Url.IsLocalUrl(returnUrl))
+                        return Redirect(returnUrl);
+                }
+
+                return RedirectToAction(REDIRECT_ACTNR, REDIRECT_CNTRR);
+
             }
         }
 
