@@ -31,6 +31,10 @@
         {
             <Partial name="SAFStoreman" />
         }
+        else if (User.IsInRole("Medic"))
+        {
+            <Partial name="SAFMedic" />
+        }
         else
         {
             <Partial name="SAFStaff" />
