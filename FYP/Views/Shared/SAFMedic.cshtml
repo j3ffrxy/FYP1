@@ -1,0 +1,43 @@
+﻿<nav class="navbar navbar-expand-sm navbar-light bg-light">
+
+    <button class="navbar-toggler" type="button"
+            data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+        <ul>
+            <li class="dropdown">
+                <a class="dropdown-toggle" role="button" aria-expanded="false" href="#" data-toggle="dropdown">Announcement<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li>@Html.ActionLink("View Announcement list", "Index", "Announcement", null, new { id = "item 1" })</li>
+
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" role="button" aria-expanded="false" href="#" data-toggle="dropdown">Assigning LOA<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li>@Html.ActionLink("Assign LOA", "AssignLOA", "User", null, new { id = "item 1" })</li>
+                </ul>
+            </li>
+
+
+        </ul>
+
+        <ul class="nav navbar-nav ml-auto">
+            <li>
+                <p class="navbar-text">
+                    Welcome, @User.Identity.Name!<br />
+                </p>
+            </li>
+            <li>
+                <a class="nav-link" asp-controller="Account" asp-action="Logoff">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a>
+            </li>
+            <li>
+                &nbsp;&nbsp;&nbsp;
+            </li>
+        </ul>
+    </div>
+</nav>
