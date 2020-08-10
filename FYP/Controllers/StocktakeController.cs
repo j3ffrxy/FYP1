@@ -145,10 +145,14 @@ namespace FYP.Controller
 
                     foreach (var a in equipment)
                     {
-                        if (a.Status.Equals("Available"))
+                        if (a.Storage_location.Equals(storage_location))
                         {
-                            equip.Add(a);
+                            if (a.Status.Equals("Available"))
+                            {
+                                equip.Add(a);
+                            }
                         }
+                        
                         foreach (var b in currequip)
                         {
                             if (a.Storage_location.Equals(storage_location))
