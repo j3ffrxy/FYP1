@@ -25,8 +25,7 @@ namespace FYP.Controllers
         {
             var list = DBUtl.GetList<Equipment>("Select * from Equipment WHERE Assigned = 'False' AND Type_desc = 'SAR-21' ");
             var equip = list[0];
-            string update = "Update Equipment Set Assigned = 'True' Where Serial_no = '" + equip.Serial_no + "'";
-            DBUtl.ExecSQL(update);
+           
             return equip.Serial_no;
         }
 
@@ -74,6 +73,8 @@ namespace FYP.Controllers
                     int res = DBUtl.ExecSQL(insert, GetEquipment() , user.nric , user.password , user.full_name , user.dob , user.rank , user.unit , user.company , user.role , "Standby");
                     if (res == 1)
                     {
+                        string update = "Update Equipment Set Assigned = 'True' Where Serial_no = '" + GetEquipment() + "'";
+                        DBUtl.ExecSQL(update);
                         TempData["Message"] = "User Created";
                         TempData["MsgType"] = "success";
                     }
@@ -258,6 +259,8 @@ namespace FYP.Controllers
                             int res = DBUtl.ExecSQL(insert,u.Serial_no , u.nric, u.password, u.full_name, u.dob, u.rank, u.unit, u.company, u.role , "Standby" );
                             if (res == 1)
                             {
+                                string update = "Update Equipment Set Assigned = 'True' Where Serial_no = '" + GetEquipment() + "'";
+                                DBUtl.ExecSQL(update);
                                 count++;
                             }
                         }

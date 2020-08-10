@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,7 +13,7 @@ namespace FYP.Models
 
         public int User_id { get; set; }
 
-        public string full_name { get; set; }
+        public String full_name { get; set; }
 
         public int total_equipment_quantity { get; set; }
 
@@ -25,6 +27,8 @@ namespace FYP.Models
 
         public int diff_accessory { get; set; }
 
-        public string storage_loocation { get; set; }
+        
+        [Required(ErrorMessage = "Please select a Store")]
+        public String storage_location { get; set; }
     }
 }

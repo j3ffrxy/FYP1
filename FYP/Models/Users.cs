@@ -11,19 +11,19 @@ namespace FYP.Models
     {
         public int User_id { get; set; }
 
-        public string Serial_no { get; set; }
+        public String Serial_no { get; set; }
 
         [Required(ErrorMessage = "Enter Users NRIC")]
         [RegularExpression("[STFG]\\d{7}[A-Z]", ErrorMessage = "Invalid NRIC format")]
-        public string nric { get; set; }
+        public String nric { get; set; }
 
         [Required(ErrorMessage = "Enter Users password")]
         [DataType(DataType.Password)]
-        public string password { get; set; }
+        public String password { get; set; }
 
         [Required(ErrorMessage = "Enter Users name")]
         [StringLength(40, ErrorMessage = "Max 40 chars")]
-        public string full_name { get; set; }
+        public String full_name { get; set; }
 
         [DataType(DataType.DateTime)]
         [Remote(action: "VerifyDate", controller: "User")]
