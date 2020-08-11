@@ -48,7 +48,7 @@ namespace FYP.Models
 
         public DateTime loa_start_date { get; set; }
 
-
+        public DateTime loa_end_date { get; set; }
 
 
     }
