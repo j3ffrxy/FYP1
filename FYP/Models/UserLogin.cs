@@ -17,7 +17,7 @@ namespace FYP.Models
         [DataType(DataType.Password)]
         public string password { get; set; }
 
-        public bool RememberMe { get; set; }
+        
         public string Maintenance_status { get; set; }
 
     }

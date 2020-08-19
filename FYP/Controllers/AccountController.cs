@@ -59,11 +59,7 @@ namespace FYP.Controller
 
                     HttpContext.SignInAsync(
                    CookieAuthenticationDefaults.AuthenticationScheme,
-                   principal,
-                   new AuthenticationProperties
-                   {
-                       IsPersistent = user.RememberMe
-                   });
+                   principal);
                     if (listt[0].Maintenance_status == "True")
 
                     {
