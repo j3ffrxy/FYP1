@@ -215,6 +215,7 @@ namespace FYP.Controllers
                                 Storage_location = rows[2].ToString(),
                                 Type_desc = rows[3].ToString(),
                                 Status =  rows[4].ToString(),
+                                Assigned = Boolean.Parse(rows[5]),
                             });
                         }
 
@@ -227,7 +228,7 @@ namespace FYP.Controllers
                         List<Equipment> list = DBUtl.GetList<Equipment>("SELECT * FROM Equipment");
                         foreach (var a in list)
                         {
-                            if (u.Serial_no==(a.Serial_no))
+                            if (u.Serial_no.Equals(a.Serial_no))
                             {
                                 exists = true;
                             }
@@ -235,11 +236,11 @@ namespace FYP.Controllers
                         if (exists == false)
                         {
                              string insert =
-                   @"INSERT INTO Equipment(Serial_no,Equipment_name,Storage_location,Type_desc)
-                                 VALUES('{0}','{1}','{2}','{3}')";
+                   @"INSERT INTO Equipment(Serial_no,Equipment_name,Storage_location,Type_desc,Status,Assigned)
+                                 VALUES('{0}','{1}','{2}','{3}','{4}','{5}')";
 
 
-                            int res = DBUtl.ExecSQL(insert, u.Serial_no, u.Equipment_name, u.Storage_location, u.Type_desc);
+                            int res = DBUtl.ExecSQL(insert, u.Serial_no, u.Equipment_name, u.Storage_location, u.Type_desc, u.Status,u.Assigned);
                             if (res == 1)
                             {
                                 count++;

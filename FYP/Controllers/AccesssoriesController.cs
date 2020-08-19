@@ -186,6 +186,7 @@ namespace FYP.Controllers
                     using (var sreader = new StreamReader(postedFile.OpenReadStream()))
                     {
                         //First line is header. If header is not passed in csv then we can neglect the below line.
+                        string[] headers = sreader.ReadLine().Split(',');
 
                         //Loop through the records
                         while (!sreader.EndOfStream)
@@ -194,10 +195,9 @@ namespace FYP.Controllers
 
                             accessory.Add(new Equipment_Accessories
                             {
-                                Equipment_accessories_id = int.Parse(rows[0].ToString()),
-                                Accessories_details = rows[1].ToString(),
-                                Storage_location = rows[2].ToString(),
-                                Quantity = int.Parse(rows[3].ToString()),
+                                Quantity = int.Parse(rows[2].ToString()),
+                                Accessories_details = rows[0].ToString(),
+                                Storage_location = rows[1].ToString(),
                             });
                         }
 
@@ -217,8 +217,8 @@ namespace FYP.Controllers
                         if (exists == false)
                         {
                             string insert =
-                                      @"INSERT INTO Equipment(Accessories_details, Storage_location , Quantity )
-                                     Values ('{0}' , '{1}' , '{2}')";
+                                      @"INSERT INTO Equipment_Accessories(Accessories_details, Storage_location, Quantity )
+                                     Values ('{0}' , '{1}', '{2}')";
 
                             int res = DBUtl.ExecSQL(insert, u.Accessories_details, u.Storage_location, u.Quantity);
                             if (res == 1)
