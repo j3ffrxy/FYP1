@@ -9,7 +9,7 @@ using System.Linq;
 using System.Data.OleDb;
 using System.IO;
 using System.Text;
-
+using System.Globalization;
 
 namespace FYP.Controllers
 {
@@ -305,7 +305,7 @@ namespace FYP.Controllers
         }
         [Authorize(Roles = "Admin , Medic")]
         [HttpPost]
-        public IActionResult AssignLOA(IFormFile postedFile)
+        public IActionResult AssignLOA(IFormFile postedFile, DateTime date1, DateTime date2)
         {
             if (postedFile != null)
             {
@@ -352,16 +352,15 @@ namespace FYP.Controllers
                         }
 
                     }
-
-
+                    
                     var user = DBUtl.GetList<Users>("SELECT * FROM Users WHERE User_id = '{0}'", userr[0].User_id);
 
-                    DateTime currentdate = DateTime.Now;
+
+
                     if (user[0].deployed_status == "Standby")
                     {
-                        int setLOA = DBUtl.ExecSQL("UPDATE Users SET loa_start_date = '{0}', deployed_status = 'LOA' WHERE User_id = '{1}'", currentdate, user[0].User_id);
+                        int setLOA = DBUtl.ExecSQL("UPDATE Users SET loa_start_date = '{0}', loa_end_date = '{1}', deployed_status = 'LOA' WHERE User_id = '{2}'", date1, date2, user[0].User_id);
                     }
-
 
 
                     return RedirectToAction("About");
@@ -384,16 +383,14 @@ namespace FYP.Controllers
         {
             var list = DBUtl.GetList<Users>("SELECT * FROM Users");
             DateTime currentdate = DateTime.Now;
-
             foreach (var a in list)
             {
-                DateTime loadate = a.loa_start_date.AddDays(3);
-                if (loadate != null) {
-                    if (loadate == currentdate)
+                if (a.loa_start_date != null)
+                {
+                    if (a.loa_end_date == currentdate)
                     {
-                        var update = "UPDATE Exercise SET loa_start_date = '{0}' AND deployed_status = 'Standby' WHERE User_id = '{1}'";
+                        var update = "UPDATE Users SET loa_start_date = '{0}', deployed_status = 'Standby' WHERE User_id = '{1}'";
                         DBUtl.ExecSQL(update, null, a.User_id);
-
                     }
                 }
             }

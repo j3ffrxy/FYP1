@@ -18,6 +18,7 @@ namespace FYP.Models
         public String nric { get; set; }
 
         [Required(ErrorMessage = "Enter Users password")]
+        [RegularExpression("([a-zA-Z0-9]){8,16}", ErrorMessage = "Password must be between 8 and 16 characters long")]
         [DataType(DataType.Password)]
         public String password { get; set; }
 
@@ -48,7 +49,7 @@ namespace FYP.Models
 
         public DateTime loa_start_date { get; set; }
 
-
+        public DateTime loa_end_date { get; set; }
 
 
     }
